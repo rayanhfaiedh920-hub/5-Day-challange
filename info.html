@@ -27,7 +27,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Logo oben links am gewohnten Platz */
+        /* Logo in top-left position */
         nav {
             width: 100%;
             padding: 40px 60px;
@@ -80,7 +80,7 @@
             max-width: 650px;
         }
 
-        /* Haupt-Box mit dem Apple Glass-Effekt */
+        /* High-quality Glassmorphism Card */
         .primary-card {
             background: var(--glass-bg);
             backdrop-filter: blur(40px) saturate(210%);
@@ -101,7 +101,7 @@
         .card-header h2 { font-size: 24px; margin: 0; font-weight: 600; }
         .card-header p { color: var(--text-sub); margin: 5px 0 0 0; font-size: 16px; }
 
-        /* Der Preis 4.99 EXAKT in der Mitte der Box */
+        /* Price 4.99 perfectly centered */
         .price-container {
             display: flex;
             justify-content: center;
@@ -110,7 +110,7 @@
         }
 
         .price-text {
-            font-size: 86px; /* Etwas kleiner als bei der "1", damit "4.99" perfekt reinpasst */
+            font-size: 86px;
             font-weight: 700;
             letter-spacing: -4px;
             line-height: 1;
@@ -142,7 +142,7 @@
             line-height: 1.5;
         }
 
-        /* Info-Boxen für Lernphase und ersten Sale */
+        /* Bottom info boxes moved below the card */
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -184,7 +184,7 @@
         <div class="primary-card">
             <div class="card-header">
                 <h2>Protocol Access</h2>
-                <p>Start your 5-day learning phase today.</p>
+                <p>Start your 5-day training phase today.</p>
             </div>
 
             <div class="price-container">
@@ -200,12 +200,12 @@
 
         <div class="info-grid">
             <div class="secondary-card">
-                <h3>5-Day Learning Phase</h3>
+                <h3>5-Day Training Phase</h3>
                 <p>During the first 5 days, we guide you step-by-step through our software. You will learn exactly how the system works and how to deploy it.</p>
             </div>
             <div class="secondary-card">
                 <h3>Your First Sale</h3>
-                <p>Our mission is clear: we teach you every required action so that you close your very first sale within the learning phase.</p>
+                <p>Our mission is clear: we teach you every required action so that you close your very first sale within the training phase.</p>
             </div>
         </div>
     </div>
