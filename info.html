@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syndicate | Exclusive Access</title>
+    <title>Syndicate | Dashboard Access</title>
     <style>
         :root {
             --apple-blue: #0071e3;
@@ -16,40 +16,36 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-            /* Das exakte Blau-Leuchten aus deinem Bild */
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
             background: radial-gradient(circle at 85% 15%, #dce8f9 0%, #f5f5f7 40%, #e8f1ff 100%);
             background-attachment: fixed;
             color: var(--text-main);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
 
-        .main-container {
+        nav {
             width: 100%;
-            max-width: 520px;
-            padding: 20px;
+            padding: 30px 60px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: flex-start;
+            box-sizing: border-box;
         }
 
-        .logo-top {
+        .logo-container {
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            padding: 10px 22px;
+            padding: 10px 20px;
             border-radius: 14px;
             border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             gap: 10px;
             font-weight: 600;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }
 
         .logo-icon {
@@ -58,43 +54,62 @@
             border-radius: 4px;
         }
 
-        /* Die einzige Box in der Mitte */
-        .glass-card {
+        .main-wrapper {
+            width: 90%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0 100px 0;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        /* Zentrale $1 Box */
+        .primary-card {
             background: var(--glass-bg);
             backdrop-filter: blur(40px) saturate(200%);
             -webkit-backdrop-filter: blur(40px) saturate(200%);
             border: 1px solid var(--glass-border);
             border-radius: 35px;
-            padding: 50px 40px;
+            padding: 50px;
             width: 100%;
-            box-sizing: border-box;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
-            text-align: center;
-            transition: transform 0.3s ease;
+            max-width: 500px;
+            text-align: left;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.04);
+            margin-bottom: 50px; /* Platz für die Boxen darunter */
         }
 
-        h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 0 0 10px 0;
-            letter-spacing: -0.5px;
+        .card-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
         }
 
-        .description {
+        .card-subtext {
             color: var(--text-sub);
-            font-size: 1.1rem;
-            line-height: 1.5;
-            margin-bottom: 30px;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
         }
 
         .price-value {
-            font-size: 5rem;
+            font-size: 5.5rem;
             font-weight: 700;
-            margin: 20px 0;
-            color: var(--text-main);
+            margin: 10px 0;
+            letter-spacing: -2px;
         }
 
-        .buy-action {
+        .buy-btn {
             display: block;
             width: 100%;
             background: var(--apple-blue);
@@ -105,55 +120,105 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 1.2rem;
-            margin-top: 10px;
             transition: all 0.3s ease;
             box-shadow: 0 10px 25px rgba(0, 113, 227, 0.3);
         }
 
-        .buy-action:hover {
+        .buy-btn:hover {
             transform: scale(1.02);
             box-shadow: 0 15px 35px rgba(0, 113, 227, 0.4);
         }
 
-        .small-note {
-            font-size: 0.85rem;
+        .small-print {
+            font-size: 0.8rem;
             color: var(--text-sub);
+            margin-top: 20px;
             display: block;
-            margin-top: 25px;
             line-height: 1.4;
-            padding: 0 10px;
         }
 
-        /* Apple Star Accent unten rechts */
+        /* Untere Boxen */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            width: 100%;
+        }
+
+        .secondary-card {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .secondary-card h3 {
+            font-size: 1.2rem;
+            margin: 0 0 10px 0;
+            font-weight: 600;
+        }
+
+        .secondary-card p {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
         .star-accent {
             position: fixed;
             bottom: 30px;
             right: 40px;
-            width: 45px;
+            width: 40px;
             opacity: 0.15;
-            pointer-events: none;
+        }
+
+        @media (max-width: 700px) {
+            .info-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <div class="logo-top">
+    <nav>
+        <div class="logo-container">
             <div class="logo-icon"></div>
             SYNDICATE
         </div>
+    </nav>
 
-        <div class="glass-card">
-            <h2>Syndicate Access</h2>
-            <p class="description">Unlock the full potential of your digital cash flow system today.</p>
+    <div class="main-wrapper">
+        <div class="header-section">
+            <h1>Your Syndicate Dashboard</h1>
+            <p style="color: var(--text-sub);">Monitor your real-time cash flow and system performance.</p>
+        </div>
+
+        <div class="primary-card">
+            <div class="card-label">Syndicate Access</div>
+            <div class="card-subtext">Essential features to get started.</div>
             
             <div class="price-value">$1</div>
             
-            <a href="#" class="buy-action">Activate Now</a>
+            <a href="#" class="buy-btn">Buy Now</a>
             
-            <span class="small-note">
-                After the initial learning phase, the protocol continues at a rate of <b>$199 per month</b> to maintain your infrastructure.
+            <span class="small-print">
+                After the initial learning phase, the protocol continues at a rate of $199 per month.
             </span>
+        </div>
+
+        <div class="info-grid">
+            <div class="secondary-card">
+                <h3>Earnings Overview</h3>
+                <p>Monitor your real-time cash flow and commission balance at a glance.</p>
+            </div>
+            <div class="secondary-card">
+                <h3>Referral System</h3>
+                <p>Invite partners and earn recurring commissions through our secure protocol.</p>
+            </div>
         </div>
     </div>
 
