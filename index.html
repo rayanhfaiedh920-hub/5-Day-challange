@@ -1,9 +1,3 @@
-Hier ist der komplette Code für deine index.html im sauberen Apple-Stil, komplett auf Englisch übersetzt.
-
-Der neue "Apple-Style" Code (Englisch)
-Ersetze den gesamten Inhalt deiner index.html mit diesem Code:
-
-HTML
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +35,8 @@ HTML
             position: fixed;
             top: 0;
             background: rgba(245, 245, 247, 0.8);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 100;
         }
 
@@ -63,7 +58,7 @@ HTML
 
         /* Main Content Container */
         .main-container {
-            margin-top: 140px;
+            margin-top: 160px;
             width: 90%;
             max-width: 1000px;
             display: flex;
@@ -73,7 +68,7 @@ HTML
         }
 
         h1 {
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
             font-weight: 700;
             letter-spacing: -1.5px;
             margin-bottom: 15px;
@@ -81,7 +76,7 @@ HTML
         }
 
         .subtitle {
-            font-size: 1.5rem;
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
             color: var(--apple-gray);
             margin-bottom: 50px;
         }
@@ -95,6 +90,7 @@ HTML
             width: 100%;
             max-width: 400px;
             margin-bottom: 80px;
+            box-sizing: border-box;
         }
 
         input {
@@ -106,16 +102,18 @@ HTML
             margin-bottom: 20px;
             box-sizing: border-box;
             outline: none;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
             text-align: center;
+            background-color: #fcfcfd;
         }
 
         input:focus {
             border-color: var(--apple-blue);
+            background-color: #fff;
         }
 
+        /* THE BUTTON */
         .enter-btn {
-            display: none; /* Only shows when code is entered */
             width: 100%;
             padding: 18px;
             background-color: var(--apple-blue);
@@ -125,11 +123,22 @@ HTML
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.2s ease;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+        }
+
+        /* Show button class */
+        .enter-btn.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
 
         .enter-btn:hover {
             opacity: 0.9;
+            transform: scale(0.99);
         }
 
         /* Info Grid */
@@ -150,15 +159,14 @@ HTML
         }
 
         .info-item h3 {
-            margin-top: 0;
+            margin: 0 0 12px 0;
             font-size: 1.3rem;
-            margin-bottom: 12px;
         }
 
         .info-item p {
             color: var(--apple-gray);
             line-height: 1.6;
-            margin-bottom: 0;
+            margin: 0;
             font-size: 0.95rem;
         }
     </style>
@@ -201,16 +209,15 @@ HTML
         function checkCode() {
             const code = document.getElementById('inviteCode').value.trim();
             const btn = document.getElementById('entryBtn');
-            // Show button if code length is at least 4 characters
+            
             if(code.length >= 4) {
-                btn.style.display = 'block';
+                btn.classList.add('visible');
             } else {
-                btn.style.display = 'none';
+                btn.classList.remove('visible');
             }
         }
 
         function verifyProtocol() {
-            // Redirects to info.html
             window.location.href = "info.html";
         }
     </script>
