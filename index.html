@@ -7,21 +7,21 @@
     <title>Syndicate | The Future of Cash Flow</title>
     <style>
         :root {
-            --apple-blue: #0071e3;
-            --text-dark: #1d1d1f;
-            --text-gray: #424245;
-            /* Glassmorphism Farben */
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.4);
+            --apple-blue: #3277d1;
+            --glass-bg: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --text-main: #1d1d1f;
+            --text-sub: #424245;
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: radial-gradient(circle at top right, #d0e1f9, #f5f5f7 40%);
+            /* Exakter Hintergrund-Verlauf aus dem Bild */
+            background: radial-gradient(circle at top right, #c0d4ef 0%, #f5f5f7 45%, #dce8f9 100%);
             background-attachment: fixed;
-            color: var(--text-dark);
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -31,85 +31,94 @@
         /* Navigation mit Logo oben rechts */
         nav {
             width: 100%;
-            padding: 30px 50px;
+            padding: 40px 60px;
             display: flex;
-            justify-content: flex-end; /* Logo nach rechts verschoben */
+            justify-content: flex-end;
             box-sizing: border-box;
             position: absolute;
             top: 0;
         }
 
-        .logo-box {
-            background: var(--glass-bg);
+        .logo-container {
+            background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            padding: 10px 25px;
-            border-radius: 18px;
+            padding: 12px 28px;
+            border-radius: 20px;
             border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             font-weight: 600;
-            letter-spacing: 0.5px;
+            font-size: 1.1rem;
         }
 
         .logo-icon {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             background: #000;
-            border-radius: 5px;
+            border-radius: 4px;
         }
 
-        /* Contentbereich */
-        .container {
-            margin-top: 140px;
-            width: 90%;
-            max-width: 1100px;
-            text-align: left; /* Text linksbündig wie im Bild */
+        /* Hauptinhalt */
+        .main-wrapper {
+            margin-top: 160px;
+            width: 85%;
+            max-width: 1200px;
+        }
+
+        .header-section {
+            text-align: left;
+            margin-bottom: 60px;
+        }
+
+        .header-section span {
+            font-size: 1.2rem;
+            color: var(--text-sub);
+            display: block;
+            margin-bottom: 20px;
         }
 
         h1 {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 700;
-            margin: 0 0 15px 0;
-            letter-spacing: -2px;
-            line-height: 1.1;
+            line-height: 1.05;
+            letter-spacing: -2.5px;
+            margin: 0 0 20px 0;
         }
 
         .subtitle {
             font-size: 1.6rem;
-            color: var(--text-gray);
-            margin-bottom: 60px;
+            color: var(--text-sub);
+            margin: 0;
         }
 
-        /* Login Box (Main Container) */
-        .login-section {
+        /* Mittlere Login Box (Main Container) */
+        .login-box-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 100px;
+            justify-content: center;
+            margin: 40px 0 100px 0;
         }
 
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
             border-radius: 35px;
-            padding: 50px;
+            padding: 45px;
             width: 100%;
-            max-width: 500px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.03);
-            text-align: left;
+            max-width: 580px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.03);
         }
 
-        .card-label {
+        .input-header {
             font-size: 1.1rem;
-            font-weight: 500;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             display: block;
+            color: var(--text-main);
+            font-weight: 500;
         }
 
         input {
@@ -118,43 +127,46 @@
             border-radius: 12px;
             border: 1px solid rgba(0,0,0,0.1);
             background: #fff;
-            font-size: 1rem;
-            margin-bottom: 25px;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
             box-sizing: border-box;
             outline: none;
         }
 
-        .button-row {
+        .card-footer {
             display: flex;
-            justify-content: flex-end;
-            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            color: #8e8e93;
+            font-size: 0.95rem;
         }
 
         .verify-btn {
             background-color: var(--apple-blue);
             color: white;
             border: none;
-            padding: 15px 35px;
-            border-radius: 12px;
+            padding: 16px 32px;
+            border-radius: 20px;
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0, 113, 227, 0.3);
         }
 
         .verify-btn:hover {
-            box-shadow: 0 0 25px rgba(0, 113, 227, 0.6);
-            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(50, 119, 209, 0.4);
+            transform: scale(1.02);
         }
 
-        /* Info Grid */
+        /* Info Grid unten */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-            padding-bottom: 80px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 80px;
         }
 
         .info-card {
@@ -165,45 +177,51 @@
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-            transition: transform 0.3s ease;
-        }
-
-        .info-card:hover {
-            transform: translateY(-5px);
         }
 
         .info-card h3 {
             font-size: 1.4rem;
-            margin-top: 0;
-            margin-bottom: 15px;
+            margin: 0 0 15px 0;
+            font-weight: 600;
         }
 
         .info-card p {
-            color: var(--text-gray);
-            line-height: 1.6;
+            color: var(--text-sub);
+            line-height: 1.55;
             margin: 0;
             font-size: 1.1rem;
+        }
+
+        /* Responsive Design für Handys */
+        @media (max-width: 900px) {
+            .info-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 3rem; }
+            nav { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo-box">
+        <div class="logo-container">
             <div class="logo-icon"></div>
             SYNDICATE
         </div>
     </nav>
 
-    <div class="container">
-        <h1>The future of <br>cash flow.</h1>
-        <p class="subtitle">Exclusive access to the 5-Day Challenge.</p>
+    <div class="main-wrapper">
+        <div class="header-section">
+            <span>inde.then</span>
+            <h1>The future of <br>cash flow.</h1>
+            <p class="subtitle">Exclusive access to the 5-Day Challenge.</p>
+        </div>
 
-        <div class="login-section">
+        <div class="login-box-container">
             <div class="glass-card">
-                <span class="card-label">Enter Invite Code</span>
+                <span class="input-header">Enter Invite Code</span>
                 <input type="text" id="inviteCode" placeholder="Enter Invite Code" autocomplete="off">
-                <div class="button-row">
+                <div class="card-footer">
+                    <span class="footer-text">autocomplete off</span>
                     <button class="verify-btn" onclick="verify()">Verify Protocol</button>
                 </div>
             </div>
@@ -228,6 +246,7 @@
     <script>
         function verify() {
             const code = document.getElementById('inviteCode').value.trim();
+            // Leitet weiter zur info.html wenn ein Code eingegeben wurde
             if(code.length >= 4) {
                 window.location.href = "info.html";
             } else {
