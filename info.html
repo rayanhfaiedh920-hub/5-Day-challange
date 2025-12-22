@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syndicate | Secure Access</title>
+    <title>Syndicate Protocol | Info</title>
     <style>
         :root {
             --apple-blue: #0071e3;
-            /* Perfekter Glass-Effekt: Transparent aber mit Struktur */
             --glass-bg: rgba(255, 255, 255, 0.55); 
             --glass-border: rgba(255, 255, 255, 0.8);
             --text-main: #1d1d1f;
@@ -18,7 +17,6 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            /* Das sanfte blaue Leuchten im Hintergrund deiner Vorlage */
             background: radial-gradient(circle at 85% 15%, #dce8f9 0%, #f5f5f7 45%, #e8f1ff 100%);
             background-attachment: fixed;
             color: var(--text-main);
@@ -29,7 +27,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Logo oben links fixiert wie in deiner Vorlage */
         nav {
             width: 100%;
             padding: 40px 60px;
@@ -49,7 +46,6 @@
             gap: 10px;
             font-weight: 600;
             font-size: 14px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .logo-square {
@@ -80,12 +76,12 @@
             font-size: 20px;
             margin-bottom: 60px;
             text-align: center;
+            max-width: 600px;
         }
 
-        /* DIE HAUPTBOX MIT EXTREMEM GLASS-EFFEKT */
+        /* Glassmorphism Card mit zentrierter $1 */
         .primary-card {
             background: var(--glass-bg);
-            /* Hohe Sättigung und Unschärfe für den echten Apple-Look */
             backdrop-filter: blur(40px) saturate(210%);
             -webkit-backdrop-filter: blur(40px) saturate(210%);
             border: 1px solid var(--glass-border);
@@ -98,26 +94,23 @@
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
-            position: relative;
         }
 
         .card-header { text-align: left; }
         .card-header h2 { font-size: 24px; margin: 0; font-weight: 600; }
         .card-header p { color: var(--text-sub); margin: 5px 0 0 0; font-size: 16px; }
 
-        /* Preis mathematisch zentriert in der Box */
         .price-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 70px 0; /* Erzeugt den perfekten Raum in der Mitte */
+            padding: 60px 0;
         }
 
         .price-text {
             font-size: 96px;
             font-weight: 700;
             letter-spacing: -4px;
-            line-height: 1;
         }
 
         .buy-button {
@@ -129,13 +122,7 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 18px;
-            transition: all 0.3s ease;
             box-shadow: 0 10px 25px rgba(0, 113, 227, 0.3);
-        }
-
-        .buy-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0, 113, 227, 0.45);
         }
 
         .small-note {
@@ -146,12 +133,13 @@
             line-height: 1.5;
         }
 
-        /* UNTERE GRID BOXEN - PERFEKT AUSGERICHTET */
+        /* Info-Boxen für die Lernphase */
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
             width: 100%;
+            margin-bottom: 50px;
         }
 
         .secondary-card {
@@ -180,34 +168,34 @@
     </nav>
 
     <div class="main-wrapper">
-        <h1>Secure Your Access</h1>
-        <p class="subtitle">Complete the verification to unlock your personal dashboard.</p>
+        <h1>Die Zukunft des Cashflow</h1>
+        <p class="subtitle">Exklusiver Zugang zu unserer automatisierten Software und der intensiven 5-Tage-Challenge.</p>
 
         <div class="primary-card">
             <div class="card-header">
-                <h2>Syndicate Access</h2>
-                <p>Essential features to get started.</p>
+                <h2>Protokoll-Zugang</h2>
+                <p>Starte deine 5-tägige Lernphase heute.</p>
             </div>
 
             <div class="price-container">
                 <div class="price-text">$1</div>
             </div>
 
-            <a href="#" class="buy-button">Activate Now</a>
+            <a href="#" class="buy-button">Challenge starten</a>
 
             <p class="small-note">
-                After the initial learning phase, the protocol continues at a rate of $199 per month.
+                Nach der Lernphase wird das Protokoll für 199$ pro Monat fortgesetzt.
             </p>
         </div>
 
         <div class="info-grid">
             <div class="secondary-card">
-                <h3>Earnings Overview</h3>
-                <p>Monitor your real-time cash flow and commission balance at a glance.</p>
+                <h3>5-Tage Lernphase</h3>
+                <p>In den ersten 5 Tagen führen wir dich Schritt für Schritt durch die Software. Du lernst genau, wie das System funktioniert und wie du es für dich nutzt.</p>
             </div>
             <div class="secondary-card">
-                <h3>Referral System</h3>
-                <p>Invite partners and earn recurring commissions through our secure protocol.</p>
+                <h3>Dein erster Sale</h3>
+                <p>Unser Ziel ist klar: Wir bringen dir alles bei, was du tun musst, damit du bereits innerhalb dieser Lernphase deinen allerersten Sale abschließt.</p>
             </div>
         </div>
     </div>
