@@ -3,45 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5-Day Cash Flow Challenge</title>
+    <title>5-Day Cash Flow Challenge | Restricted Access</title>
     <style>
-        :root { --gold: #d4af37; --bg: #0a0a0a; --card: #151515; }
-        body { background: var(--bg); color: white; font-family: 'Helvetica Neue', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { max-width: 400px; width: 90%; text-align: center; padding: 40px; border-radius: 20px; background: var(--card); border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h1 { font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
-        .highlight { color: var(--gold); font-size: 2rem; font-weight: bold; display: block; margin-bottom: 20px; }
-        input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #333; background: #000; color: var(--gold); text-align: center; font-size: 1.2rem; margin-bottom: 20px; box-sizing: border-box; }
-        .btn { display: none; background: linear-gradient(135deg, var(--gold), #b8860b); color: black; padding: 18px; border-radius: 10px; text-decoration: none; font-weight: bold; width: 100%; border: none; cursor: pointer; text-transform: uppercase; }
-        .feature-list { text-align: left; margin: 20px 0; padding: 0; list-style: none; color: #aaa; font-size: 0.9rem; }
-        .feature-list li { margin-bottom: 10px; }
-        .feature-list li b { color: var(--gold); }
+        :root {
+            --neon-blue: #00d4ff;
+            --neon-glow: rgba(0, 212, 255, 0.4);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: #050505;
+            background-image: 
+                radial-gradient(circle at 20% 30%, #101a20 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, #0d1218 0%, transparent 40%);
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Glaseffekt Container */
+        .container {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 50px 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        h1 {
+            font-size: 0.8rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            margin-bottom: 35px;
+            letter-spacing: 1px;
+        }
+
+        /* Transparenter Input mit Leuchteffekt */
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            color: var(--neon-blue);
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            text-align: center;
+            transition: 0.4s;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-glow);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Transparenter Button */
+        .btn {
+            display: none;
+            width: 100%;
+            padding: 18px;
+            background: transparent;
+            color: #fff;
+            border: 1px solid var(--neon-blue);
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        /* Info Bereich nach Login */
+        .info-card {
+            text-align: left;
+            background: rgba(255,255,255,0.02);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 1px dashed #333;
+        }
+
+        .info-card p {
+            font-size: 0.9rem;
+            margin: 12px 0;
+            color: #ccc;
+        }
+
+        .info-card b {
+            color: var(--neon-blue);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
+
     <div id="gate" class="container">
-        <h1>Welcome to the</h1>
-        <span class="highlight">CASH FLOW CHALLENGE</span>
-        <input type="text" id="inviteCode" placeholder="ACCESS CODE" oninput="checkCode()">
-        <button id="entryBtn" class="btn" onclick="showVault()">Enter Dashboard</button>
+        <h1>System Access</h1>
+        <span class="highlight">CASH FLOW<br>CHALLENGE</span>
+        
+        <div class="input-wrapper">
+            <input type="text" id="inviteCode" placeholder="ENTER CODE" oninput="checkCode()">
+        </div>
+        
+        <button id="entryBtn" class="btn" onclick="showVault()">Verify Protocol</button>
     </div>
 
     <div id="vault" class="container" style="display:none;">
-        <h1 style="color: var(--gold);">Access Granted</h1>
-        <ul class="feature-list">
-            <li>• <b>5 Days</b> Premium Sales Training</li>
-            <li>• <b>Business License</b> Included</li>
-            <li>• Keep <b>90% Profit</b> per Sale</li>
-        </ul>
-        <a href="DEIN_STRIPE_LINK" class="btn" style="display:block;">Start Challenge Now</a>
+        <h1 style="color: var(--neon-blue);">Verified</h1>
+        <span class="highlight">DASHBOARD</span>
+        
+        <div class="info-card">
+            <p>● <b>5 Days</b> Premium Sales Training</p>
+            <p>● <b>Digital Business</b> License</p>
+            <p>● <b>90% Profit</b> per Conversion</p>
+        </div>
+
+        <a href="DEIN_STRIPE_LINK" class="btn" style="display:block; text-align: center; text-decoration: none;">Launch Challenge</a>
     </div>
 
     <script>
         function checkCode() {
             const code = document.getElementById('inviteCode').value.toUpperCase();
             const btn = document.getElementById('entryBtn');
-            if(code === "START2025") { btn.style.display = 'block'; }
-            else { btn.style.display = 'none'; }
+            if(code === "START2025") {
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
+            }
         }
+
         function showVault() {
             document.getElementById('gate').style.display = 'none';
             document.getElementById('vault').style.display = 'block';
