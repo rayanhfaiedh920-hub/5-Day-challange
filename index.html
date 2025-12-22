@@ -12,6 +12,7 @@
             --apple-text: #1d1d1f;
             --apple-blue: #0071e3;
             --apple-gray: #86868b;
+            --glow-color: rgba(0, 113, 227, 0.5);
         }
 
         body {
@@ -25,7 +26,7 @@
             min-height: 100vh;
         }
 
-        /* Navigation / Logo top left */
+        /* Nav Bar with Logo */
         nav {
             width: 100%;
             padding: 20px 40px;
@@ -46,19 +47,19 @@
             letter-spacing: -0.5px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .logo-icon {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             background: var(--apple-text);
-            border-radius: 6px;
+            border-radius: 5px;
         }
 
-        /* Main Content Container */
+        /* Content Area */
         .main-container {
-            margin-top: 160px;
+            margin-top: 150px;
             width: 90%;
             max-width: 1000px;
             display: flex;
@@ -68,10 +69,10 @@
         }
 
         h1 {
-            font-size: clamp(2.5rem, 8vw, 3.5rem);
+            font-size: clamp(2.5rem, 8vw, 3.8rem);
             font-weight: 700;
             letter-spacing: -1.5px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             line-height: 1.1;
         }
 
@@ -81,24 +82,24 @@
             margin-bottom: 50px;
         }
 
-        /* Login Card */
+        /* The Interactive Login Card */
         .login-card {
             background: var(--apple-card);
             padding: 40px;
-            border-radius: 28px;
+            border-radius: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.04);
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             margin-bottom: 80px;
             box-sizing: border-box;
         }
 
         input {
             width: 100%;
-            padding: 18px;
+            padding: 20px;
             border: 1px solid #d2d2d7;
-            border-radius: 14px;
-            font-size: 1rem;
+            border-radius: 16px;
+            font-size: 1.1rem;
             margin-bottom: 20px;
             box-sizing: border-box;
             outline: none;
@@ -110,38 +111,37 @@
         input:focus {
             border-color: var(--apple-blue);
             background-color: #fff;
+            box-shadow: 0 0 15px var(--glow-color);
         }
 
-        /* THE BUTTON */
+        /* THE GLOWING BUTTON */
         .enter-btn {
             width: 100%;
-            padding: 18px;
+            padding: 20px;
             background-color: var(--apple-blue);
             color: white;
             border: none;
-            border-radius: 14px;
-            font-size: 1rem;
+            border-radius: 16px;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-        }
-
-        /* Show button class */
-        .enter-btn.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 113, 227, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .enter-btn:hover {
-            opacity: 0.9;
-            transform: scale(0.99);
+            transform: scale(1.02);
+            box-shadow: 0 0 25px var(--apple-blue); /* Strong Glow effect */
+            background-color: #0077ed;
         }
 
-        /* Info Grid */
+        .enter-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Info Section */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -152,22 +152,23 @@
 
         .info-item {
             background: var(--apple-card);
-            padding: 35px;
-            border-radius: 24px;
+            padding: 40px;
+            border-radius: 28px;
             text-align: left;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
         }
 
         .info-item h3 {
-            margin: 0 0 12px 0;
-            font-size: 1.3rem;
+            margin: 0 0 15px 0;
+            font-size: 1.4rem;
+            font-weight: 600;
         }
 
         .info-item p {
             color: var(--apple-gray);
             line-height: 1.6;
             margin: 0;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -185,40 +186,34 @@
         <p class="subtitle">Exclusive access to the 5-Day Challenge.</p>
 
         <div class="login-card">
-            <input type="text" id="inviteCode" placeholder="Enter Invite Code" oninput="checkCode()">
+            <input type="text" id="inviteCode" placeholder="Enter Invite Code" autocomplete="off">
             <button id="entryBtn" class="enter-btn" onclick="verifyProtocol()">Verify Protocol</button>
         </div>
 
         <div class="info-grid">
             <div class="info-item">
                 <h3>Verified System</h3>
-                <p>Utilize proven digital infrastructure to build and scale your personal income streams.</p>
+                <p>Utilize proven digital infrastructure to build and scale your personal income streams with total security.</p>
             </div>
             <div class="info-item">
                 <h3>Premium Training</h3>
-                <p>Gain 5 days of exclusive insights into high-level strategies reserved for a select few.</p>
+                <p>Gain 5 days of exclusive insights into high-level strategies reserved for a select few professionals.</p>
             </div>
             <div class="info-item">
                 <h3>90% Commission</h3>
-                <p>Join the Syndicate and benefit from a structure designed to keep most of the profit in your pocket.</p>
+                <p>Join the Syndicate and benefit from a structure designed to keep the vast majority of profit in your pocket.</p>
             </div>
         </div>
     </div>
 
     <script>
-        function checkCode() {
-            const code = document.getElementById('inviteCode').value.trim();
-            const btn = document.getElementById('entryBtn');
-            
-            if(code.length >= 4) {
-                btn.classList.add('visible');
-            } else {
-                btn.classList.remove('visible');
-            }
-        }
-
         function verifyProtocol() {
-            window.location.href = "info.html";
+            const code = document.getElementById('inviteCode').value.trim();
+            if(code.length >= 4) {
+                window.location.href = "info.html";
+            } else {
+                alert("Please enter a valid invite code to proceed.");
+            }
         }
     </script>
 
