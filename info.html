@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,30 +7,29 @@
     <title>Syndicate | Dashboard</title>
     <style>
         :root {
-            --apple-blue: #3277d1;
-            --glass-bg: rgba(255, 255, 255, 0.35); 
-            --glass-border: rgba(255, 255, 255, 0.5);
+            --apple-blue: #0071e3;
+            --glass-bg: rgba(255, 255, 255, 0.4); 
+            --glass-border: rgba(255, 255, 255, 0.7);
             --text-main: #1d1d1f;
-            --text-sub: #424245;
-            --accent-glow: rgba(50, 119, 209, 0.15);
+            --text-sub: #86868b;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            /* Der exakte Hintergrundverlauf mit den leuchtenden Akzenten */
-            background: radial-gradient(circle at top right, #c0d4ef 0%, #f5f5f7 45%, #dce8f9 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            /* Hintergrund mit dem exakten radialen Blau-Leuchten aus dem Bild */
+            background: radial-gradient(circle at 90% 10%, #dce8f9 0%, #f5f5f7 50%, #e8f1ff 100%);
             background-attachment: fixed;
             color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Navigation wie im Entwurf */
+        /* Navigation */
         nav {
             width: 100%;
             padding: 30px 60px;
@@ -37,21 +37,20 @@
             justify-content: space-between;
             align-items: center;
             box-sizing: border-box;
-            z-index: 10;
         }
 
         .logo-container {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 10px 24px;
-            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 10px 20px;
+            border-radius: 14px;
             border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             gap: 10px;
             font-weight: 600;
-            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .logo-icon {
@@ -60,107 +59,156 @@
             border-radius: 4px;
         }
 
-        .buy-now-nav {
-            background-color: var(--apple-blue);
+        .buy-now-btn {
+            background: var(--apple-blue);
             color: white;
-            padding: 10px 25px;
-            border-radius: 15px;
             text-decoration: none;
+            padding: 10px 22px;
+            border-radius: 12px;
             font-weight: 500;
-            box-shadow: 0 8px 20px var(--accent-glow);
-            transition: transform 0.2s;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
         }
 
-        .buy-now-nav:hover { transform: translateY(-2px); }
-
-        /* Main Content Wrapper */
+        /* Dashboard Layout */
         .main-wrapper {
             width: 90%;
-            max-width: 1200px;
-            margin-top: 40px;
-            padding-bottom: 100px;
+            max-width: 1100px;
+            padding: 40px 0 100px 0;
         }
 
-        section { margin-bottom: 60px; }
-
-        .section-title {
-            font-size: 2.2rem;
+        h1 {
+            font-size: 2.8rem;
             font-weight: 700;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
+            letter-spacing: -0.8px;
+            margin-bottom: 8px;
         }
 
-        .section-subtitle {
+        .subtitle {
             color: var(--text-sub);
-            font-size: 1.1rem;
-            margin-bottom: 30px;
+            font-size: 1.2rem;
+            margin-bottom: 50px;
         }
 
-        /* Das Glass-Card Grid */
+        .grid-label {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 40px 0 20px 0;
+        }
+
+        /* Glass Cards Styling */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
         }
 
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            backdrop-filter: blur(35px) saturate(180%);
+            -webkit-backdrop-filter: blur(35px) saturate(180%);
             border: 1px solid var(--glass-border);
-            border-radius: 30px;
+            border-radius: 28px;
             padding: 35px;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.02);
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
         .glass-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.45);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .glass-card h3 {
-            font-size: 1.4rem;
-            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 12px;
             font-weight: 600;
         }
 
         .glass-card p {
             color: var(--text-sub);
-            line-height: 1.6;
-            font-size: 1.05rem;
-            margin: 0;
+            line-height: 1.5;
+            margin-bottom: 0;
         }
 
-        /* Pricing Cards - Speziell hervorgehoben */
+        /* Pricing Cards */
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
+            margin-top: 20px;
         }
 
-        .price-tag {
-            font-size: 3rem;
+        .price-value {
+            font-size: 3.5rem;
             font-weight: 700;
             margin: 20px 0;
+        }
+
+        .buy-action {
             display: block;
-        }
-
-        .action-btn {
-            background-color: var(--apple-blue);
-            color: white;
-            border: none;
             width: 100%;
+            background: var(--apple-blue);
+            color: white;
+            text-align: center;
             padding: 16px;
-            border-radius: 18px;
-            font-size: 1.1rem;
+            border-radius: 16px;
+            text-decoration: none;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 25px rgba(50, 119, 209, 0.25);
+            margin-top: 20px;
+            transition: opacity 0.2s;
         }
 
-        .action-btn:hover {
-            box-shadow: 0 15px 35px rgba(50, 119,
+        /* Deko-Element unten rechts (Stern) */
+        .star-accent {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            width: 40px;
+            height: 40px;
+            opacity: 0.2;
+        }
+
+        @media (max-width: 850px) {
+            .dashboard-grid, .pricing-grid { grid-template-columns: 1fr; }
+            nav { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-container">
+            <div class="logo-icon"></div>
+            SYNDICATE
+        </div>
+        <a href="#" class="buy-now-btn">Buy Now</a>
+    </nav>
+
+    <div class="main-wrapper">
+        <h1>Your Syndicate Dashboard</h1>
+        <p class="subtitle">Monitor your real-time cash flow and system performance.</p>
+
+        <div class="dashboard-grid">
+            <div class="glass-card">
+                <h3>Earnings Overview</h3>
+                <p>Monitor your real-time cash flow, commission balance, and daily performance metrics at a glance.</p>
+            </div>
+            <div class="glass-card">
+                <h3>Referral System</h3>
+                <p>Invite partners to the Syndicate and earn recurring commissions through our secure verified protocol.</p>
+            </div>
+        </div>
+
+        <div class="grid-label">Upgrade Your Access</div>
+        <div class="pricing-grid">
+            <div class="glass-card">
+                <h3>Basic Plan</h3>
+                <p>Essential features to get started.</p>
+                <div class="price-value">$99</div>
+                <a href="#" class="buy-action">Buy Now</a>
+            </div>
+            <div class="glass-card">
+                <h3>Pro Plan</h3>
+                <p>Full access to all tools & insights.</p>
