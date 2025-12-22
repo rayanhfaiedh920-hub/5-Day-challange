@@ -28,10 +28,9 @@
             overflow-x: hidden;
         }
 
-        /* Compact Top Navigation */
         nav {
             width: 100%;
-            padding: 15px 30px; /* Reduced from 40px */
+            padding: 15px 30px; 
             display: flex;
             justify-content: flex-start;
             box-sizing: border-box;
@@ -62,11 +61,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 5px; /* Minimal top padding */
+            padding-top: 5px; 
         }
 
         h1 {
-            font-size: 36px; /* Slightly smaller to save space */
+            font-size: 36px; 
             font-weight: 700;
             letter-spacing: -1.2px;
             margin: 0 0 5px 0;
@@ -76,23 +75,22 @@
         .subtitle {
             color: var(--text-sub);
             font-size: 16px;
-            margin-bottom: 20px; /* Tightened from 60px */
+            margin-bottom: 20px; 
             text-align: center;
             max-width: 550px;
         }
 
-        /* Compact Main Glass Card */
         .primary-card {
             background: var(--glass-bg);
             backdrop-filter: blur(40px) saturate(210%);
             -webkit-backdrop-filter: blur(40px) saturate(210%);
             border: 1px solid var(--glass-border);
             border-radius: 28px;
-            padding: 20px 35px; /* Reduced padding */
+            padding: 20px 35px; 
             width: 100%;
             max-width: 440px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.04);
-            margin-bottom: 20px; /* Tight gap to bring bottom boxes up */
+            margin-bottom: 20px; 
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
@@ -101,12 +99,11 @@
         .card-header h2 { font-size: 18px; margin: 0; font-weight: 600; }
         .card-header p { color: var(--text-sub); margin: 2px 0 0 0; font-size: 13px; }
 
-        /* Centered Price with specific vertical alignment */
         .price-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 25px 0; /* Vertical space for $4.99 */
+            padding: 25px 0; 
         }
 
         .price-text {
@@ -127,6 +124,11 @@
             transition: all 0.2s ease;
         }
 
+        .buy-button:hover {
+            background: #0077ed;
+            transform: scale(1.02);
+        }
+
         .small-note {
             font-size: 11px;
             color: var(--text-sub);
@@ -135,7 +137,6 @@
             line-height: 1.4;
         }
 
-        /* Information Grid - Now visible on landing */
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -184,7 +185,7 @@
                 <div class="price-text">$4.99</div>
             </div>
 
-            <a href="#" class="buy-button">Start Challenge</a>
+            <a href="DEIN_STRIPE_LINK_HIER" class="buy-button">Start Challenge</a>
 
             <p class="small-note">
                 After the initial learning phase, the protocol continues at a rate of $199 per month.
