@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syndicate Access</title>
+    <title>Syndicate Access | Dashboard</title>
     <style>
         :root {
             --apple-blue: #0071e3;
-            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-bg: rgba(255, 255, 255, 0.55);
             --glass-border: rgba(255, 255, 255, 0.8);
             --text-main: #1d1d1f;
             --text-sub: #86868b;
@@ -16,8 +16,9 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            background: radial-gradient(circle at 80% 20%, #e2ebf9 0%, #f5f5f7 50%, #fbfbfd 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+            /* Das exakte radiale Leuchten aus deiner Vorlage */
+            background: radial-gradient(circle at 85% 15%, #dce8f9 0%, #f5f5f7 45%, #e8f1ff 100%);
             background-attachment: fixed;
             color: var(--text-main);
             display: flex;
@@ -30,188 +31,187 @@
         /* Logo oben links am alten Platz */
         nav {
             width: 100%;
-            padding: 30px 50px;
+            padding: 40px 60px;
             display: flex;
             justify-content: flex-start;
             box-sizing: border-box;
         }
 
-        .logo {
-            background: rgba(255, 255, 255, 0.7);
+        .logo-box {
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(20px);
-            padding: 8px 16px;
-            border-radius: 12px;
+            padding: 10px 18px;
+            border-radius: 14px;
             border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-weight: 600;
             font-size: 14px;
             letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
-        .logo-box {
+        .logo-square {
             width: 14px;
             height: 14px;
             background: #000;
             border-radius: 3px;
         }
 
-        .container {
+        .main-wrapper {
             width: 90%;
-            max-width: 800px;
+            max-width: 900px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 40px;
-        }
-
-        .title-section {
-            text-align: center;
-            margin-bottom: 50px;
+            padding-top: 20px;
         }
 
         h1 {
             font-size: 48px;
             font-weight: 700;
             letter-spacing: -1.5px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+            text-align: center;
         }
 
         .subtitle {
             color: var(--text-sub);
-            font-size: 21px;
-            font-weight: 400;
-        }
-
-        /* DIE PERFEKTE $1 BOX */
-        .main-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            border-radius: 32px;
-            padding: 48px;
-            width: 100%;
-            max-width: 480px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            font-size: 20px;
             margin-bottom: 60px;
-            position: relative;
+            text-align: center;
         }
 
-        .main-card h2 {
-            font-size: 24px;
-            font-weight: 600;
-            margin: 0 0 8px 0;
+        /* DIE PERFEKTE ZENTRIERTE $1 BOX */
+        .primary-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px) saturate(210%);
+            -webkit-backdrop-filter: blur(40px) saturate(210%);
+            border: 1px solid var(--glass-border);
+            border-radius: 38px;
+            padding: 50px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 25px 55px rgba(0,0,0,0.05);
+            margin-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
         }
 
-        .main-card .sub-info {
-            color: var(--text-sub);
-            font-size: 16px;
-            margin-bottom: 32px;
+        .card-header {
+            text-align: left;
         }
 
-        .price {
-            font-size: 86px;
+        .card-header h2 { font-size: 24px; margin: 0; font-weight: 600; }
+        .card-header p { color: var(--text-sub); margin: 5px 0 0 0; font-size: 16px; }
+
+        /* Preis EXAKT in der Mitte */
+        .price-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 0; /* Erzeugt den Raum für die mittige Position */
+        }
+
+        .price-text {
+            font-size: 96px;
             font-weight: 700;
-            margin: 20px 0;
-            letter-spacing: -3px;
+            letter-spacing: -4px;
             line-height: 1;
         }
 
-        .buy-now {
-            display: block;
+        .buy-button {
             background: var(--apple-blue);
             color: white;
             text-align: center;
-            padding: 18px;
-            border-radius: 16px;
+            padding: 20px;
+            border-radius: 18px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 17px;
-            transition: all 0.2s ease;
-            box-shadow: 0 8px 20px rgba(0, 113, 227, 0.25);
+            font-size: 18px;
+            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            box-shadow: 0 10px 25px rgba(0, 113, 227, 0.3);
         }
 
-        .buy-now:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 12px 24px rgba(0, 113, 227, 0.35);
+        .buy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 113, 227, 0.45);
         }
 
-        .note {
-            display: block;
-            margin-top: 24px;
+        .small-note {
             font-size: 13px;
             color: var(--text-sub);
+            margin-top: 25px;
+            text-align: left;
             line-height: 1.5;
         }
 
-        /* UNTERE BOXEN */
-        .bottom-grid {
+        /* UNTERE GRID BOXEN */
+        .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
             width: 100%;
         }
 
-        .info-box {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(20px);
+        .secondary-card {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 30px;
+            border-radius: 28px;
+            padding: 35px;
+            transition: transform 0.3s ease;
         }
 
-        .info-box h3 {
-            font-size: 18px;
-            margin: 0 0 10px 0;
-        }
+        .secondary-card h3 { font-size: 19px; margin: 0 0 10px 0; font-weight: 600; }
+        .secondary-card p { color: var(--text-sub); font-size: 15px; line-height: 1.5; margin: 0; }
 
-        .info-box p {
-            font-size: 14px;
-            color: var(--text-sub);
-            margin: 0;
-            line-height: 1.4;
+        @media (max-width: 750px) {
+            .info-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 36px; }
         }
-
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">
-            <div class="logo-box"></div>
+        <div class="logo-box">
+            <div class="logo-square"></div>
             SYNDICATE
         </div>
     </nav>
 
-    <div class="container">
-        <div class="title-section">
-            <h1>Syndicate Access</h1>
-            <p class="subtitle">Wähle deinen Zugang zum Dashboard.</p>
-        </div>
+    <div class="main-wrapper">
+        <h1>Your Syndicate Dashboard</h1>
+        <p class="subtitle">Monitor your real-time cash flow and system performance.</p>
 
-        <div class="main-card">
-            <h2>Syndicate Access</h2>
-            <p class="sub-info">Essential features to get started.</p>
-            
-            <div class="price">$1</div>
-            
-            <a href="#" class="buy-now">Buy Now</a>
-            
-            <span class="note">
-                After the initial learning phase, the protocol continues at a rate of $199 per month.
-            </span>
-        </div>
-
-        <div class="bottom-grid">
-            <div class="info-box">
-                <h3>Earnings Overview</h3>
-                <p>Behalte deinen Cashflow und deine Provisionen in Echtzeit im Blick.</p>
+        <div class="primary-card">
+            <div class="card-header">
+                <h2>Syndicate Access</h2>
+                <p>Essential features to get started.</p>
             </div>
-            <div class="info-box">
+
+            <div class="price-container">
+                <div class="price-text">$1</div>
+            </div>
+
+            <a href="#" class="buy-button">Buy Now</a>
+
+            <p class="small-note">
+                After the initial learning phase, the protocol continues at a rate of $199 per month.
+            </p>
+        </div>
+
+        <div class="info-grid">
+            <div class="secondary-card">
+                <h3>Earnings Overview</h3>
+                <p>Monitor your real-time cash flow and commission balance at a glance.</p>
+            </div>
+            <div class="secondary-card">
                 <h3>Referral System</h3>
-                <p>Lade Partner ein und verdiene wiederkehrende Provisionen über unser Protokoll.</p>
+                <p>Invite partners and earn recurring commissions through our secure protocol.</p>
             </div>
         </div>
     </div>
