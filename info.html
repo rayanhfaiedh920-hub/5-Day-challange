@@ -16,8 +16,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-            /* Hintergrund mit dem exakten radialen Blau-Leuchten aus dem Bild */
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
             background: radial-gradient(circle at 90% 10%, #dce8f9 0%, #f5f5f7 50%, #e8f1ff 100%);
             background-attachment: fixed;
             color: var(--text-main);
@@ -28,7 +27,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Navigation */
         nav {
             width: 100%;
             padding: 30px 60px;
@@ -49,7 +47,6 @@
             align-items: center;
             gap: 10px;
             font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .logo-icon {
@@ -58,18 +55,6 @@
             border-radius: 4px;
         }
 
-        .buy-now-btn {
-            background: var(--apple-blue);
-            color: white;
-            text-decoration: none;
-            padding: 10px 22px;
-            border-radius: 12px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-
-        /* Dashboard Layout */
         .main-wrapper {
             width: 90%;
             max-width: 1100px;
@@ -89,17 +74,12 @@
             margin-bottom: 50px;
         }
 
-        .grid-label {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 40px 0 20px 0;
-        }
-
         /* Glass Cards Styling */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 24px;
+            margin-bottom: 60px;
         }
 
         .glass-card {
@@ -110,39 +90,42 @@
             border-radius: 28px;
             padding: 35px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.02);
-            transition: transform 0.3s ease, background 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
         .glass-card:hover {
             transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.5);
         }
 
-        .glass-card h3 {
-            font-size: 1.3rem;
-            margin-top: 0;
-            margin-bottom: 12px;
+        .grid-label {
+            font-size: 1.5rem;
             font-weight: 600;
+            margin-bottom: 25px;
         }
 
-        .glass-card p {
-            color: var(--text-sub);
-            line-height: 1.5;
-            margin-bottom: 0;
+        /* Pricing Card - Zentriert & Einzeln */
+        .pricing-container {
+            display: flex;
+            justify-content: flex-start; /* Links ausgerichtet wie im Image */
         }
 
-        /* Pricing Cards */
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            margin-top: 20px;
+        .price-card {
+            width: 100%;
+            max-width: 450px;
         }
 
         .price-value {
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: 700;
-            margin: 20px 0;
+            margin: 15px 0;
+        }
+
+        .small-note {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            display: block;
+            margin-top: 15px;
+            line-height: 1.4;
         }
 
         .buy-action {
@@ -151,27 +134,29 @@
             background: var(--apple-blue);
             color: white;
             text-align: center;
-            padding: 16px;
+            padding: 18px;
             border-radius: 16px;
             text-decoration: none;
             font-weight: 600;
-            margin-top: 20px;
+            margin-top: 25px;
             transition: opacity 0.2s;
+            box-shadow: 0 8px 20px rgba(0, 113, 227, 0.3);
         }
 
-        /* Deko-Element unten rechts (Stern) */
+        .buy-action:hover {
+            opacity: 0.9;
+        }
+
         .star-accent {
             position: fixed;
             bottom: 30px;
             right: 40px;
             width: 40px;
-            height: 40px;
             opacity: 0.2;
         }
 
         @media (max-width: 850px) {
-            .dashboard-grid, .pricing-grid { grid-template-columns: 1fr; }
-            nav { padding: 20px; }
+            .dashboard-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -182,7 +167,6 @@
             <div class="logo-icon"></div>
             SYNDICATE
         </div>
-        <a href="#" class="buy-now-btn">Buy Now</a>
     </nav>
 
     <div class="main-wrapper">
@@ -192,27 +176,23 @@
         <div class="dashboard-grid">
             <div class="glass-card">
                 <h3>Earnings Overview</h3>
-                <p>Monitor your real-time cash flow, commission balance, and daily performance metrics at a glance.</p>
+                <p>Monitor your real-time cash flow and commission balance at a glance.</p>
             </div>
             <div class="glass-card">
                 <h3>Referral System</h3>
-                <p>Invite partners to the Syndicate and earn recurring commissions through our secure verified protocol.</p>
+                <p>Invite partners and earn recurring commissions through our secure protocol.</p>
             </div>
         </div>
 
         <div class="grid-label">Upgrade Your Access</div>
-        <div class="pricing-grid">
-            <div class="glass-card">
-                <h3>Basic Plan</h3>
+        
+        <div class="pricing-container">
+            <div class="glass-card price-card">
+                <h3>Syndicate Access</h3>
                 <p>Essential features to get started.</p>
-                <div class="price-value">$99</div>
+                <div class="price-value">$1</div>
                 <a href="#" class="buy-action">Buy Now</a>
-            </div>
-            <div class="glass-card">
-                <h3>Pro Plan</h3>
-                <p>Full access to all tools & insights.</p>
-                <div class="price-value">$299</div>
-                <a href="#" class="buy-action">Buy Now</a>
+                <span class="small-note">After the initial learning phase, the protocol continues at a rate of $199 per month.</span>
             </div>
         </div>
     </div>
