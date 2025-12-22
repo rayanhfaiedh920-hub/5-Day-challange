@@ -3,161 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5-Day Cash Flow Challenge | Restricted Access</title>
+    <title>Syndicate | Cash Flow Challenge</title>
     <style>
         :root {
-            --neon-blue: #00d4ff;
-            --neon-glow: rgba(0, 212, 255, 0.4);
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --apple-bg: #f5f5f7;
+            --apple-card: #ffffff;
+            --apple-text: #1d1d1f;
+            --apple-blue: #0071e3;
+            --apple-gray: #86868b;
         }
 
         body {
-            background-color: #050505;
-            background-image: 
-                radial-gradient(circle at 20% 30%, #101a20 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, #0d1218 0%, transparent 40%);
-            color: #ffffff;
-            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--apple-bg);
+            color: var(--apple-text);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            overflow: hidden;
         }
 
-        .container {
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 50px 40px;
+        /* Navigation / Logo oben links */
+        nav {
+            width: 100%;
+            padding: 20px 40px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: flex-start;
+            position: absolute;
+            top: 0;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--apple-text);
+            border-radius: 6px;
+        }
+
+        /* Main Content Container */
+        .main-container {
+            margin-top: 120px;
             width: 90%;
-            max-width: 400px;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            animation: fadeIn 1.2s ease-out;
         }
 
         h1 {
-            font-size: 0.8rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: #888;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -1px;
             margin-bottom: 10px;
         }
 
-        .highlight {
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(to bottom, #fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: block;
-            margin-bottom: 35px;
-            letter-spacing: 1px;
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--apple-gray);
+            margin-bottom: 40px;
+        }
+
+        /* Login Card */
+        .login-card {
+            background: var(--apple-card);
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 80px;
         }
 
         input {
             width: 100%;
             padding: 18px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            color: var(--neon-blue);
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-            text-align: center;
-            transition: 0.4s;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-bottom: 20px;
             box-sizing: border-box;
             outline: none;
-            margin-bottom: 25px;
+            transition: border-color 0.3s ease;
         }
 
         input:focus {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 20px var(--neon-glow);
+            border-color: var(--apple-blue);
         }
 
-        .btn {
-            display: none; /* Wird erst durch JS angezeigt */
+        .enter-btn {
             width: 100%;
             padding: 18px;
-            background: transparent;
-            color: #fff;
-            border: 1px solid var(--neon-blue);
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            background-color: var(--apple-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: 0.4s;
-            box-shadow: 0 0 10px var(--neon-glow);
-            text-decoration: none;
+            transition: opacity 0.2s ease;
         }
 
-        .btn:hover {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 30px var(--neon-blue);
+        .enter-btn:hover {
+            opacity: 0.9;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Info Section */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            width: 100%;
+            padding-bottom: 100px;
+        }
+
+        .info-item {
+            background: var(--apple-card);
+            padding: 30px;
+            border-radius: 22px;
+            text-align: left;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+        }
+
+        .info-item h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+
+        .info-item p {
+            color: var(--apple-gray);
+            line-height: 1.5;
+            margin-bottom: 0;
         }
     </style>
 </head>
 <body>
 
-    <div id="gate" class="container">
-        <h1>System Access</h1>
-        <span class="highlight">CASH FLOW<br>CHALLENGE</span>
-        
-        <input type="text" id="inviteCode" placeholder="ENTER CODE" oninput="checkCode()">
-        
-        <button id="entryBtn" class="btn" onclick="showVault()">Verify Protocol</button>
+    <nav>
+        <div class="logo">
+            <div class="logo-icon"></div>
+            SYNDICATE
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <h1>Die Zukunft des Cashflows.</h1>
+        <p class="subtitle">Exklusiver Zugang zur 5-Day Challenge.</p>
+
+        <div class="login-card">
+            <input type="text" id="inviteCode" placeholder="Invite-Code eingeben" oninput="toggleButton()">
+            <button id="entryBtn" class="enter-btn" onclick="verifyCode()">Fortfahren</button>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <h3>Verifiziertes System</h3>
+                <p>Nutzen Sie erprobte Strategien, um digitale Einkommensströme nachhaltig aufzubauen.</p>
+            </div>
+            <div class="info-item">
+                <h3>Premium Training</h3>
+                <p>Erhalten Sie 5 Tage lang exklusiven Zugang zu Inhalten, die normalerweise verborgen bleiben.</p>
+            </div>
+            <div class="info-item">
+                <h3>90% Provision</h3>
+                <p>Werden Sie Teil des Syndicate und behalten Sie den Großteil Ihrer Umsätze selbst.</p>
+            </div>
+        </div>
     </div>
 
     <script>
-        function checkCode() {
+        function toggleButton() {
             const code = document.getElementById('inviteCode').value.trim();
             const btn = document.getElementById('entryBtn');
-            // Zeigt den Button an, wenn der Code mindestens 4 Zeichen hat
-            if(code.length >= 4) {
-                btn.style.display = 'block';
-            } else {
-                btn.style.display = 'none';
-            }
+            // Der Button ist immer da, aber wir könnten ihn hier deaktivieren wenn gewünscht
         }
 
-        function showVault() {
-            // Leitet zur Info-Seite weiter
-            window.location.href = "info.html";
+        function verifyCode() {
+            const code = document.getElementById('inviteCode').value.trim();
+            if(code.length >= 4) {
+                window.location.href = "info.html";
+            } else {
+                alert("Bitte geben Sie einen gültigen Code ein.");
+            }
         }
     </script>
 
-</body>
-</html>
-        const code = document.getElementById('inviteCode').value.trim();
-        const btn = document.getElementById('entryBtn');
-
-        // Akzeptiert jeden Code, der mindestens 4 Zeichen lang ist
-        if(code.length >= 4) {
-            btn.style.display = 'block'; // Zeigt den Enter-Button an
-        } else {
-            btn.style.display = 'none'; // Versteckt den Button, wenn der Code zu kurz ist
-        }
-    }
-
-    function showVault() {
-        // Leitet den Nutzer direkt zur Info-Seite weiter
-        window.location.href = "info.html";
-    }
-</script>
-  
 </body>
 </html>
