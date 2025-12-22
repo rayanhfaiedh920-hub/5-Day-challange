@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syndicate Access | Dashboard</title>
+    <title>Syndicate | Secure Access</title>
     <style>
         :root {
             --apple-blue: #0071e3;
@@ -16,8 +16,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-            /* Das exakte radiale Leuchten aus deiner Vorlage */
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
             background: radial-gradient(circle at 85% 15%, #dce8f9 0%, #f5f5f7 45%, #e8f1ff 100%);
             background-attachment: fixed;
             color: var(--text-main);
@@ -28,7 +27,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Logo oben links am alten Platz */
+        /* Logo oben links fixiert */
         nav {
             width: 100%;
             padding: 40px 60px;
@@ -48,13 +47,11 @@
             gap: 10px;
             font-weight: 600;
             font-size: 14px;
-            letter-spacing: 0.5px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .logo-square {
-            width: 14px;
-            height: 14px;
+            width: 14px; height: 14px;
             background: #000;
             border-radius: 3px;
         }
@@ -68,6 +65,7 @@
             padding-top: 20px;
         }
 
+        /* Neuer Titel statt "Dashboard" */
         h1 {
             font-size: 48px;
             font-weight: 700;
@@ -83,7 +81,7 @@
             text-align: center;
         }
 
-        /* DIE PERFEKTE ZENTRIERTE $1 BOX */
+        /* Die Box mit EXAKT zentriertem Preis */
         .primary-card {
             background: var(--glass-bg);
             backdrop-filter: blur(40px) saturate(210%);
@@ -100,19 +98,16 @@
             box-sizing: border-box;
         }
 
-        .card-header {
-            text-align: left;
-        }
-
+        .card-header { text-align: left; }
         .card-header h2 { font-size: 24px; margin: 0; font-weight: 600; }
         .card-header p { color: var(--text-sub); margin: 5px 0 0 0; font-size: 16px; }
 
-        /* Preis EXAKT in der Mitte */
+        /* Preis mathematisch zentriert */
         .price-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 60px 0; /* Erzeugt den Raum für die mittige Position */
+            padding: 65px 0; /* Perfekter vertikaler Abstand */
         }
 
         .price-text {
@@ -131,7 +126,7 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 18px;
-            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transition: all 0.3s ease;
             box-shadow: 0 10px 25px rgba(0, 113, 227, 0.3);
         }
 
@@ -144,11 +139,11 @@
             font-size: 13px;
             color: var(--text-sub);
             margin-top: 25px;
-            text-align: left;
+            text-align: center;
             line-height: 1.5;
         }
 
-        /* UNTERE GRID BOXEN */
+        /* Untere Info-Boxen */
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -162,7 +157,6 @@
             border: 1px solid var(--glass-border);
             border-radius: 28px;
             padding: 35px;
-            transition: transform 0.3s ease;
         }
 
         .secondary-card h3 { font-size: 19px; margin: 0 0 10px 0; font-weight: 600; }
@@ -170,7 +164,6 @@
 
         @media (max-width: 750px) {
             .info-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 36px; }
         }
     </style>
 </head>
@@ -184,8 +177,8 @@
     </nav>
 
     <div class="main-wrapper">
-        <h1>Your Syndicate Dashboard</h1>
-        <p class="subtitle">Monitor your real-time cash flow and system performance.</p>
+        <h1>Complete Your Setup</h1>
+        <p class="subtitle">Secure your protocol access and prepare for deployment.</p>
 
         <div class="primary-card">
             <div class="card-header">
@@ -197,7 +190,7 @@
                 <div class="price-text">$1</div>
             </div>
 
-            <a href="#" class="buy-button">Buy Now</a>
+            <a href="#" class="buy-button">Activate Protocol</a>
 
             <p class="small-note">
                 After the initial learning phase, the protocol continues at a rate of $199 per month.
@@ -207,7 +200,7 @@
         <div class="info-grid">
             <div class="secondary-card">
                 <h3>Earnings Overview</h3>
-                <p>Monitor your real-time cash flow and commission balance at a glance.</p>
+                <p>Monitor your real-time cash flow and commission balance.</p>
             </div>
             <div class="secondary-card">
                 <h3>Referral System</h3>
