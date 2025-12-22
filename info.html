@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syndicate Protocol | Info</title>
+    <title>Syndicate Protocol | Access Info</title>
     <style>
         :root {
             --apple-blue: #0071e3;
@@ -27,6 +27,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Logo oben links am gewohnten Platz */
         nav {
             width: 100%;
             padding: 40px 60px;
@@ -76,10 +77,10 @@
             font-size: 20px;
             margin-bottom: 60px;
             text-align: center;
-            max-width: 600px;
+            max-width: 650px;
         }
 
-        /* Glassmorphism Card mit zentrierter $1 */
+        /* Haupt-Box mit dem Apple Glass-Effekt */
         .primary-card {
             background: var(--glass-bg);
             backdrop-filter: blur(40px) saturate(210%);
@@ -100,17 +101,19 @@
         .card-header h2 { font-size: 24px; margin: 0; font-weight: 600; }
         .card-header p { color: var(--text-sub); margin: 5px 0 0 0; font-size: 16px; }
 
+        /* Der Preis 4.99 EXAKT in der Mitte der Box */
         .price-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 60px 0;
+            padding: 65px 0;
         }
 
         .price-text {
-            font-size: 96px;
+            font-size: 86px; /* Etwas kleiner als bei der "1", damit "4.99" perfekt reinpasst */
             font-weight: 700;
             letter-spacing: -4px;
+            line-height: 1;
         }
 
         .buy-button {
@@ -122,7 +125,13 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 18px;
+            transition: all 0.3s ease;
             box-shadow: 0 10px 25px rgba(0, 113, 227, 0.3);
+        }
+
+        .buy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 113, 227, 0.45);
         }
 
         .small-note {
@@ -133,7 +142,7 @@
             line-height: 1.5;
         }
 
-        /* Info-Boxen für die Lernphase */
+        /* Info-Boxen für Lernphase und ersten Sale */
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -155,6 +164,7 @@
 
         @media (max-width: 750px) {
             .info-grid { grid-template-columns: 1fr; }
+            .price-text { font-size: 72px; }
         }
     </style>
 </head>
@@ -168,34 +178,34 @@
     </nav>
 
     <div class="main-wrapper">
-        <h1>Die Zukunft des Cashflow</h1>
-        <p class="subtitle">Exklusiver Zugang zu unserer automatisierten Software und der intensiven 5-Tage-Challenge.</p>
+        <h1>The Future of Cash Flow</h1>
+        <p class="subtitle">Exclusive access to our automated software and the intensive 5-day challenge.</p>
 
         <div class="primary-card">
             <div class="card-header">
-                <h2>Protokoll-Zugang</h2>
-                <p>Starte deine 5-tägige Lernphase heute.</p>
+                <h2>Protocol Access</h2>
+                <p>Start your 5-day learning phase today.</p>
             </div>
 
             <div class="price-container">
-                <div class="price-text">$5</div>
+                <div class="price-text">$4.99</div>
             </div>
 
-            <a href="#" class="buy-button">Challenge starten</a>
+            <a href="#" class="buy-button">Start Challenge</a>
 
             <p class="small-note">
-                Nach der Lernphase wird das Protokoll für 199$ pro Monat fortgesetzt.
+                After the initial learning phase, the protocol continues at a rate of $199 per month.
             </p>
         </div>
 
         <div class="info-grid">
             <div class="secondary-card">
-                <h3>5-Tage Lernphase</h3>
-                <p>In den ersten 5 Tagen führen wir dich Schritt für Schritt durch die Software. Du lernst genau, wie das System funktioniert und wie du es für dich nutzt.</p>
+                <h3>5-Day Learning Phase</h3>
+                <p>During the first 5 days, we guide you step-by-step through our software. You will learn exactly how the system works and how to deploy it.</p>
             </div>
             <div class="secondary-card">
-                <h3>Dein erster Sale</h3>
-                <p>Unser Ziel ist klar: Wir bringen dir alles bei, was du tun musst, damit du bereits innerhalb dieser Lernphase deinen allerersten Sale abschließt.</p>
+                <h3>Your First Sale</h3>
+                <p>Our mission is clear: we teach you every required action so that you close your very first sale within the learning phase.</p>
             </div>
         </div>
     </div>
