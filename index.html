@@ -3,53 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Syndicate | Private Access</title>
+    <title>5-Day Cash Flow Challenge | Exclusive Access</title>
     <style>
-        :root { --neon: #ccff00; --bg: #0a0a0a; --card: #151515; --text: #ffffff; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
-        .container { max-width: 400px; width: 85%; text-align: center; padding: 50px 30px; border-radius: 30px; background: var(--card); border: 1px solid #222; box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative; }
-        .container::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg, transparent, #222, transparent); border-radius: 32px; z-index: -1; }
-        h1 { font-size: 1.8rem; letter-spacing: 4px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
-        p { color: #666; font-size: 0.9rem; margin-bottom: 30px; }
-        input { width: 100%; padding: 18px; border-radius: 12px; border: 1px solid #252525; background: #000; color: var(--neon); text-align: center; font-size: 1.1rem; letter-spacing: 2px; box-sizing: border-box; transition: 0.3s; }
-        input:focus { border-color: var(--neon); outline: none; box-shadow: 0 0 15px rgba(204, 255, 0, 0.1); }
-        .btn { display: none; margin-top: 25px; background: var(--neon); color: black; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: bold; width: 100%; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; font-size: 1rem; }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(204, 255, 0, 0.2); }
-        .info-box { text-align: left; background: #000; padding: 20px; border-radius: 15px; margin-top: 25px; font-size: 0.95rem; border: 1px solid #222; }
-        .info-box p { margin: 10px 0; color: #ccc; }
-        .neon-text { color: var(--neon); text-shadow: 0 0 10px rgba(204, 255, 0, 0.3); }
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f4d03f;
+            --bg: #0d0d0d;
+            --card: #1a1a1a;
+            --text: #e0e0e0;
+        }
+        
+        body {
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at top right, #1a1a1a, #0d0d0d);
+            color: var(--text);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            padding: 50px 40px;
+            border-radius: 20px;
+            background: var(--card);
+            border: 1px solid #333;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .highlight {
+            color: var(--gold);
+            display: block;
+            font-size: 2.2rem;
+            margin-top: 5px;
+        }
+
+        p {
+            color: #888;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin: 30px 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #000;
+            color: var(--gold);
+            font-size: 1.1rem;
+            text-align: center;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn {
+            display: none; /* Versteckt bis Code korrekt */
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--gold), #b8860b);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .features {
+            text-align: left;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .feature-item span {
+            color: var(--gold);
+            margin-right: 15px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
 <div id="gate" class="container">
-    <h1>The Syndicate</h1>
-    <p>ENCRYPTED ACCESS ONLY</p>
-    <input type="text" id="inviteCode" placeholder="ENTER ACCESS CODE" oninput="checkCode()">
-    <button id="entryBtn" class="btn" onclick="showVault()">Verify Identity</button>
+    <h1>Welcome to the</h1>
+    <span class="highlight">CASH FLOW CHALLENGE</span>
+    <p>Bitte gib deinen exklusiven Einladungs-Code ein, um auf das Dashboard zuzugreifen.</p>
+    
+    <div class="input-group">
+        <input type="text" id="inviteCode" placeholder="DEIN CODE" oninput="checkCode()">
+    </div>
+    
+    <button id="entryBtn" class="btn" onclick="showVault()">Zugang verifizieren</button>
 </div>
 
 <div id="vault" class="container" style="display:none;">
-    <h1 class="neon-text">Access Granted</h1>
-    <p>WELCOME TO THE INNER CIRCLE</p>
-    <div class="info-box">
-        <p>• <b>Phase 1:</b> 5-Day Sales Bootcamp (5€)</p>
-        <p>• <b>Phase 2:</b> 199€/m Business License</p>
-        <p>• <b>Profit:</b> Keep <b>90%</b> of every sale.</p>
+    <h1 style="color: var(--gold);">ZUGANG GEWÄHRT</h1>
+    <p>Du bist jetzt Teil der 5-Day Cash Flow Challenge.</p>
+    
+    <div class="features">
+        <div class="feature-item"><span>✓</span> 5 Tage Intensiv-Sales-Training</div>
+        <div class="feature-item"><span>✓</span> Volle Business-Lizenz inklusive</div>
+        <div class="feature-item"><span>✓</span> 90% Provision auf jeden Sale</div>
     </div>
-    <a href="DEIN_STRIPE_LINK" class="btn" style="display:block;">Initiate Setup</a>
+
+    <a href="HIER_DEIN_STRIPE_LINK" class="btn" style="display:block; margin-top: 30px;">Challenge jetzt starten</a>
 </div>
 
 <script>
     function checkCode() {
-        const code = document.getElementById('inviteCode').value;
+        const code = document.getElementById('inviteCode').value.toUpperCase();
         const btn = document.getElementById('entryBtn');
-        if(code.toUpperCase() === "START2025") { 
+        // Dein Code bleibt: START2025
+        if(code === "START2025") {
             btn.style.display = 'block';
         } else {
             btn.style.display = 'none';
         }
     }
+
     function showVault() {
         document.getElementById('gate').style.display = 'none';
         document.getElementById('vault').style.display = 'block';
