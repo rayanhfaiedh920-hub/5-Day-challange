@@ -5,39 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Syndicate | Private Access</title>
     <style>
-        :root { --neon: #ccff00; --bg: #050505; --card: #111; }
-        body { background: var(--bg); color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { max-width: 450px; width: 90%; text-align: center; padding: 40px; border-radius: 25px; background: var(--card); border: 1px solid #222; }
-        h1 { font-size: 2rem; margin-bottom: 10px; }
-        input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #333; background: #000; color: white; margin-top: 20px; box-sizing: border-box; }
-        .btn { display: none; margin-top: 20px; background: var(--neon); color: black; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; width: 100%; cursor: pointer; border: none; }
-        .info-box { text-align: left; background: #000; padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 0.9rem; border-left: 3px solid var(--neon); }
+        :root { --neon: #ccff00; --bg: #0a0a0a; --card: #151515; --text: #ffffff; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
+        .container { max-width: 400px; width: 85%; text-align: center; padding: 50px 30px; border-radius: 30px; background: var(--card); border: 1px solid #222; box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative; }
+        .container::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg, transparent, #222, transparent); border-radius: 32px; z-index: -1; }
+        h1 { font-size: 1.8rem; letter-spacing: 4px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
+        p { color: #666; font-size: 0.9rem; margin-bottom: 30px; }
+        input { width: 100%; padding: 18px; border-radius: 12px; border: 1px solid #252525; background: #000; color: var(--neon); text-align: center; font-size: 1.1rem; letter-spacing: 2px; box-sizing: border-box; transition: 0.3s; }
+        input:focus { border-color: var(--neon); outline: none; box-shadow: 0 0 15px rgba(204, 255, 0, 0.1); }
+        .btn { display: none; margin-top: 25px; background: var(--neon); color: black; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: bold; width: 100%; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; font-size: 1rem; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(204, 255, 0, 0.2); }
+        .info-box { text-align: left; background: #000; padding: 20px; border-radius: 15px; margin-top: 25px; font-size: 0.95rem; border: 1px solid #222; }
+        .info-box p { margin: 10px 0; color: #ccc; }
+        .neon-text { color: var(--neon); text-shadow: 0 0 10px rgba(204, 255, 0, 0.3); }
     </style>
 </head>
 <body>
 
 <div id="gate" class="container">
-    <h1>THE SYNDICATE</h1>
-    <p style="color: #888;">Zugang nur mit Einladungs-Code</p>
-    <input type="text" id="inviteCode" placeholder="Code hier eingeben..." oninput="checkCode()">
-    <button id="entryBtn" class="btn" onclick="showVault()">CODE VERIFIZIEREN</button>
+    <h1>The Syndicate</h1>
+    <p>ENCRYPTED ACCESS ONLY</p>
+    <input type="text" id="inviteCode" placeholder="ENTER ACCESS CODE" oninput="checkCode()">
+    <button id="entryBtn" class="btn" onclick="showVault()">Verify Identity</button>
 </div>
 
 <div id="vault" class="container" style="display:none;">
-    <h1 style="color: var(--neon);">ZUGANG GEWÄHRT</h1>
+    <h1 class="neon-text">Access Granted</h1>
+    <p>WELCOME TO THE INNER CIRCLE</p>
     <div class="info-box">
-        <p>• <b>Phase 1:</b> 5 Tage Sales Bootcamp (5€)</p>
-        <p>• <b>Phase 2:</b> 199€/Monat Business-Lizenz</p>
-        <p>• <b>Dein Profit:</b> Du behältst <b>90%</b> jeder Zahlung!</p>
+        <p>• <b>Phase 1:</b> 5-Day Sales Bootcamp (5€)</p>
+        <p>• <b>Phase 2:</b> 199€/m Business License</p>
+        <p>• <b>Profit:</b> Keep <b>90%</b> of every sale.</p>
     </div>
-    <a href="#" class="btn" style="display:block;">JETZT STARTEN</a>
+    <a href="DEIN_STRIPE_LINK" class="btn" style="display:block;">Initiate Setup</a>
 </div>
 
 <script>
     function checkCode() {
         const code = document.getElementById('inviteCode').value;
         const btn = document.getElementById('entryBtn');
-        // Dein Test-Code ist: START2025
         if(code.toUpperCase() === "START2025") { 
             btn.style.display = 'block';
         } else {
