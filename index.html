@@ -24,15 +24,18 @@
             min-height: 100vh;
         }
 
-        /* Navigation / Logo oben links */
+        /* Logo oben links */
         nav {
             width: 100%;
             padding: 20px 40px;
             box-sizing: border-box;
             display: flex;
             justify-content: flex-start;
-            position: absolute;
+            position: fixed;
             top: 0;
+            background: rgba(245, 245, 247, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
         }
 
         .logo {
@@ -44,6 +47,7 @@
             gap: 8px;
         }
 
+        /* Quadratisches Logo-Icon */
         .logo-icon {
             width: 24px;
             height: 24px;
@@ -51,9 +55,9 @@
             border-radius: 6px;
         }
 
-        /* Main Content Container */
+        /* Hauptbereich */
         .main-container {
-            margin-top: 120px;
+            margin-top: 140px;
             width: 90%;
             max-width: 1000px;
             display: flex;
@@ -75,7 +79,7 @@
             margin-bottom: 40px;
         }
 
-        /* Login Card */
+        /* Login Bereich */
         .login-card {
             background: var(--apple-card);
             padding: 40px;
@@ -103,6 +107,7 @@
         }
 
         .enter-btn {
+            display: none; /* Erscheint erst bei Code-Eingabe */
             width: 100%;
             padding: 18px;
             background-color: var(--apple-blue);
@@ -119,10 +124,10 @@
             opacity: 0.9;
         }
 
-        /* Info Section */
+        /* Info-Bereich (Vorteile) */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
             width: 100%;
             padding-bottom: 100px;
@@ -162,40 +167,39 @@
         <p class="subtitle">Exklusiver Zugang zur 5-Day Challenge.</p>
 
         <div class="login-card">
-            <input type="text" id="inviteCode" placeholder="Invite-Code eingeben" oninput="toggleButton()">
-            <button id="entryBtn" class="enter-btn" onclick="verifyCode()">Fortfahren</button>
+            <input type="text" id="inviteCode" placeholder="Invite-Code eingeben" oninput="checkCode()">
+            <button id="entryBtn" class="enter-btn" onclick="showVault()">Protokoll verifizieren</button>
         </div>
 
         <div class="info-grid">
             <div class="info-item">
-                <h3>Verifiziertes System</h3>
-                <p>Nutzen Sie erprobte Strategien, um digitale Einkommensströme nachhaltig aufzubauen.</p>
+                <h3>Verschlüsseltes System</h3>
+                <p>Nutzen Sie modernste digitale Infrastruktur für den Aufbau Ihrer Einkommensströme.</p>
             </div>
             <div class="info-item">
                 <h3>Premium Training</h3>
-                <p>Erhalten Sie 5 Tage lang exklusiven Zugang zu Inhalten, die normalerweise verborgen bleiben.</p>
+                <p>Erhalten Sie exklusive Einblicke in Strategien, die normalerweise nur einem kleinen Kreis vorbehalten sind.</p>
             </div>
             <div class="info-item">
-                <h3>90% Provision</h3>
-                <p>Werden Sie Teil des Syndicate und behalten Sie den Großteil Ihrer Umsätze selbst.</p>
+                <h3>Maximaler Profit</h3>
+                <p>Profitieren Sie von einer Provisionsstruktur, die 90% des Umsatzes direkt an Sie ausschüttet.</p>
             </div>
         </div>
     </div>
 
     <script>
-        function toggleButton() {
+        function checkCode() {
             const code = document.getElementById('inviteCode').value.trim();
             const btn = document.getElementById('entryBtn');
-            // Der Button ist immer da, aber wir könnten ihn hier deaktivieren wenn gewünscht
+            if(code.length >= 4) {
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
+            }
         }
 
-        function verifyCode() {
-            const code = document.getElementById('inviteCode').value.trim();
-            if(code.length >= 4) {
-                window.location.href = "info.html";
-            } else {
-                alert("Bitte geben Sie einen gültigen Code ein.");
-            }
+        function showVault() {
+            window.location.href = "info.html";
         }
     </script>
 
