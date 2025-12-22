@@ -12,7 +12,6 @@
             --apple-text: #1d1d1f;
             --apple-blue: #0071e3;
             --apple-gray: #86868b;
-            --glow-color: rgba(0, 113, 227, 0.5);
         }
 
         body {
@@ -26,7 +25,7 @@
             min-height: 100vh;
         }
 
-        /* Nav Bar with Logo */
+        /* Nav Bar with Logo top left */
         nav {
             width: 100%;
             padding: 20px 40px;
@@ -37,14 +36,12 @@
             top: 0;
             background: rgba(245, 245, 247, 0.8);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             z-index: 100;
         }
 
         .logo {
             font-weight: 600;
             font-size: 1.2rem;
-            letter-spacing: -0.5px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -71,7 +68,6 @@
         h1 {
             font-size: clamp(2.5rem, 8vw, 3.8rem);
             font-weight: 700;
-            letter-spacing: -1.5px;
             margin-bottom: 10px;
             line-height: 1.1;
         }
@@ -82,7 +78,7 @@
             margin-bottom: 50px;
         }
 
-        /* The Interactive Login Card */
+        /* The Card */
         .login-card {
             background: var(--apple-card);
             padding: 40px;
@@ -103,18 +99,11 @@
             margin-bottom: 20px;
             box-sizing: border-box;
             outline: none;
-            transition: all 0.3s ease;
             text-align: center;
             background-color: #fcfcfd;
         }
 
-        input:focus {
-            border-color: var(--apple-blue);
-            background-color: #fff;
-            box-shadow: 0 0 15px var(--glow-color);
-        }
-
-        /* THE GLOWING BUTTON */
+        /* DER LEUCHTENDE BUTTON */
         .enter-btn {
             width: 100%;
             padding: 20px;
@@ -125,20 +114,15 @@
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 113, 227, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            display: block; /* Immer sichtbar */
         }
 
         .enter-btn:hover {
+            box-shadow: 0 0 25px rgba(0, 113, 227, 0.7); /* Leuchteffekt */
             transform: scale(1.02);
-            box-shadow: 0 0 25px var(--apple-blue); /* Strong Glow effect */
             background-color: #0077ed;
-        }
-
-        .enter-btn:active {
-            transform: scale(0.98);
         }
 
         /* Info Section */
@@ -152,24 +136,14 @@
 
         .info-item {
             background: var(--apple-card);
-            padding: 40px;
+            padding: 35px;
             border-radius: 28px;
             text-align: left;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
         }
 
-        .info-item h3 {
-            margin: 0 0 15px 0;
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
-
-        .info-item p {
-            color: var(--apple-gray);
-            line-height: 1.6;
-            margin: 0;
-            font-size: 1rem;
-        }
+        .info-item h3 { margin: 0 0 10px 0; }
+        .info-item p { color: var(--apple-gray); line-height: 1.6; margin: 0; }
     </style>
 </head>
 <body>
@@ -186,22 +160,22 @@
         <p class="subtitle">Exclusive access to the 5-Day Challenge.</p>
 
         <div class="login-card">
-            <input type="text" id="inviteCode" placeholder="Enter Invite Code" autocomplete="off">
-            <button id="entryBtn" class="enter-btn" onclick="verifyProtocol()">Verify Protocol</button>
+            <input type="text" id="inviteCode" placeholder="Enter Invite Code">
+            <button class="enter-btn" onclick="verifyProtocol()">Verify Protocol</button>
         </div>
 
         <div class="info-grid">
             <div class="info-item">
                 <h3>Verified System</h3>
-                <p>Utilize proven digital infrastructure to build and scale your personal income streams with total security.</p>
+                <p>Proven digital infrastructure to build and scale your personal income streams.</p>
             </div>
             <div class="info-item">
                 <h3>Premium Training</h3>
-                <p>Gain 5 days of exclusive insights into high-level strategies reserved for a select few professionals.</p>
+                <p>5 days of exclusive insights into high-level strategies for professionals.</p>
             </div>
             <div class="info-item">
                 <h3>90% Commission</h3>
-                <p>Join the Syndicate and benefit from a structure designed to keep the vast majority of profit in your pocket.</p>
+                <p>Join the Syndicate and keep the vast majority of the profit in your pocket.</p>
             </div>
         </div>
     </div>
@@ -212,7 +186,7 @@
             if(code.length >= 4) {
                 window.location.href = "info.html";
             } else {
-                alert("Please enter a valid invite code to proceed.");
+                alert("Please enter your 4-digit invite code.");
             }
         }
     </script>
