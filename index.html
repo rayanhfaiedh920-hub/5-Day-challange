@@ -1,5 +1,5 @@
 
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -78,5 +78,187 @@
             letter-spacing: -2.5px;
             margin: 0 0 20px 0;
         }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-sub);
+            margin: 0;
+        }
+
+        .login-box-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0 100px 0;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 35px;
+            padding: 50px;
+            width: 100%;
+            max-width: 580px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.03); 
+            box-sizing: border-box;
+        }
+
+        .input-header {
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+            display: block;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.6);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        /* Red Error Text */
+        #errorMessage {
+            color: var(--error-red);
+            font-size: 0.9rem;
+            display: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .footer-text {
+            color: #8e8e93;
+            font-size: 0.95rem;
+        }
+
+        .verify-btn {
+            background-color: var(--apple-blue);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(50, 119, 209, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .verify-btn:hover {
+            box-shadow: 0 15px 30px rgba(50, 119, 209, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 80px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 30px;
+        }
+
+        .info-card h3 { font-size: 1.4rem; margin: 0 0 15px 0; font-weight: 600; }
+        .info-card p { color: var(--text-sub); line-height: 1.55; margin: 0; font-size: 1.1rem; }
+
+        @media (max-width: 900px) {
+            .info-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-container">
+            <div class="logo-icon"></div>
+            SYNDICATE
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="header-section">
+            <h1>The future of <br>cash flow.</h1>
+            <p class="subtitle">Exclusive access to the 5-Day Challenge.</p>
+        </div>
+
+        <div class="login-box-container">
+            <div class="glass-card">
+                <span class="input-header">Enter Invite Code</span>
+                <input type="text" id="inviteCode" placeholder="Enter Invite Code" autocomplete="off">
+                
+                <div id="errorMessage">Please enter your invite code</div>
+
+                <div class="card-footer">
+                    <span class="footer-text">autocomplete off</span>
+                    <button class="verify-btn" onclick="verify()">Verify Protocol</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>Verified System</h3>
+                <p>Utilize proven digital infrastructure to build and scale personal income streams with total security.</p>
+            </div>
+            <div class="info-card">
+                <h3>Premium Training</h3>
+                <p>Gain 5 days of exclusive insights into high-level strategies reserved for a select few professionals.</p>
+            </div>
+            <div class="info-card">
+                <h3>90% Commission</h3>
+                <p>Join the Syndicate and benefit from a structure designed to keep the vast majority of profit in your pocket.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function verify() {
+            const input = document.getElementById('inviteCode');
+            const error = document.getElementById('errorMessage');
+            const code = input.value.trim();
+
+            if (code === "") {
+                // Show error if empty
+                error.style.display = "block";
+                input.style.borderColor = "var(--error-red)";
+            } else {
+                // Success: proceed to info.html
+                error.style.display = "none";
+                input.style.borderColor = "rgba(0,0,0,0.08)";
+                window.location.href = "info.html";
+            }
+        }
+
+        // Hide error when user starts typing again
+        document.getElementById('inviteCode').addEventListener('input', function() {
+            document.getElementById('errorMessage').style.display = "none";
+            this.style.borderColor = "rgba(0,0,0,0.08)";
+        });
+    </script>
+</body>
+</html>
 
         .
