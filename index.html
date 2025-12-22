@@ -4,192 +4,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syndicate | Cash Flow Challenge</title>
+    <title>Syndicate | The Future of Cash Flow</title>
     <style>
         :root {
-            --apple-bg: #f5f5f7;
-            --apple-card: #ffffff;
-            --apple-text: #1d1d1f;
             --apple-blue: #0071e3;
-            --apple-gray: #86868b;
+            --text-dark: #1d1d1f;
+            --text-gray: #424245;
+            /* Glassmorphism Farben */
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
         }
 
         body {
             margin: 0;
+            padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--apple-bg);
-            color: var(--apple-text);
+            background: radial-gradient(circle at top right, #d0e1f9, #f5f5f7 40%);
+            background-attachment: fixed;
+            color: var(--text-dark);
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
 
-        /* Nav Bar with Logo top left */
+        /* Navigation mit Logo oben rechts */
         nav {
             width: 100%;
-            padding: 20px 40px;
-            box-sizing: border-box;
+            padding: 30px 50px;
             display: flex;
-            justify-content: flex-start;
-            position: fixed;
+            justify-content: flex-end; /* Logo nach rechts verschoben */
+            box-sizing: border-box;
+            position: absolute;
             top: 0;
-            background: rgba(245, 245, 247, 0.8);
-            backdrop-filter: blur(20px);
-            z-index: 100;
         }
 
-        .logo {
-            font-weight: 600;
-            font-size: 1.2rem;
+        .logo-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 10px 25px;
+            border-radius: 18px;
+            border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .logo-icon {
-            width: 22px;
-            height: 22px;
-            background: var(--apple-text);
+            width: 20px;
+            height: 20px;
+            background: #000;
             border-radius: 5px;
         }
 
-        /* Content Area */
-        .main-container {
-            margin-top: 150px;
+        /* Contentbereich */
+        .container {
+            margin-top: 140px;
             width: 90%;
-            max-width: 1000px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+            max-width: 1100px;
+            text-align: left; /* Text linksbündig wie im Bild */
         }
 
         h1 {
-            font-size: clamp(2.5rem, 8vw, 3.8rem);
+            font-size: 4rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin: 0 0 15px 0;
+            letter-spacing: -2px;
             line-height: 1.1;
         }
 
         .subtitle {
-            font-size: clamp(1.1rem, 4vw, 1.5rem);
-            color: var(--apple-gray);
-            margin-bottom: 50px;
+            font-size: 1.6rem;
+            color: var(--text-gray);
+            margin-bottom: 60px;
         }
 
-        /* The Card */
-        .login-card {
-            background: var(--apple-card);
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+        /* Login Box (Main Container) */
+        .login-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
-            max-width: 420px;
-            margin-bottom: 80px;
-            box-sizing: border-box;
+            margin-bottom: 100px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 35px;
+            padding: 50px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.03);
+            text-align: left;
+        }
+
+        .card-label {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: block;
         }
 
         input {
             width: 100%;
-            padding: 20px;
-            border: 1px solid #d2d2d7;
-            border-radius: 16px;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: #fff;
+            font-size: 1rem;
+            margin-bottom: 25px;
             box-sizing: border-box;
             outline: none;
-            text-align: center;
-            background-color: #fcfcfd;
         }
 
-        /* DER LEUCHTENDE BUTTON */
-        .enter-btn {
+        .button-row {
+            display: flex;
+            justify-content: flex-end;
             width: 100%;
-            padding: 20px;
+        }
+
+        .verify-btn {
             background-color: var(--apple-blue);
             color: white;
             border: none;
-            border-radius: 16px;
+            padding: 15px 35px;
+            border-radius: 12px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 113, 227, 0.3);
-            display: block; /* Immer sichtbar */
+            box-shadow: 0 10px 20px rgba(0, 113, 227, 0.3);
         }
 
-        .enter-btn:hover {
-            box-shadow: 0 0 25px rgba(0, 113, 227, 0.7); /* Leuchteffekt */
-            transform: scale(1.02);
-            background-color: #0077ed;
+        .verify-btn:hover {
+            box-shadow: 0 0 25px rgba(0, 113, 227, 0.6);
+            transform: translateY(-2px);
         }
 
-        /* Info Section */
+        /* Info Grid */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            width: 100%;
-            padding-bottom: 100px;
+            margin-top: 50px;
+            padding-bottom: 80px;
         }
 
-        .info-item {
-            background: var(--apple-card);
-            padding: 35px;
-            border-radius: 28px;
-            text-align: left;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+        .info-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            transition: transform 0.3s ease;
         }
 
-        .info-item h3 { margin: 0 0 10px 0; }
-        .info-item p { color: var(--apple-gray); line-height: 1.6; margin: 0; }
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-card h3 {
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .info-card p {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin: 0;
+            font-size: 1.1rem;
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">
+        <div class="logo-box">
             <div class="logo-icon"></div>
             SYNDICATE
         </div>
     </nav>
 
-    <div class="main-container">
+    <div class="container">
         <h1>The future of <br>cash flow.</h1>
         <p class="subtitle">Exclusive access to the 5-Day Challenge.</p>
 
-        <div class="login-card">
-            <input type="text" id="inviteCode" placeholder="Enter Invite Code">
-            <button class="enter-btn" onclick="verifyProtocol()">Verify Protocol</button>
+        <div class="login-section">
+            <div class="glass-card">
+                <span class="card-label">Enter Invite Code</span>
+                <input type="text" id="inviteCode" placeholder="Enter Invite Code" autocomplete="off">
+                <div class="button-row">
+                    <button class="verify-btn" onclick="verify()">Verify Protocol</button>
+                </div>
+            </div>
         </div>
 
         <div class="info-grid">
-            <div class="info-item">
+            <div class="info-card">
                 <h3>Verified System</h3>
-                <p>Proven digital infrastructure to build and scale your personal income streams.</p>
+                <p>Utilize proven digital infrastructure to build and scale personal income streams with total security.</p>
             </div>
-            <div class="info-item">
+            <div class="info-card">
                 <h3>Premium Training</h3>
-                <p>5 days of exclusive insights into high-level strategies for professionals.</p>
+                <p>Gain 5 days of exclusive insights into high-level strategies reserved for a select few professionals.</p>
             </div>
-            <div class="info-item">
+            <div class="info-card">
                 <h3>90% Commission</h3>
-                <p>Join the Syndicate and keep the vast majority of the profit in your pocket.</p>
+                <p>Join the Syndicate and benefit from a structure designed to keep the vast majority of profit in your pocket.</p>
             </div>
         </div>
     </div>
 
     <script>
-        function verifyProtocol() {
+        function verify() {
             const code = document.getElementById('inviteCode').value.trim();
             if(code.length >= 4) {
                 window.location.href = "info.html";
             } else {
-                alert("Please enter your 4-digit invite code.");
+                alert("Please enter a valid invite code.");
             }
         }
     </script>
-
 </body>
 </html>
