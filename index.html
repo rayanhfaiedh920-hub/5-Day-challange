@@ -198,6 +198,24 @@
             h1 { font-size: 3rem; }
             nav { padding: 20px; }
         }
+        .glass-card {
+    /* Transparenter Hintergrund (Weiß mit 40% Deckkraft) */
+    background: rgba(255, 255, 255, 0.4); 
+    
+    /* Der entscheidende Blur-Effekt für den Hintergrund */
+    backdrop-filter: blur(25px); 
+    -webkit-backdrop-filter: blur(25px);
+    
+    /* Zarter Rand für den Glas-Effekt */
+    border: 1px solid rgba(255, 255, 255, 0.5); 
+    
+    /* Abgerundete Ecken und Schatten wie im Bild */
+    border-radius: 35px;
+    padding: 45px;
+    width: 100%;
+    max-width: 580px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+}
     </style>
 </head>
 <body>
