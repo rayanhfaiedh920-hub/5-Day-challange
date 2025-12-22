@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syndicate | Dashboard</title>
+    <title>Syndicate | Exclusive Access</title>
     <style>
         :root {
             --apple-blue: #0071e3;
-            --glass-bg: rgba(255, 255, 255, 0.4); 
+            --glass-bg: rgba(255, 255, 255, 0.45); 
             --glass-border: rgba(255, 255, 255, 0.7);
             --text-main: #1d1d1f;
             --text-sub: #86868b;
@@ -16,37 +16,40 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            background: radial-gradient(circle at 90% 10%, #dce8f9 0%, #f5f5f7 50%, #e8f1ff 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+            /* Das exakte Blau-Leuchten aus deinem Bild */
+            background: radial-gradient(circle at 85% 15%, #dce8f9 0%, #f5f5f7 40%, #e8f1ff 100%);
             background-attachment: fixed;
             color: var(--text-main);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
 
-        nav {
+        .main-container {
             width: 100%;
-            padding: 30px 60px;
+            max-width: 520px;
+            padding: 20px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            box-sizing: border-box;
         }
 
-        .logo-container {
+        .logo-top {
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            padding: 10px 20px;
+            padding: 10px 22px;
             border-radius: 14px;
             border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             gap: 10px;
             font-weight: 600;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }
 
         .logo-icon {
@@ -55,77 +58,40 @@
             border-radius: 4px;
         }
 
-        .main-wrapper {
-            width: 90%;
-            max-width: 1100px;
-            padding: 40px 0 100px 0;
-        }
-
-        h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: -0.8px;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            color: var(--text-sub);
-            font-size: 1.2rem;
-            margin-bottom: 50px;
-        }
-
-        /* Glass Cards Styling */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin-bottom: 60px;
-        }
-
+        /* Die einzige Box in der Mitte */
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(35px) saturate(180%);
-            -webkit-backdrop-filter: blur(35px) saturate(180%);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
             border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            padding: 35px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.02);
+            border-radius: 35px;
+            padding: 50px 40px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+            text-align: center;
             transition: transform 0.3s ease;
         }
 
-        .glass-card:hover {
-            transform: translateY(-4px);
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            letter-spacing: -0.5px;
         }
 
-        .grid-label {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 25px;
-        }
-
-        /* Pricing Card - Zentriert & Einzeln */
-        .pricing-container {
-            display: flex;
-            justify-content: flex-start; /* Links ausgerichtet wie im Image */
-        }
-
-        .price-card {
-            width: 100%;
-            max-width: 450px;
+        .description {
+            color: var(--text-sub);
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 30px;
         }
 
         .price-value {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: 700;
-            margin: 15px 0;
-        }
-
-        .small-note {
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            display: block;
-            margin-top: 15px;
-            line-height: 1.4;
+            margin: 20px 0;
+            color: var(--text-main);
         }
 
         .buy-action {
@@ -134,66 +100,60 @@
             background: var(--apple-blue);
             color: white;
             text-align: center;
-            padding: 18px;
-            border-radius: 16px;
+            padding: 20px;
+            border-radius: 18px;
             text-decoration: none;
             font-weight: 600;
-            margin-top: 25px;
-            transition: opacity 0.2s;
-            box-shadow: 0 8px 20px rgba(0, 113, 227, 0.3);
+            font-size: 1.2rem;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 113, 227, 0.3);
         }
 
         .buy-action:hover {
-            opacity: 0.9;
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 113, 227, 0.4);
         }
 
+        .small-note {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            display: block;
+            margin-top: 25px;
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+
+        /* Apple Star Accent unten rechts */
         .star-accent {
             position: fixed;
             bottom: 30px;
             right: 40px;
-            width: 40px;
-            opacity: 0.2;
-        }
-
-        @media (max-width: 850px) {
-            .dashboard-grid { grid-template-columns: 1fr; }
+            width: 45px;
+            opacity: 0.15;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo-container">
+    <div class="main-container">
+        <div class="logo-top">
             <div class="logo-icon"></div>
             SYNDICATE
         </div>
-    </nav>
 
-    <div class="main-wrapper">
-        <h1>Your Syndicate Dashboard</h1>
-        <p class="subtitle">Monitor your real-time cash flow and system performance.</p>
-
-        <div class="dashboard-grid">
-            <div class="glass-card">
-                <h3>Earnings Overview</h3>
-                <p>Monitor your real-time cash flow and commission balance at a glance.</p>
-            </div>
-            <div class="glass-card">
-                <h3>Referral System</h3>
-                <p>Invite partners and earn recurring commissions through our secure protocol.</p>
-            </div>
-        </div>
-
-        <div class="grid-label">Upgrade Your Access</div>
-        
-        <div class="pricing-container">
-            <div class="glass-card price-card">
-                <h3>Syndicate Access</h3>
-                <p>Essential features to get started.</p>
-                <div class="price-value">$1</div>
-                <a href="#" class="buy-action">Buy Now</a>
-                <span class="small-note">After the initial learning phase, the protocol continues at a rate of $199 per month.</span>
-            </div>
+        <div class="glass-card">
+            <h2>Syndicate Access</h2>
+            <p class="description">Unlock the full potential of your digital cash flow system today.</p>
+            
+            <div class="price-value">$1</div>
+            
+            <a href="#" class="buy-action">Activate Now</a>
+            
+            <span class="small-note">
+                After the initial learning phase, the protocol continues at a rate of <b>$199 per month</b> to maintain your infrastructure.
+            </span>
         </div>
     </div>
 
