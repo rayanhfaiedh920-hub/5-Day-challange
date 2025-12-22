@@ -1,5 +1,12 @@
+Hier ist der komplette Code für deine index.html im sauberen Apple-Stil, komplett auf Englisch übersetzt.
+
+Der neue "Apple-Style" Code (Englisch)
+Ersetze den gesamten Inhalt deiner index.html mit diesem Code:
+
+HTML
+
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +31,7 @@
             min-height: 100vh;
         }
 
-        /* Logo oben links */
+        /* Navigation / Logo top left */
         nav {
             width: 100%;
             padding: 20px 40px;
@@ -47,7 +54,6 @@
             gap: 8px;
         }
 
-        /* Quadratisches Logo-Icon */
         .logo-icon {
             width: 24px;
             height: 24px;
@@ -55,7 +61,7 @@
             border-radius: 6px;
         }
 
-        /* Hauptbereich */
+        /* Main Content Container */
         .main-container {
             margin-top: 140px;
             width: 90%;
@@ -67,19 +73,20 @@
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: 10px;
+            letter-spacing: -1.5px;
+            margin-bottom: 15px;
+            line-height: 1.1;
         }
 
         .subtitle {
             font-size: 1.5rem;
             color: var(--apple-gray);
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
-        /* Login Bereich */
+        /* Login Card */
         .login-card {
             background: var(--apple-card);
             padding: 40px;
@@ -94,12 +101,13 @@
             width: 100%;
             padding: 18px;
             border: 1px solid #d2d2d7;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 1rem;
             margin-bottom: 20px;
             box-sizing: border-box;
             outline: none;
             transition: border-color 0.3s ease;
+            text-align: center;
         }
 
         input:focus {
@@ -107,13 +115,13 @@
         }
 
         .enter-btn {
-            display: none; /* Erscheint erst bei Code-Eingabe */
+            display: none; /* Only shows when code is entered */
             width: 100%;
             padding: 18px;
             background-color: var(--apple-blue);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -124,7 +132,7 @@
             opacity: 0.9;
         }
 
-        /* Info-Bereich (Vorteile) */
+        /* Info Grid */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -135,21 +143,23 @@
 
         .info-item {
             background: var(--apple-card);
-            padding: 30px;
-            border-radius: 22px;
+            padding: 35px;
+            border-radius: 24px;
             text-align: left;
             box-shadow: 0 10px 20px rgba(0,0,0,0.02);
         }
 
         .info-item h3 {
             margin-top: 0;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
         }
 
         .info-item p {
             color: var(--apple-gray);
-            line-height: 1.5;
+            line-height: 1.6;
             margin-bottom: 0;
+            font-size: 0.95rem;
         }
     </style>
 </head>
@@ -163,26 +173,26 @@
     </nav>
 
     <div class="main-container">
-        <h1>Die Zukunft des Cashflows.</h1>
-        <p class="subtitle">Exklusiver Zugang zur 5-Day Challenge.</p>
+        <h1>The future of <br>cash flow.</h1>
+        <p class="subtitle">Exclusive access to the 5-Day Challenge.</p>
 
         <div class="login-card">
-            <input type="text" id="inviteCode" placeholder="Invite-Code eingeben" oninput="checkCode()">
-            <button id="entryBtn" class="enter-btn" onclick="showVault()">Protokoll verifizieren</button>
+            <input type="text" id="inviteCode" placeholder="Enter Invite Code" oninput="checkCode()">
+            <button id="entryBtn" class="enter-btn" onclick="verifyProtocol()">Verify Protocol</button>
         </div>
 
         <div class="info-grid">
             <div class="info-item">
-                <h3>Verschlüsseltes System</h3>
-                <p>Nutzen Sie modernste digitale Infrastruktur für den Aufbau Ihrer Einkommensströme.</p>
+                <h3>Verified System</h3>
+                <p>Utilize proven digital infrastructure to build and scale your personal income streams.</p>
             </div>
             <div class="info-item">
                 <h3>Premium Training</h3>
-                <p>Erhalten Sie exklusive Einblicke in Strategien, die normalerweise nur einem kleinen Kreis vorbehalten sind.</p>
+                <p>Gain 5 days of exclusive insights into high-level strategies reserved for a select few.</p>
             </div>
             <div class="info-item">
-                <h3>Maximaler Profit</h3>
-                <p>Profitieren Sie von einer Provisionsstruktur, die 90% des Umsatzes direkt an Sie ausschüttet.</p>
+                <h3>90% Commission</h3>
+                <p>Join the Syndicate and benefit from a structure designed to keep most of the profit in your pocket.</p>
             </div>
         </div>
     </div>
@@ -191,6 +201,7 @@
         function checkCode() {
             const code = document.getElementById('inviteCode').value.trim();
             const btn = document.getElementById('entryBtn');
+            // Show button if code length is at least 4 characters
             if(code.length >= 4) {
                 btn.style.display = 'block';
             } else {
@@ -198,7 +209,8 @@
             }
         }
 
-        function showVault() {
+        function verifyProtocol() {
+            // Redirects to info.html
             window.location.href = "info.html";
         }
     </script>
