@@ -27,7 +27,6 @@
             overflow: hidden;
         }
 
-        /* Glaseffekt Container */
         .container {
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -61,12 +60,6 @@
             letter-spacing: 1px;
         }
 
-        /* Transparenter Input mit Leuchteffekt */
-        .input-wrapper {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
         input {
             width: 100%;
             padding: 18px;
@@ -80,17 +73,16 @@
             transition: 0.4s;
             box-sizing: border-box;
             outline: none;
+            margin-bottom: 25px;
         }
 
         input:focus {
             border-color: var(--neon-blue);
             box-shadow: 0 0 20px var(--neon-glow);
-            background: rgba(0, 0, 0, 0.6);
         }
 
-        /* Transparenter Button */
         .btn {
-            display: none;
+            display: none; /* Wird erst durch JS angezeigt */
             width: 100%;
             padding: 18px;
             background: transparent;
@@ -104,32 +96,13 @@
             cursor: pointer;
             transition: 0.4s;
             box-shadow: 0 0 10px var(--neon-glow);
+            text-decoration: none;
         }
 
         .btn:hover {
             background: var(--neon-blue);
             color: #000;
             box-shadow: 0 0 30px var(--neon-blue);
-        }
-
-        /* Info Bereich nach Login */
-        .info-card {
-            text-align: left;
-            background: rgba(255,255,255,0.02);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 25px 0;
-            border: 1px dashed #333;
-        }
-
-        .info-card p {
-            font-size: 0.9rem;
-            margin: 12px 0;
-            color: #ccc;
-        }
-
-        .info-card b {
-            color: var(--neon-blue);
         }
 
         @keyframes fadeIn {
@@ -144,46 +117,17 @@
         <h1>System Access</h1>
         <span class="highlight">CASH FLOW<br>CHALLENGE</span>
         
-        <div class="input-wrapper">
-            <input type="text" id="inviteCode" placeholder="ENTER CODE" oninput="checkCode()">
-        </div>
+        <input type="text" id="inviteCode" placeholder="ENTER CODE" oninput="checkCode()">
         
         <button id="entryBtn" class="btn" onclick="showVault()">Verify Protocol</button>
     </div>
 
-    <div id="vault" class="container" style="display:none;">
-        <h1 style="color: var(--neon-blue);">Verified</h1>
-        <span class="highlight">DASHBOARD</span>
-        
-        <div class="info-card">
-            <p>● <b>5 Days</b> Premium Sales Training</p>
-            <p>● <b>Digital Business</b> License</p>
-            <p>● <b>90% Profit</b> per Conversion</p>
-        </div>
-
-        <a href="DEIN_STRIPE_LINK" class="btn" style="display:block; text-align: center; text-decoration: none;">Launch Challenge</a>
-    </div>
-<div id="vault" class="container" style="display:none;">
-    <h1 style="color: var(--neon);">ACCESS GRANTED</h1>
-    <div class="info-card">
-        <p>● <b>Phase 1:</b> $5 Setup Challenge (One-time)</p>
-        <p>● <b>Phase 2:</b> $199/mo Business License</p>
-        <p>● <b>Profit:</b> You keep 90% Commission</p>
-    </div>
-
-    <a href="https://buy.stripe.com/test_00wdR2043gO43FR1vh1gs00" class="btn" style="display:block; text-decoration: none; margin-bottom: 15px;">
-        Start $5 Challenge
-    </a>
-    
-    <a href="https://buy.stripe.com/test_fZueV61877du4JVa1N1gs01" class="btn" style="display:block; text-decoration: none; border-color: #ff0055;">
-        Full Access ($199)
-    </a>
-</div>
     <script>
         function checkCode() {
-            const code = document.getElementById('inviteCode').value.toUpperCase();
+            const code = document.getElementById('inviteCode').value.trim();
             const btn = document.getElementById('entryBtn');
-            if(code === "START2025") {
+            // Zeigt den Button an, wenn der Code mindestens 4 Zeichen hat
+            if(code.length >= 4) {
                 btn.style.display = 'block';
             } else {
                 btn.style.display = 'none';
@@ -191,9 +135,29 @@
         }
 
         function showVault() {
-            document.getElementById('gate').style.display = 'none';
-            document.getElementById('vault').style.display = 'block';
+            // Leitet zur Info-Seite weiter
+            window.location.href = "info.html";
         }
     </script>
+
+</body>
+</html>
+        const code = document.getElementById('inviteCode').value.trim();
+        const btn = document.getElementById('entryBtn');
+
+        // Akzeptiert jeden Code, der mindestens 4 Zeichen lang ist
+        if(code.length >= 4) {
+            btn.style.display = 'block'; // Zeigt den Enter-Button an
+        } else {
+            btn.style.display = 'none'; // Versteckt den Button, wenn der Code zu kurz ist
+        }
+    }
+
+    function showVault() {
+        // Leitet den Nutzer direkt zur Info-Seite weiter
+        window.location.href = "info.html";
+    }
+</script>
+  
 </body>
 </html>
