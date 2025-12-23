@@ -19,10 +19,10 @@
             margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: radial-gradient(circle at top right, #e2e2e7, #f5f5f7);
             color: var(--text-main); display: flex; min-height: 100vh;
-            font-size: 22px; /* Basis-Schriftgröße massiv erhöht */
+            font-size: 22px;
         }
 
-        /* SIDEBAR - Größer und Breiter */
+        /* SIDEBAR - XXL & STABLE */
         .sidebar {
             width: 320px; background: var(--glass-bg); backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px); border-right: 1px solid var(--glass-border);
@@ -41,18 +41,17 @@
 
         .logout-btn {
             margin-top: auto; color: #ff3b30 !important; border: 2px solid rgba(255, 59, 48, 0.2) !important;
-            font-weight: 700 !important; text-align: center !important;
+            font-weight: 700 !important; text-align: center !important; cursor: pointer; border-radius: 18px; padding: 15px;
         }
-        .logout-btn:hover { background: rgba(255, 59, 48, 0.1) !important; }
 
-        /* MAIN CONTENT - Maximale Skalierung */
+        /* MAIN CONTENT - MAX SCALE */
         .main-content { margin-left: 320px; padding: 80px; flex-grow: 1; max-width: 1400px; width: 100%; box-sizing: border-box; }
 
         .tab-content { display: none; animation: fadeIn 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* STATS CARDS - Riesig */
+        /* STATS CARDS */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin: 50px 0; }
         .stat-card { 
             background: var(--glass-bg); backdrop-filter: blur(20px);
@@ -62,7 +61,7 @@
         .stat-card h3 { font-size: 16px; text-transform: uppercase; color: var(--text-sub); margin: 0; letter-spacing: 2px; font-weight: 700; }
         .stat-card p { font-size: 48px; font-weight: 800; margin-top: 20px; margin-bottom: 0; letter-spacing: -1px; }
 
-        /* LEARNING PANEL - Kino-Format */
+        /* LEARNING PANEL */
         .glass-panel {
             background: var(--glass-bg); backdrop-filter: blur(50px);
             padding: 80px; border-radius: 50px; border: 1px solid var(--glass-border);
@@ -71,28 +70,20 @@
 
         .step-label { font-size: 16px; font-weight: 800; color: var(--apple-blue); text-transform: uppercase; margin-bottom: 20px; display: block; letter-spacing: 2px; }
         .mission-box { background: rgba(255,255,255,0.6); padding: 40px; border-radius: 35px; margin: 35px 0; border: 1px solid rgba(0,0,0,0.05); }
-        .mission-item { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 30px; font-size: 24px; line-height: 1.6; }
-        .check-icon { color: var(--success); font-weight: bold; font-size: 30px; }
+        
+        /* IMAGE GRID FOR PART 2 */
+        .image-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
+        .image-gallery img { width: 100%; border-radius: 20px; border: 2px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 
-        .dialog-bubble { 
-            background: #f0f7ff; padding: 40px; border-radius: 30px; border-left: 10px solid var(--apple-blue); 
-            font-style: italic; margin: 40px 0; font-size: 26px; line-height: 1.5; color: #000;
-        }
-
-        /* BUTTONS - XXL */
         .next-btn {
             background: var(--apple-blue); color: white; border: none; padding: 25px 70px;
             border-radius: 25px; font-weight: 700; cursor: pointer; transition: 0.4s;
             box-shadow: 0 15px 35px rgba(0, 113, 227, 0.3); font-size: 22px;
         }
-        .next-btn:hover { transform: scale(1.05); box-shadow: 0 25px 50px rgba(0, 113, 227, 0.45); }
-        
         .back-btn {
             background: transparent; color: var(--text-sub); border: 2px solid #d2d2d7; padding: 25px 50px;
             border-radius: 25px; font-weight: 700; cursor: pointer; font-size: 22px;
         }
-
-        .badge { padding: 12px 25px; border-radius: 40px; font-size: 16px; font-weight: 800; background: rgba(0, 113, 227, 0.1); color: var(--apple-blue); margin-bottom: 30px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -103,36 +94,31 @@
         <button class="nav-item" onclick="showTab('learning', this)">Masterclass</button>
         <button class="nav-item">Assets</button>
         
-        <button onclick="handleLogout()" class="nav-item logout-btn">Logout</button>
+        <button onclick="handleLogout()" class="logout-btn">Abmelden</button>
     </div>
 
     <div class="main-content">
         
         <div id="dashboard" class="tab-content active">
-            <span class="badge">SYNDICATE ELITE</span>
-            <h1 style="font-size: 70px; letter-spacing: -4px; margin-top: 0; margin-bottom: 20px;">Welcome, <span id="userName">User</span></h1>
-            
+            <h1 style="font-size: 70px; letter-spacing: -4px; margin-top: 0; margin-bottom: 20px;">Willkommen, <span id="userName">User</span></h1>
             <div class="stats-grid">
-                <div class="stat-card"><h3>Net Earnings</h3><p style="color: var(--success);">$<span id="userBalance">0.00</span></p></div>
-                <div class="stat-card"><h3>Mission Day</h3><p><span id="dayNum">1</span> / 5</p></div>
-                <div class="stat-card"><h3>Invite Code</h3><p id="myCode" style="color: var(--apple-blue);">---</p></div>
+                <div class="stat-card"><h3>Aktuelle Earnings</h3><p style="color: var(--success);">$<span id="userBalance">0.00</span></p></div>
+                <div class="stat-card"><h3>Testphase</h3><p>Tag <span id="dayNum">1</span> / 5</p></div>
+                <div class="stat-card"><h3>Dein Invite-Code</h3><p id="myCode" style="color: var(--apple-blue);">---</p></div>
             </div>
-
-            <div class="glass-panel" style="text-align: center; padding: 100px 60px;">
-                <h2 style="font-size: 45px; margin-bottom: 20px; letter-spacing: -1px;">Initiate Sourcing Mission</h2>
-                <p style="color: var(--text-sub); margin-bottom: 50px; font-size: 26px; max-width: 800px; margin-left: auto; margin-right: auto;">Step into the protocol. Learn to source, set, and close high-ticket clients.</p>
-                <button class="next-btn" style="float:none;" onclick="document.querySelector('[onclick*=\'learning\']').click()">Launch Training</button>
+            <div class="glass-panel" style="text-align: center;">
+                <h2 style="font-size: 40px;">Starte deine Sourcing Mission</h2>
+                <button class="next-btn" style="margin-top: 30px;" onclick="document.querySelector('[onclick*=\'learning\']').click()">Training öffnen</button>
             </div>
         </div>
 
         <div id="learning" class="tab-content">
-            <h1 style="font-size: 60px; letter-spacing: -3px; margin-bottom: 50px;">Training Protocol</h1>
-            
+            <h1 style="font-size: 60px; letter-spacing: -3px; margin-bottom: 50px;">Strategie & Akquise</h1>
             <div class="glass-panel">
                 <div id="learning-stage"></div>
-                <div style="margin-top: 80px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid rgba(0,0,0,0.05); padding-top: 50px;">
-                    <button class="back-btn" id="backBtn" onclick="prevLesson()" style="visibility: hidden;">← Previous</button>
-                    <button class="next-btn" id="nextBtn" onclick="nextLesson()">Next Phase →</button>
+                <div style="margin-top: 60px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid rgba(0,0,0,0.05); padding-top: 50px;">
+                    <button class="back-btn" id="backBtn" onclick="prevLesson()" style="visibility: hidden;">← Zurück</button>
+                    <button class="next-btn" id="nextBtn" onclick="nextLesson()">Nächste Phase →</button>
                 </div>
             </div>
         </div>
@@ -159,42 +145,35 @@
         let currentStep = 1;
         const lessonData = {
             1: {
-                label: "Phase 1: The Foundation",
-                title: "Mastering the Sourcing Mission",
-                html: `
-                    <p style="color:var(--text-sub); line-height:1.6; font-size:26px;">The 5-Day Cash Flow Challenge is your blueprint for success. Focus on these core objectives:</p>
-                    <div class="mission-box">
-                        <div class="mission-item"><span class="check-icon">✓</span><span><b>The Target:</b> Find people looking for remote work, side hustles, or financial freedom.</span></div>
-                        <div class="mission-item"><span class="check-icon">✓</span><span><b>The Key:</b> Your <b>Invite Code</b> is your digital fingerprint. Every client must use it to register.</span></div>
-                        <div class="mission-item"><span class="check-icon">✓</span><span><b>The Logic:</b> Once they enter via your code, they are locked to your network forever.</span></div>
-                    </div>`
+                label: "Phase 1: Das Fundament",
+                title: "Mission & Invite-Code",
+                html: `<p style="font-size:26px;">Dein Invite-Code ist dein digitaler Fingerabdruck. Er ist der einzige Weg, wie das System deine Verkäufe erkennt.</p>
+                       <div class="mission-box"><p>Stelle sicher, dass jeder Lead deinen Code nutzt, um deine Provision zu sichern.</p></div>`
             },
             2: {
-                label: "Phase 2: Tactical Search",
-                title: "High-Ticket Sniper Method",
-                html: `<p style="font-size:26px;">Infiltrate <b>Facebook Groups</b> for High-Ticket Closing, SaaS, and Digital Marketing.</p>
-                       <div class="mission-box"><b>Pro Strategy:</b> Scan the comments of viral industry leaders. People asking "How?" are your golden leads.</div>`
+                label: "Phase 2: Target Sourcing",
+                title: "Hochwertige Zielgruppen identifizieren",
+                html: `
+                    <p style="font-size:26px;">Um maximale Conversion zu erzielen, musst du dort präsent sein, wo deine Zielgruppe bereits nach Lösungen sucht.</p>
+                    <div class="image-gallery">
+                        <img src="Screenshot 2025-12-23 120115.png" alt="Cleaning Groups">
+                        <img src="Screenshot 2025-12-23 120226.png" alt="Online Jobs">
+                    </div>
+                    <p style="font-size:20px; color:var(--apple-blue); font-weight:600; text-align:center;">Hier siehst du Referenzbeispiele für Facebook-Gruppen, in denen sich täglich tausende potenzielle Leads aufhalten.</p>
+                    
+                    <div class="mission-box">
+                        <h4 style="font-size:24px; margin-top:0;">Professionelle Akquise-Kanäle:</h4>
+                        <ul style="font-size:22px; line-height:1.8;">
+                            <li><b>Facebook Nischengruppen:</b> Suche nach Begriffen wie "Online Jobs", "Remote Work" oder branchenspezifischen Gruppen (z.B. Cleaning, Real Estate).</li>
+                            <li><b>Interaktions-Snipping:</b> Antworte auf Kommentare unter viralen Posts von Coaches oder Business-Gurus.</li>
+                            <li><b>LinkedIn Outreach:</b> Identifiziere Profile, die "Open to Work" markiert haben oder im Bereich Sales/Setting wachsen wollen.</li>
+                            <li><b>Instagram DM-Setting:</b> Nutze Hashtags wie #sidehustle, um aktive Nutzer zu finden, die nach neuen Einkommensquellen suchen.</li>
+                        </ul>
+                    </div>`
             },
-            3: {
-                label: "Phase 3: The Approach",
-                title: "Elite Communication",
-                html: `<p style="font-size:26px;">Soft setting is about authority, not selling.</p>
-                       <div class="dialog-bubble">"Hey [Name], saw your comment on the scaling post. I'm actually using the Syndicate Protocol to automate my flow. Happy to show you the 5-day trial dashboard!"</div>`
-            },
-            4: {
-                label: "Phase 4: Closing the $5 Lead",
-                title: "Frictionless Onboarding",
-                html: `<p style="font-size:26px;">The $5 entry fee is designed to be an easy 'yes'.</p>
-                       <div class="dialog-bubble">"It's just $5 for the full 5-day challenge. Use my invite code to get in. I'll help you set it up."</div>`
-            },
-            5: {
-                label: "Phase 5: Dominance",
-                title: "Network Expansion",
-                html: `<div class="mission-box" style="background:var(--text-main); color:white; padding:60px; text-align:center;">
-                        <h4 style="color:var(--success); font-size:40px;">Mission Ready</h4>
-                        <p style="font-size:28px;">Go to the dashboard, copy your code, and start your hunt.</p>
-                       </div>`
-            }
+            3: { label: "Phase 3", title: "Kommunikation", html: "<p>Professioneller Outreach...</p>" },
+            4: { label: "Phase 4", title: "Trial Onboarding", html: "<p>Abschluss der $5 Testphase...</p>" },
+            5: { label: "Phase 5", title: "Netzwerk Skalierung", html: "<p>Werde zum Ultra-Client.</p>" }
         };
 
         window.nextLesson = () => { if(currentStep < 5) { currentStep++; renderLesson(); window.scrollTo(0,0); } };
@@ -204,10 +183,10 @@
             const data = lessonData[currentStep];
             document.getElementById('learning-stage').innerHTML = `
                 <span class="step-label">${data.label}</span>
-                <h2 style="font-size:55px; margin: 20px 0 40px 0; letter-spacing:-2px;">${data.title}</h2>
+                <h2 style="font-size:55px; margin: 20px 0 40px 0;">${data.title}</h2>
                 ${data.html}`;
             document.getElementById('backBtn').style.visibility = currentStep === 1 ? 'hidden' : 'visible';
-            document.getElementById('nextBtn').innerText = currentStep === 5 ? "Complete Mission" : "Next Phase →";
+            document.getElementById('nextBtn').innerText = currentStep === 5 ? "Abschließen" : "Nächste Phase →";
         }
 
         renderLesson();
@@ -224,9 +203,9 @@
                 const userDoc = await getDoc(doc(db, "members", user.uid));
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    document.getElementById('userName').innerText = data.firstName;
+                    document.getElementById('userName').innerText = data.firstName || "User";
                     document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
-                    document.getElementById('myCode').innerText = data.myInviteCode;
+                    document.getElementById('myCode').innerText = data.myInviteCode || "N/A";
                 }
             } else { window.location.href = "login.html"; }
         });
