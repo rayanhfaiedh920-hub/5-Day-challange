@@ -252,24 +252,31 @@
     </div>
 
     <script>
-        function verify() {
-            const input = document.getElementById('inviteCode');
-            const error = document.getElementById('errorMessage');
-            const code = input.value.trim();
+    async function verifyCode() {
+    const inviteCode = document.querySelector('input[placeholder="Enter Invite Code"]').value;
+    
+    if (!inviteCode) {
+        alert("Please enter a code.");
+        return;
+    }
 
-            if (code === "") {
-                error.style.display = "block";
-                input.style.borderColor = "var(--error-red)";
-            } else {
-                // Speichere den Code für die spätere Registrierung
-                localStorage.setItem('referrerCode', code);
-                window.location.href = "info.html";
-            }
+    try {
+        const q = query(collection(db, "members"), where("myInviteCode", "==", inviteCode.trim().toUpperCase()));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            // SPEICHERN: Wir merken uns den Code für die nächste Seite
+            sessionStorage.setItem("verifiedCode", inviteCode.trim().toUpperCase());
+            // WEITERLEITUNG
+            window.location.href = "info.html";
+        } else {
+            alert("Invalid Invite Code.");
         }
-
-        document.getElementById('inviteCode').addEventListener('input', function() {
-            document.getElementById('errorMessage').style.display = "none";
-            this.style.borderColor = "rgba(0,0,0,0.08)";
+    } catch (error) {
+        console.error("Error:", error);
+        alert("System Error.");
+    }
+}= "rgba(0,0,0,0.08)";
         });
     </script>
 </body>
