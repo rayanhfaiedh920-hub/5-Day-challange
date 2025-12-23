@@ -251,34 +251,46 @@
         </div>
     </div>
 
-    <script>
-    async function verifyCode() {
-    const inviteCode = document.querySelector('input[placeholder="Enter Invite Code"]').value;
-    
-    if (!inviteCode) {
-        alert("Please enter a code.");
-        return;
-    }
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    try {
-        const q = query(collection(db, "members"), where("myInviteCode", "==", inviteCode.trim().toUpperCase()));
-        const querySnapshot = await getDocs(q);
+    const firebaseConfig = {
+        apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+        authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+        projectId: "syndicate-protocol-48f8c",
+        storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+        appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+    };
 
-        if (!querySnapshot.empty) {
-            // SPEICHERN: Wir merken uns den Code für die nächste Seite
-            sessionStorage.setItem("verifiedCode", inviteCode.trim().toUpperCase());
-            // WEITERLEITUNG
-            window.location.href = "info.html";
-        } else {
-            alert("Invalid Invite Code.");
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function checkAccess() {
+        const savedCode = sessionStorage.getItem("verifiedCode");
+
+        if (!savedCode) {
+            window.location.href = "index.html";
+            return;
         }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("System Error.");
+
+        try {
+            const q = query(collection(db, "members"), where("myInviteCode", "==", savedCode));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                // Zugriff erlaubt -> Seite sichtbar machen
+                document.body.style.display = "flex";
+            } else {
+                window.location.href = "index.html";
+            }
+        } catch (e) {
+            window.location.href = "index.html";
+        }
     }
-}= "rgba(0,0,0,0.08)";
-        });
-    </script>
+
+    checkAccess();
+</script>
 </body>
 </html>
 
