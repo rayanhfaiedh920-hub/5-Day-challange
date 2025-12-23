@@ -1,278 +1,238 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syndicate | The Future of Cash Flow</title>
+    <title>Syndicate | Dashboard</title>
     <style>
         :root {
             --apple-blue: #0071e3;
-            --glass-bg: rgba(255, 255, 255, 0.3); 
-            --glass-border: rgba(255, 255, 255, 0.4);
+            --bg-light: #f5f5f7;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.5);
             --text-main: #1d1d1f;
             --text-sub: #424245;
-            --error-red: #ff4d4d;
+            --success: #34c759;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            background: radial-gradient(circle at top right, #c0d4ef 0%, #f5f5f7 45%, #dce8f9 100%);
-            background-attachment: fixed;
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: radial-gradient(circle at top right, #e2e2e7, #f5f5f7);
+            color: var(--text-main); display: flex; min-height: 100vh;
+            font-size: 18px; /* Standard-Schriftgröße erhöht */
         }
 
-        /* NAVIGATION MIT ANMELDE-BUTTON */
-        nav {
-            width: 100%;
-            padding: 30px 60px;
-            display: flex;
-            justify-content: space-between; /* Verteilt Logo links und Button rechts */
-            align-items: center;
-            box-sizing: border-box;
-            position: absolute;
-            top: 0;
-            z-index: 100;
+        /* Sidebar Fix & Scaling */
+        .sidebar {
+            width: 280px; background: var(--glass-bg); backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px); border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column; padding: 40px 25px; position: fixed; height: 100vh; box-sizing: border-box; z-index: 1000;
+        }
+        .sidebar h2 { font-size: 22px; font-weight: 800; margin-bottom: 50px; letter-spacing: 1px; }
+        
+        .nav-item { 
+            padding: 16px; margin-bottom: 12px; border-radius: 14px; 
+            color: var(--text-sub); font-size: 16px; text-decoration: none; 
+            cursor: pointer; border: none; background: transparent; text-align: left; width: 100%;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-weight: 500;
+        }
+        .nav-item.active { background: rgba(0, 113, 227, 0.1); color: var(--apple-blue); font-weight: 600; }
+        .nav-item:hover:not(.active) { background: rgba(0, 0, 0, 0.05); transform: translateX(5px); }
+
+        .logout-btn {
+            margin-top: auto; color: #ff3b30 !important; border: 1px solid rgba(255, 59, 48, 0.2) !important;
+            font-weight: 600 !important;
+        }
+        .logout-btn:hover { background: rgba(255, 59, 48, 0.1) !important; }
+
+        /* Main Content Scaling */
+        .main-content { margin-left: 280px; padding: 60px; flex-grow: 1; max-width: 1200px; width: 100%; }
+
+        .tab-content { display: none; animation: fadeIn 0.5s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Stats Cards Larger */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin: 40px 0; }
+        .stat-card { 
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            padding: 35px; border-radius: 30px; border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+        }
+        .stat-card h3 { font-size: 13px; text-transform: uppercase; color: var(--text-sub); margin: 0; letter-spacing: 1px; }
+        .stat-card p { font-size: 32px; font-weight: 700; margin-top: 15px; margin-bottom: 0; }
+
+        /* Learning Panel Larger */
+        .glass-panel {
+            background: var(--glass-bg); backdrop-filter: blur(40px);
+            padding: 60px; border-radius: 40px; border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.07);
         }
 
-        .logo-container {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 10px 22px;
-            border-radius: 18px;
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            letter-spacing: 0.5px;
+        .step-label { font-size: 13px; font-weight: 800; color: var(--apple-blue); text-transform: uppercase; margin-bottom: 15px; display: block; }
+        .mission-box { background: rgba(255,255,255,0.5); padding: 30px; border-radius: 25px; margin: 25px 0; border: 1px solid rgba(0,0,0,0.03); }
+        .mission-item { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; font-size: 18px; line-height: 1.6; }
+        .check-icon { color: var(--success); font-weight: bold; font-size: 22px; }
+
+        .dialog-bubble { 
+            background: #f0f7ff; padding: 25px; border-radius: 20px; border-left: 6px solid var(--apple-blue); 
+            font-style: italic; margin: 25px 0; font-size: 19px; line-height: 1.6; 
         }
 
-        .logo-icon {
-            width: 16px;
-            height: 16px;
-            background: #000;
-            border-radius: 4px;
+        /* Buttons Larger */
+        .next-btn {
+            background: var(--apple-blue); color: white; border: none; padding: 20px 50px;
+            border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(0, 113, 227, 0.25); font-size: 18px;
+        }
+        .next-btn:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0, 113, 227, 0.4); }
+        
+        .back-btn {
+            background: transparent; color: var(--text-sub); border: 1px solid #d2d2d7; padding: 18px 40px;
+            border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 17px;
         }
 
-        /* DER ANMELDE-BUTTON (OBEN RECHTS) */
-        .login-nav-btn {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            padding: 10px 25px;
-            border-radius: 20px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .login-nav-btn:hover {
-            background: white;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-        }
-
-        .main-wrapper {
-            margin-top: 180px;
-            width: 85%;
-            max-width: 1200px;
-        }
-
-        .header-section {
-            text-align: left;
-            margin-bottom: 60px;
-        }
-
-        h1 {
-            font-size: 4.5rem;
-            font-weight: 700;
-            line-height: 1.05;
-            letter-spacing: -2.5px;
-            margin: 0 0 20px 0;
-        }
-
-        .subtitle {
-            font-size: 1.6rem;
-            color: var(--text-sub);
-            margin: 0;
-        }
-
-        .login-box-container {
-            display: flex;
-            justify-content: center;
-            margin: 40px 0 100px 0;
-        }
-
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            border-radius: 35px;
-            padding: 50px;
-            width: 100%;
-            max-width: 580px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.03); 
-            box-sizing: border-box;
-        }
-
-        .input-header {
-            font-size: 1.1rem;
-            margin-bottom: 18px;
-            display: block;
-            font-weight: 500;
-        }
-
-        input {
-            width: 100%;
-            padding: 18px;
-            border-radius: 14px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            background: rgba(255, 255, 255, 0.6);
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        #errorMessage {
-            color: var(--error-red);
-            font-size: 0.9rem;
-            display: none;
-            margin-bottom: 20px;
-            font-weight: 500;
-            text-align: left;
-        }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .verify-btn {
-            background-color: var(--apple-blue);
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            border-radius: 20px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0, 113, 227, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .verify-btn:hover {
-            box-shadow: 0 15px 30px rgba(0, 113, 227, 0.5);
-            transform: translateY(-1px);
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin-bottom: 80px;
-        }
-
-        .info-card {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            padding: 40px;
-            border-radius: 30px;
-        }
-
-        @media (max-width: 900px) {
-            .info-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 3rem; }
-            nav { padding: 20px 30px; }
-        }
+        .badge { padding: 8px 18px; border-radius: 30px; font-size: 13px; font-weight: 700; background: rgba(0, 113, 227, 0.1); color: var(--apple-blue); margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo-container">
-            <div class="logo-icon"></div>
-            SYNDICATE
+    <div class="sidebar">
+        <h2>■ SYNDICATE</h2>
+        <button class="nav-item active" onclick="showTab('dashboard', this)">Dashboard</button>
+        <button class="nav-item" onclick="showTab('learning', this)">Learning Content</button>
+        <button class="nav-item">Marketing Assets</button>
+        
+        <button onclick="handleLogout()" class="nav-item logout-btn">Logout</button>
+    </div>
+
+    <div class="main-content">
+        
+        <div id="dashboard" class="tab-content active">
+            <span class="badge">PRO MEMBER</span>
+            <h1 style="font-size: 48px; letter-spacing: -2px; margin-top: 0;">Welcome back, <span id="userName">User</span></h1>
+            
+            <div class="stats-grid">
+                <div class="stat-card"><h3>Earnings</h3><p style="color: var(--success);">$<span id="userBalance">0.00</span></p></div>
+                <div class="stat-card"><h3>Challenge Progress</h3><p>Day <span id="dayNum">1</span> / 5</p></div>
+                <div class="stat-card"><h3>Your Invite Code</h3><p id="myCode" style="color: var(--apple-blue);">---</p></div>
+            </div>
+
+            <div class="glass-panel" style="text-align: center; padding: 80px 50px;">
+                <h2 style="font-size: 32px; margin-bottom: 15px;">Initiate Your Sourcing Mission</h2>
+                <p style="color: var(--text-sub); margin-bottom: 40px; font-size: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">Master high-ticket setting through our 5-day elite training protocol.</p>
+                <button class="next-btn" style="float:none;" onclick="document.querySelector('[onclick*=\'learning\']').click()">Access Masterclass</button>
+            </div>
         </div>
-        <a href="login.html" class="login-nav-btn">Anmelden</a>
-    </nav>
 
-    <div class="main-wrapper">
-        <div class="header-section">
-            <h1>The future of <br>cash flow.</h1>
-            <p class="subtitle">Exclusive access to the 5-Day Challenge.</p>
-        </div>
-
-        <div class="login-box-container">
-            <div class="glass-card">
-                <span class="input-header">Enter Invite Code</span>
-                <input type="text" id="inviteCode" placeholder="Enter Invite Code" autocomplete="off">
-                
-                <div id="errorMessage">Please enter your invite code</div>
-
-                <div class="card-footer">
-                    <span style="color: #8e8e93; font-size: 0.9rem;">Verification required</span>
-                    <button class="verify-btn" onclick="verify()">Verify Protocol</button>
+        <div id="learning" class="tab-content">
+            <h1 style="font-size: 42px; letter-spacing: -1.5px; margin-bottom: 40px;">Strategy & Execution</h1>
+            
+            <div class="glass-panel">
+                <div id="learning-stage"></div>
+                <div style="margin-top: 60px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 40px;">
+                    <button class="back-btn" id="backBtn" onclick="prevLesson()" style="visibility: hidden;">← Back</button>
+                    <button class="next-btn" id="nextBtn" onclick="nextLesson()">Next Part →</button>
                 </div>
-            </div>
-        </div>
-
-        <div class="info-grid">
-            <div class="info-card">
-                <h3>Verified System</h3>
-                <p>Utilize proven digital infrastructure to build and scale personal income streams with total security.</p>
-            </div>
-            <div class="info-card">
-                <h3>Premium Training</h3>
-                <p>Gain 5 days of exclusive insights into high-level strategies reserved for a select few professionals.</p>
-            </div>
-            <div class="info-card">
-                <h3>90% Commission</h3>
-                <p>Join the Syndicate and benefit from a structure designed to keep the vast majority of profit in your pocket.</p>
             </div>
         </div>
     </div>
 
-    <script>
-        function verify() {
-            const input = document.getElementById('inviteCode');
-            const error = document.getElementById('errorMessage');
-            const code = input.value.trim();
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-            if (code === "") {
-                error.style.display = "block";
-                input.style.borderColor = "var(--error-red)";
-            } else {
-                // Speichere den Code für die spätere Registrierung
-                localStorage.setItem('referrerCode', code);
-                window.location.href = "info.html";
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+            authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+            projectId: "syndicate-protocol-48f8c",
+            storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+            messagingSenderId: "47535029358",
+            appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentStep = 1;
+        const lessonData = {
+            1: {
+                label: "Part 1: The Mission & The Invite Code",
+                title: "Your Gateway to High-Value Sourcing",
+                html: `
+                    <p style="color:var(--text-sub); line-height:1.6;">Welcome to the <b>5-Day Cash Flow Challenge</b>. You are here to learn how to identify, engage, and close leads. While the start may seem demanding, your growth will be exponential.</p>
+                    <div class="mission-box">
+                        <div class="mission-item"><span class="check-icon">✓</span><span><b>The Objective:</b> Locate individuals seeking financial freedom—primarily those looking for remote roles or side income.</span></div>
+                        <div class="mission-item"><span class="check-icon">✓</span><span><b>The Invite Code:</b> This is your unique ID. Clients MUST use this to register so they are permanently linked to your profile.</span></div>
+                        <div class="mission-item"><span class="check-icon">✓</span><span><b>The System:</b> Your code allows the platform to attribute every client to you. No code = No tracking.</span></div>
+                    </div>`
+            },
+            2: {
+                label: "Part 2: Lead Sourcing",
+                title: "The High-Ticket Sniper Method",
+                html: `<p>Go to <b>Facebook Groups</b> dedicated to High-Ticket Sales, SaaS, or Real Estate.</p>
+                       <div class="mission-box"><b>The Strategy:</b> Monitor comments of viral posts. Look for people asking for advice or showing interest in "scaling income". They are your targets.</div>`
+            },
+            3: {
+                label: "Part 3: Communication",
+                title: "The Soft Setting Dialog",
+                html: `<p>Professionalism builds trust. Use a conversational tone.</p>
+                       <div class="dialog-bubble">"Hi [Name], I saw your interest in that post about scaling systems. I'm actually using a protocol that automates cash flow. Happy to share how it works!"</div>`
+            },
+            4: {
+                label: "Part 4: The Invitation",
+                title: "Bridging to the $5 Trial",
+                html: `<p>The $5 entry is a "no-brainer".</p>
+                       <div class="dialog-bubble">"I'm in a 5-day challenge with Syndicate. It's just $5 to get full dashboard access. I can give you my invite code if you're interested."</div>`
+            },
+            5: {
+                label: "Part 5: Master of the Network",
+                title: "Consistency & Scaling",
+                html: `<div class="mission-box" style="background:var(--text-main); color:white;">
+                        <h4 style="color:var(--success); font-size:24px;">Mission Success</h4>
+                        <p>Consistency is key. Secure 1-2 trial entries daily to build momentum.</p>
+                       </div>`
             }
+        };
+
+        window.nextLesson = () => { if(currentStep < 5) { currentStep++; renderLesson(); window.scrollTo(0,0); } };
+        window.prevLesson = () => { if(currentStep > 1) { currentStep--; renderLesson(); window.scrollTo(0,0); } };
+
+        function renderLesson() {
+            const data = lessonData[currentStep];
+            document.getElementById('learning-stage').innerHTML = `
+                <span class="step-label">${data.label}</span>
+                <h2 style="font-size:36px; margin: 15px 0 30px 0;">${data.title}</h2>
+                ${data.html}`;
+            document.getElementById('backBtn').style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+            document.getElementById('nextBtn').innerText = currentStep === 5 ? "Finish Session" : "Next Part →";
         }
 
-        document.getElementById('inviteCode').addEventListener('input', function() {
-            document.getElementById('errorMessage').style.display = "none";
-            this.style.borderColor = "rgba(0,0,0,0.08)";
+        renderLesson();
+
+        window.showTab = (tabId, btn) => {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "members", user.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    document.getElementById('userName').innerText = data.firstName;
+                    document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
+                    document.getElementById('myCode').innerText = data.myInviteCode;
+                }
+            } else { window.location.href = "login.html"; }
         });
+
+        window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
     </script>
 </body>
 </html>
-
         .
