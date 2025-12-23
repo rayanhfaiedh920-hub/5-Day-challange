@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syndicate | Create Account</title>
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #0071e3;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: radial-gradient(circle at top right, #1d1d1f, #000000);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f5f5f7;
+        }
+
+        /* Der Glassy-Container */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 40px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 30px;
+        }
+
+        /* Moderne Apple-Style Inputs */
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Der Button */
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0077ed;
+            transform: scale(1.02);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-card">
+        <h2>Join the Protocol</h2>
+        <p>Your access is verified. Setup your account.</p>
+        
+        <input type="email" id="email" placeholder="Email address">
+        <input type="password" id="pass" placeholder="Password">
+        
+        <button onclick="createAccount()">Complete Registration</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Deine aktiven Firebase-Daten
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+            authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+            projectId: "syndicate-protocol-48f8c",
+            storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+            messagingSenderId: "47535029358",
+            appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Generiert einen sauberen 8-stelligen Code ohne Sonderzeichen
+        function generateCode() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Keine verwirrenden Zeichen wie O oder 0
+            let result = "";
+            for (let i = 0; i < 8; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        window.createAccount = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            const myNewCode = generateCode();
+            const referrer = localStorage.getItem('referrerCode') || "RAYANSEO2025"; //
+
+            try {
+                const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+                
+                // Speichert den neuen User weltweit in eur3
+                await setDoc(doc(db, "members", userCred.user.uid), {
+                    email: email,
+                    myInviteCode: myNewCode,
+                    referredBy: referrer,
+                    balance: 0, //
+                    role: "member",
+                    joined: new Date().toISOString()
