@@ -67,7 +67,6 @@
         .step-label { font-size: 16px; font-weight: 800; color: var(--apple-blue); text-transform: uppercase; margin-bottom: 20px; display: block; }
         .mission-box { background: rgba(255,255,255,0.6); padding: 40px; border-radius: 35px; margin: 35px 0; border: 1px solid rgba(0,0,0,0.05); }
         
-        /* IMAGE FIX */
         .image-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
         .image-gallery img { width: 100%; height: auto; border-radius: 20px; border: 2px solid var(--glass-border); display: block; }
 
@@ -142,19 +141,28 @@
                 label: "Phase 2: Target Sourcing",
                 title: "Zielgruppen identifizieren",
                 html: `
-                    <p>Suche gezielt in Gruppen nach Leads.</p>
+                    <p>Suche gezielt in Gruppen nach Leads, die aktiv nach Lösungen suchen.</p>
                     <div class="image-gallery">
-                        <img src="screenshot_fb_1.png" alt="FB 1">
-                        <img src="screenshot_fb_2.png" alt="FB 2">
+                        <img src="fb1.png" alt="Cleaning Groups">
+                        <img src="fb2.png" alt="Online Jobs">
                     </div>
                     <div class="mission-box">
                         <ul>
-                            <li><b>Facebook Mining:</b> Suche nach Jobs & Hilfe-Gesuchen.</li>
-                            <li><b>LinkedIn:</b> Kontaktiere "Open to Work" Profile.</li>
+                            <li><b>Facebook Mining:</b> Suche nach Gruppen wie "Cleaning Jobs" oder "Remote Work".</li>
+                            <li><b>LinkedIn:</b> Kontaktiere Profile mit dem Status "Open to Work".</li>
                         </ul>
                     </div>`
             },
-            3: { label: "Phase 3", title: "Kommunikation", html: "<p>Skripte folgen...</p>" }
+            3: { 
+                label: "Phase 3: Kommunikation", 
+                title: "Outreach & Skripte", 
+                html: `
+                    <p>Nutze dieses Skript für die erste Kontaktaufnahme:</p>
+                    <div class="mission-box">
+                        <p><i>"Hey [Name], ich habe deinen Post in der [Gruppe] gesehen. Ich helfe aktuell Leuten dabei, sich nebenbei etwas aufzubauen. Hättest du Interesse an ein paar Infos?"</i></p>
+                    </div>
+                    <p><b>Wichtig:</b> Sei authentisch und kein Spammer.</p>` 
+            }
         };
 
         window.nextLesson = () => { if(currentStep < 3) { currentStep++; renderLesson(); } };
@@ -167,6 +175,7 @@
                 <h2 style="font-size:55px;">${data.title}</h2>
                 ${data.html}`;
             document.getElementById('backBtn').style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+            document.getElementById('nextBtn').innerText = currentStep === 3 ? "Abschließen" : "Nächste Phase →";
         }
 
         renderLesson();
