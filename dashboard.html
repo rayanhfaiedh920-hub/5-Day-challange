@@ -32,10 +32,26 @@
             border-radius: 24px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.03);
             margin-bottom: 20px;
+            position: relative;
         }
 
         h1 { font-size: 28px; font-weight: 700; margin-bottom: 5px; }
         .welcome-text { color: var(--text-sub); margin-bottom: 30px; }
+
+        /* ADMIN BUTTON STYLE */
+        #adminLink {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: #1d1d1f;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
 
         .stat-grid {
             display: grid;
@@ -83,7 +99,7 @@
             font-size: 16px;
             cursor: pointer;
             width: 100%;
-            display: none; /* Erst nach 5 Tagen sichtbar */
+            display: none;
         }
 
         .progress-bar {
@@ -105,6 +121,8 @@
 
     <div class="container">
         <div class="card">
+            <a href="admin.html" id="adminLink">⚙️ Admin Panel</a>
+
             <h1 id="userName">Lade Profil...</h1>
             <p class="welcome-text">Willkommen im Syndicate Protocol System.</p>
 
@@ -155,6 +173,11 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                // ADMIN CHECK: Wenn DU eingeloggt bist, zeige den Admin-Button
+                if (user.email === "rayanhfaiedh920@gmail.com") {
+                    document.getElementById('adminLink').style.display = "block";
+                }
+
                 const userDoc = await getDoc(doc(db, "members", user.uid));
                 if (userDoc.exists()) {
                     const data = userDoc.data();
@@ -162,7 +185,6 @@
                     document.getElementById('myCode').innerText = data.myInviteCode;
                     document.getElementById('userBalance').innerText = "$" + (data.balance || 0).toFixed(2);
 
-                    // LOGIK FÜR DIE 5 TAGE LERNPHASE
                     const joinDate = new Date(data.joined);
                     const now = new Date();
                     const diffTime = Math.abs(now - joinDate);
@@ -172,7 +194,6 @@
                     document.getElementById('dayCount').innerText = displayDays + " / 5";
                     document.getElementById('pFill').style.width = (displayDays * 20) + "%";
 
-                    // Wenn 5 Tage rum sind, zeige den Bezahl-Button
                     if (diffDays >= 5 && data.paymentStatus === "learning_phase") {
                         document.getElementById('timerText').innerText = "Lernphase abgeschlossen! Du kannst jetzt dein Konto upgraden.";
                         document.getElementById('payButton').style.display = "block";
@@ -192,7 +213,6 @@
         };
 
         window.startFullPayment = () => {
-            // Hier kommt später dein Stripe-Link für die 199$ hin
             window.location.href = "https://buy.stripe.com/DEIN_199_DOLLAR_LINK";
         };
     </script>
