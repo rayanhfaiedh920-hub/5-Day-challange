@@ -143,17 +143,25 @@
 
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+                
+                // Erstellt einen eigenen Code für den neuen User
                 const myCode = Math.random().toString(36).substring(2, 10).toUpperCase();
                 
+                // Holt den Code, den der User auf der Index.html eingegeben hat
+                const usedReferrerCode = localStorage.getItem('usedInviteCode') || "DIRECT";
+
                 await setDoc(doc(db, "members", userCred.user.uid), {
                     displayName: name,
                     birthDate: bday,
                     email: email,
                     myInviteCode: myCode,
+                    referredBy: usedReferrerCode, // Werber wird hier gespeichert
+                    paymentStatus: "pending",     // Noch nicht die 199$ gezahlt
                     balance: 0,
                     joined: new Date().toISOString()
                 });
 
+                // Nach der Registrierung zum Dashboard (oder zur Info/Zahlungsseite)
                 window.location.href = "dashboard.html";
             } catch (e) {
                 alert("Fehler: " + e.message);
