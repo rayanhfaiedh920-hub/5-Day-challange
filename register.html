@@ -97,7 +97,7 @@
 </head>
 <body>
 
-    <div class="register-card">
+    <div class="register-card" id="mainCard">
         <h1>Account erstellen</h1>
         <p class="subtitle">Tritt dem Syndicate Protocol bei.</p>
 
@@ -126,7 +126,6 @@
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Dein Firebase Config (Behalte deine IDs bei!)
         const firebaseConfig = {
             apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
             authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
@@ -139,6 +138,16 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+
+        // --- SCHUTZ: NUR NACH ZAHLUNG ZUGÄNGLICH ---
+        const urlParams = new URLSearchParams(window.location.search);
+        if (!urlParams.has('session_id')) {
+            document.getElementById('mainCard').innerHTML = `
+                <h2 style="color: #ff3b30;">Zugriff verweigert</h2>
+                <p>Bitte schließen Sie erst die Zahlung der Lernphase (5$) ab.</p>
+                <button onclick="window.location.href='info.html'">Zurück zur Info</button>
+            `;
+        }
 
         window.handleRegister = async () => {
             const firstName = document.getElementById('fName').value;
@@ -155,10 +164,10 @@
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, email, pass);
                 
-                // 1. Eigener Invite-Code generieren
-                const myCode = Math.random().toString(36).substring(2, 9).toUpperCase();
+                // 1. Eigener Invite-Code generieren (Eindeutig für diesen User)
+                const myCode = "SYN-" + Math.random().toString(36).substring(2, 8).toUpperCase();
                 
-                // 2. Werber-Code aus localStorage holen
+                // 2. Werber-Code aus localStorage (von der index.html) holen
                 const refCode = localStorage.getItem('usedInviteCode') || "DIRECT";
 
                 // 3. In Firestore speichern
@@ -168,13 +177,15 @@
                     lastName: lastName,
                     email: email,
                     birthDate: bday,
-                    myInviteCode: myCode,
-                    referredBy: refCode, // Wer hat ihn eingeladen?
-                    balance: 0,
-                    systemEarnings: 0, // Nur für dich als Admin relevant
-                    paymentStatus: "pending",
+                    myInviteCode: myCode,    // Sein Code zum Weitergeben
+                    referredBy: refCode,    // Derjenige, der die 90% Provision bekommt
+                    balance: 0,             // Aktuelles Guthaben des Users
+                    paymentStatus: "learning_phase", // Status: 5$ gezahlt, 5-Tage-Challenge läuft
                     joined: new Date().toISOString()
                 });
+
+                // Invite-Code aus Speicher löschen, da er jetzt fest im Profil steht
+                localStorage.removeItem('usedInviteCode');
 
                 window.location.href = "dashboard.html";
             } catch (e) {
