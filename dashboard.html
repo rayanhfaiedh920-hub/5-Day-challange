@@ -11,6 +11,7 @@
             --text-main: #1d1d1f;
             --text-sub: #86868b;
             --success: #34c759;
+            --pending: #ff9500;
             --glass: rgba(255, 255, 255, 0.8);
         }
 
@@ -18,7 +19,6 @@
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
             background-color: var(--bg-light);
-            /* Ein leichter blauer Schimmer im Hintergrund für mehr Tiefe */
             background-image: radial-gradient(circle at top right, #e3efff, transparent);
             color: var(--text-main);
             display: flex;
@@ -30,7 +30,6 @@
 
         .container { width: 100%; max-width: 800px; flex-grow: 1; }
 
-        /* LOGO BEREICH */
         .header {
             display: flex;
             justify-content: space-between;
@@ -48,12 +47,8 @@
             border-radius: 28px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.04);
             margin-bottom: 25px;
-            position: relative;
             border: 1px solid rgba(255,255,255,0.4);
         }
-
-        h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
-        .welcome-text { color: var(--text-sub); margin-bottom: 35px; font-size: 16px; }
 
         #adminLink {
             display: none;
@@ -64,69 +59,45 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 600;
-            transition: 0.2s;
         }
-        #adminLink:hover { transform: scale(1.05); }
 
         .stat-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 25px;
         }
 
         .stat-box {
-            padding: 25px;
+            padding: 20px;
             background: white;
             border-radius: 20px;
             border: 1px solid #eee;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
 
-        .stat-label { font-size: 11px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
-        .stat-value { font-size: 28px; font-weight: 700; margin-top: 8px; color: var(--apple-blue); }
+        .stat-label { font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { font-size: 24px; font-weight: 700; margin-top: 5px; }
+
+        .progress-container { margin-top: 10px; background: #eee; height: 8px; border-radius: 4px; overflow: hidden; }
+        .progress-fill { background: var(--apple-blue); height: 100%; width: 0%; transition: 0.5s; }
 
         .invite-section {
             background: linear-gradient(135deg, var(--apple-blue), #005bb5);
             color: white;
-            padding: 35px;
+            padding: 30px;
             border-radius: 24px;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 113, 227, 0.2);
         }
 
         .invite-code {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 800;
-            letter-spacing: 3px;
-            margin: 20px 0;
+            margin: 15px 0;
             background: rgba(255,255,255,0.15);
-            padding: 15px;
-            border-radius: 14px;
+            padding: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid rgba(255,255,255,0.2);
         }
-        .invite-code:hover { background: rgba(255,255,255,0.25); }
-
-        /* FOOTER STYLE */
-        footer {
-            margin-top: 50px;
-            padding: 40px 0;
-            text-align: center;
-            width: 100%;
-            border-top: 1px solid #e5e5e7;
-        }
-        .footer-links { margin-bottom: 15px; }
-        .footer-links a {
-            color: var(--text-sub);
-            text-decoration: none;
-            font-size: 13px;
-            margin: 0 15px;
-            transition: 0.2s;
-        }
-        .footer-links a:hover { color: var(--apple-blue); }
-        .copyright { font-size: 12px; color: #b6b6bb; }
 
         .btn-pay {
             background: var(--success);
@@ -140,18 +111,10 @@
             width: 100%;
             display: none;
             margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(52, 199, 89, 0.3);
         }
 
-        .logout-btn {
-            background: none;
-            border: none;
-            color: var(--text-sub);
-            font-size: 13px;
-            cursor: pointer;
-            text-decoration: underline;
-            margin-top: 10px;
-        }
+        footer { margin-top: 50px; padding: 30px; text-align: center; border-top: 1px solid #e5e5e7; }
+        .footer-links a { color: var(--text-sub); text-decoration: none; font-size: 13px; margin: 0 10px; }
     </style>
 </head>
 <body>
@@ -163,52 +126,52 @@
         </header>
 
         <div class="card">
-            <h1 id="userName">Lade Profil...</h1>
-            <p class="welcome-text">Willkommen zurück. Hier ist deine Übersicht.</p>
+            <h1 id="userName">Lädt...</h1>
+            <p class="welcome-text">Status: <span id="userStatusText">Lernphase</span></p>
 
             <div class="stat-grid">
                 <div class="stat-box">
-                    <div class="stat-label">Verfügbares Guthaben</div>
-                    <div class="stat-value" id="userBalance">$0.00</div>
+                    <div class="stat-label">Verfügbar</div>
+                    <div class="stat-value" id="userBalance" style="color: var(--success);">$0.00</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Lernphase Fortschritt</div>
-                    <div class="stat-value" id="dayCount">0 / 5</div>
-                    <div class="progress-bar"><div class="progress-fill" id="pFill"></div></div>
+                    <div class="stat-label">Ausstehend (Pending)</div>
+                    <div class="stat-value" id="pendingBalance" style="color: var(--pending);">$0.00</div>
+                </div>
+                <div class="stat-box" style="grid-column: span 2;">
+                    <div class="stat-label">Lernphase Fortschritt: <span id="dayCount">0 / 5</span> Tage</div>
+                    <div class="progress-container"><div class="progress-fill" id="pFill"></div></div>
                 </div>
             </div>
 
             <div id="paymentArea">
                 <p id="timerText" style="font-size: 14px; color: var(--text-sub);">
-                    Deine 5-tägige Lernphase ist aktiv.
+                    Lerne jetzt, wie du Partner gewinnst.
                 </p>
                 <button class="btn-pay" id="payButton" onclick="startFullPayment()">Vollversion freischalten ($199)</button>
             </div>
             
-            <button class="logout-btn" onclick="handleLogout()">Sicher abmelden</button>
+            <button class="logout-btn" onclick="handleLogout()" style="background:none; border:none; color:var(--text-sub); text-decoration:underline; cursor:pointer; margin-top:20px;">Abmelden</button>
         </div>
 
         <div class="card invite-section">
-            <div class="stat-label" style="color: rgba(255,255,255,0.7);">Dein Partner Invite-Code</div>
+            <div class="stat-label" style="color: rgba(255,255,255,0.7);">Dein persönlicher Invite-Code</div>
             <div class="invite-code" id="myCode" onclick="copyCode()">---</div>
-            <p style="font-size: 14px; opacity: 0.9;">Klicke auf den Code zum Kopieren. Verdienst: <b>$179.10</b> pro Sale.</p>
+            <p style="font-size: 14px;">Verdienst pro Upgrade: <b>$179.10 (90%)</b></p>
         </div>
     </div>
 
     <footer>
         <div class="footer-links">
-            <a href="#">Support</a>
-            <a href="#">Datenschutz</a>
-            <a href="#">Impressum</a>
-            <a href="#">Nutzungsbedingungen</a>
+            <a href="#">Support</a><a href="#">Impressum</a>
         </div>
-        <div class="copyright">© 2025 Syndicate Protocol System. Alle Rechte vorbehalten.</div>
+        <p style="font-size: 12px; color: #b6b6bb;">© 2025 Syndicate Protocol</p>
     </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
@@ -230,41 +193,53 @@
                     document.getElementById('adminLink').style.display = "block";
                 }
 
-                const userDoc = await getDoc(doc(db, "members", user.uid));
+                const userDocRef = doc(db, "members", user.uid);
+                const userDoc = await getDoc(userDocRef);
+
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     document.getElementById('userName').innerText = "Hallo, " + data.firstName;
                     document.getElementById('myCode').innerText = data.myInviteCode;
                     document.getElementById('userBalance').innerText = "$" + (data.balance || 0).toFixed(2);
-
-                    const joinDate = new Date(data.joined);
-                    const now = new Date();
-                    const diffDays = Math.floor(Math.abs(now - joinDate) / (1000 * 60 * 60 * 24));
                     
-                    let displayDays = diffDays > 5 ? 5 : diffDays;
-                    document.getElementById('dayCount').innerText = displayDays + " / 5";
-                    document.getElementById('pFill').style.width = (displayDays * 20) + "%";
+                    // --- CASH FLOW LOGIK: PENDING BALANCE BERECHNEN ---
+                    const membersRef = collection(db, "members");
+                    const q = query(membersRef, where("referredBy", "==", data.myInviteCode));
+                    const querySnapshot = await getDocs(q);
+                    
+                    let pending = 0;
+                    querySnapshot.forEach((doc) => {
+                        // Wenn der geworbene User noch kein Full Member ist, zeige die mögliche Provision
+                        if (doc.data().paymentStatus !== "full_member") {
+                            pending += 179.10; 
+                        }
+                    });
+                    document.getElementById('pendingBalance').innerText = "$" + pending.toFixed(2);
 
-                    if (diffDays >= 5 && data.paymentStatus === "learning_phase") {
-                        document.getElementById('timerText').innerText = "Glückwunsch! Deine Lernphase ist beendet.";
+                    // --- LERNPHASE LOGIK ---
+                    const joinDate = new Date(data.joined);
+                    const diffDays = Math.floor((new Date() - joinDate) / (1000 * 60 * 60 * 24));
+                    let progress = diffDays > 5 ? 5 : diffDays;
+                    
+                    document.getElementById('dayCount').innerText = progress;
+                    document.getElementById('pFill').style.width = (progress * 20) + "%";
+
+                    if (data.paymentStatus === "full_member") {
+                        document.getElementById('userStatusText').innerText = "Full Member (Aktiv)";
+                        document.getElementById('paymentArea').innerHTML = "✓ Du bist für 90% Provision freigeschaltet.";
+                    } else if (diffDays >= 5) {
                         document.getElementById('payButton').style.display = "block";
-                    } else if (data.paymentStatus === "full_member") {
-                        document.getElementById('paymentArea').innerHTML = "<div style='color:var(--success); font-weight:700;'>✓ System vollständig freigeschaltet</div>";
+                        document.getElementById('timerText').innerText = "Lernphase beendet! Schalte jetzt die Auszahlungen frei.";
                     }
                 }
-            } else {
-                window.location.href = "login.html";
-            }
+            } else { window.location.href = "login.html"; }
         });
 
         window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
-        
         window.copyCode = () => {
-            const code = document.getElementById('myCode').innerText;
-            navigator.clipboard.writeText(code);
-            alert("Invite-Code kopiert!");
+            navigator.clipboard.writeText(document.getElementById('myCode').innerText);
+            alert("Code kopiert! Sende diesen an deine neuen Clients.");
         };
-
         window.startFullPayment = () => {
             window.location.href = "https://buy.stripe.com/DEIN_199_DOLLAR_LINK";
         };
