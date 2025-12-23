@@ -124,6 +124,12 @@
             margin-top: 20px;
         }
 
+        @keyframes pulseGlow {
+    0% { opacity: 0.8; text-shadow: 0 0 8px rgba(50, 255, 126, 0.6); }
+    50% { opacity: 1; text-shadow: 0 0 15px rgba(50, 255, 126, 1); }
+    100% { opacity: 0.8; text-shadow: 0 0 8px rgba(50, 255, 126, 0.6); }
+}
+
         .glow-btn:hover { transform: scale(1.03); box-shadow: 0 0 40px rgba(0, 113, 227, 0.6); }
 
         /* --- LEARNING PHASE CONTENT --- */
@@ -160,7 +166,9 @@
 
     <div class="main-content">
         <div id="dashboard" class="tab-content active">
-            <p style="color: var(--apple-blue); font-weight: 700;">PROFILE: ACTIVE</p>
+          <p style="color: var(--apple-blue); font-weight: 700;">
+    PROFILE: <span style="color: #34c759; text-shadow: 0 0 5px rgba(52, 199, 89, 0.4);">ACTIVE</span>
+</p>
             <h1 class="header-title">The future of cash flow.</h1>
             <p class="header-sub">Exclusive access to the Syndicate protocol.</p>
 
@@ -310,7 +318,7 @@
                             <span class="check-icon">💰</span>
                             <div class="blueprint-text">
                                 <b>Step 3: The Close (URL & Code)</b>
-                                <p>Once they are ready, send the link and your code. **No code, no commission! Danger : You are responsible for your setters; you must help them when they need help. **</p>
+                                <p>Once they are ready, send the link and your code. **No code, no commission!**</p>
                                 <div class="script-box" style="border-left-color: var(--success-green); background: rgba(52, 199, 89, 0.1); font-style: normal;">
                                     "Perfect. Register here and use my code to be activated immediately:<br><br>
                                     🔗 <b>URL:</b> [Your-Website.com]<br>
@@ -394,4 +402,4 @@
         window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
     </script>
 </body>
-</html> 
+</html>
