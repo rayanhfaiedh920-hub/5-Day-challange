@@ -377,23 +377,30 @@
             });
         };
 
-        // Firebase Sync
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userDoc = await getDoc(doc(db, "members", user.uid));
-                if (userDoc.exists()) {
-                    const data = userDoc.data();
-                    document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
-                    const code = data.myInviteCode || "N/A";
-                    document.getElementById('myCode').innerText = code;
-                    
-                    if(document.getElementById('displayMyCode')) {
-                        document.getElementById('displayMyCode').innerText = code;
-                    }
-                    if(document.getElementById('finalCodeDisplay')) {
-                        document.getElementById('finalCodeDisplay').innerText = code;
-                    }
-                }
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        const userDoc = await getDoc(doc(db, "members", user.uid));
+        if (userDoc.exists()) {
+            const data = userDoc.data();
+            
+            // NEU: Sperre für unbezahlte Nutzer
+            if (data.hasPaid !== true) {
+                alert("Please complete your payment to access the Masterclass.");
+                window.location.href = "index.html"; // Zurück zur Startseite
+                return;
+            }
+
+            document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
+            const code = data.myInviteCode || "---";
+            document.getElementById('myCode').innerText = code;
+            if(document.getElementById('finalCodeDisplay')) {
+                document.getElementById('finalCodeDisplay').innerText = code;
+            }
+        }
+    } else {
+        window.location.href = "login.html";
+    }
+});
             } else {
                 window.location.href = "login.html";
             }
