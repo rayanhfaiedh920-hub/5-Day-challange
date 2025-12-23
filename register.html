@@ -101,6 +101,11 @@
             <input type="date" id="birthDate">
         </div>
 
+        <div class="input-group">
+            <label>Einladungscode (Invite Code)</label>
+            <input type="text" id="usedCodeInput" placeholder="Z.B. RAYANSEO2025">
+        </div>
+
         <input type="email" id="email" placeholder="E-Mail Adresse" style="margin-bottom: 12px;">
         <input type="password" id="pass" placeholder="Passwort">
 
@@ -129,14 +134,15 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // STRIPE SCHUTZ
+        // Code automatisch aus URL oder LocalStorage ziehen
         const urlParams = new URLSearchParams(window.location.search);
-        if (!urlParams.has('session_id')) {
-            document.getElementById('mainCard').innerHTML = `
-                <h2 style="color: #ff3b30;">Zugriff verweigert</h2>
-                <p>Bitte schließen Sie erst die Zahlung ab.</p>
-                <button onclick="window.location.href='info.html'">Zurück zur Info</button>
-            `;
+        const codeFromUrl = urlParams.get('ref');
+        const codeFromStorage = localStorage.getItem('usedInviteCode');
+        
+        if (codeFromUrl) {
+            document.getElementById('usedCodeInput').value = codeFromUrl;
+        } else if (codeFromStorage) {
+            document.getElementById('usedCodeInput').value = codeFromStorage;
         }
 
         window.handleRegister = async () => {
@@ -146,6 +152,7 @@
             const bday = document.getElementById('birthDate').value;
             const email = document.getElementById('email').value;
             const pass = document.getElementById('pass').value;
+            const refCode = document.getElementById('usedCodeInput').value.trim() || "DIRECT";
 
             if(!firstName || !lastName || !paypal || !bday || !email || !pass) {
                 alert("Bitte alle Felder ausfüllen.");
@@ -154,10 +161,10 @@
 
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-                const myCode = "SYN-" + Math.random().toString(36).substring(2, 8).toUpperCase();
-                const refCode = localStorage.getItem('usedInviteCode') || "DIRECT";
+                
+                // Erstelle den eigenen Code für den neuen User (Vorname + Zufallszahl)
+                const myCode = firstName.toUpperCase() + Math.floor(Math.random() * 10000);
 
-                // Alles in EINEM Dokument speichern
                 await setDoc(doc(db, "members", userCred.user.uid), {
                     displayName: firstName + " " + lastName,
                     firstName: firstName,
@@ -165,12 +172,12 @@
                     paypalEmail: paypal,
                     email: email,
                     birthDate: bday,
-                    myInviteCode: myCode,
-                    referredBy: refCode,
+                    myInviteCode: myCode,      // Sein eigener Code zum Setten
+                    referredBy: refCode,       // Dein Code (z.B. RAYANSEO2025)
                     balance: 0,
                     paymentStatus: "learning_phase", 
-                    commissionLocked: true, // Geld ist noch gesperrt (5 Tage warten)
-                    referralValue: 179.10,  // Dein 90% Anteil
+                    commissionLocked: true, 
+                    referralValue: 179.10,     // 90% von 199$
                     joined: new Date().toISOString()
                 });
 
