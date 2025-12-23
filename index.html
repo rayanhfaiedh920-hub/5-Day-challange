@@ -251,27 +251,57 @@
         </div>
     </div>
 
-    <script>
-        function verify() {
-            const input = document.getElementById('inviteCode');
-            const error = document.getElementById('errorMessage');
-            const code = input.value.trim();
+<script type="module">
+    // 1. Firebase Importe
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-            if (code === "") {
-                error.style.display = "block";
-                input.style.borderColor = "var(--error-red)";
-            } else {
-                // Speichere den Code für die spätere Registrierung
-                localStorage.setItem('referrerCode', code);
-                window.location.href = "info.html";
-            }
+    // 2. Deine Konfiguration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+        authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+        projectId: "syndicate-protocol-48f8c",
+        storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+        appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 3. Die Funktion global verfügbar machen, damit der Button sie findet
+    window.verifyCode = async function() {
+        const inputField = document.getElementById('inviteCode');
+        const inviteCode = inputField ? inputField.value.trim() : "";
+        const errorMsg = document.getElementById('errorMessage');
+
+        if (!inviteCode) {
+            if (errorMsg) errorMsg.style.display = 'block';
+            alert("Please enter a code.");
+            return;
         }
 
-        document.getElementById('inviteCode').addEventListener('input', function() {
-            document.getElementById('errorMessage').style.display = "none";
-            this.style.borderColor = "rgba(0,0,0,0.08)";
-        });
-    </script>
+        try {
+            console.log("Prüfe Code:", inviteCode.toUpperCase()); // Zum Testen in der Konsole
+            
+            const q = query(collection(db, "members"), where("myInviteCode", "==", inviteCode.toUpperCase()));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                console.log("Code gültig!");
+                // Code im Browser speichern
+                sessionStorage.setItem("verifiedCode", inviteCode.toUpperCase());
+                // Weiterleiten
+                window.location.href = "info.html";
+            } else {
+                console.log("Code ungültig!");
+                alert("ACCESS DENIED: Invalid Invite Code.");
+            }
+        } catch (error) {
+            console.error("Firebase Fehler:", error);
+            alert("System Error: Check your connection.");
+        }
+    };
+</script>
 </body>
 </html>
 
