@@ -42,6 +42,12 @@
         h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
         p { font-size: 15px; color: var(--text-sub); margin-bottom: 30px; }
 
+        .name-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
         input {
             width: 100%;
             padding: 14px;
@@ -57,7 +63,7 @@
 
         input:focus { border-color: var(--apple-blue); background: white; }
 
-        label { display: block; text-align: left; font-size: 13px; color: var(--text-sub); margin-bottom: 5px; margin-left: 5px; }
+        label { display: block; text-align: left; font-size: 11px; color: var(--text-sub); text-transform: uppercase; margin-bottom: 5px; margin-left: 5px; font-weight: 600; }
 
         button {
             width: 100%;
@@ -85,9 +91,12 @@
         <h2>Account erstellen</h2>
         <p>Tritt dem Syndicate Protocol bei.</p>
         
-        <input type="text" id="fullName" placeholder="Vollständiger Name">
+        <div class="name-row">
+            <input type="text" id="firstName" placeholder="Vorname">
+            <input type="text" id="lastName" placeholder="Nachname">
+        </div>
         
-        <label for="birthDate">Geburtsdatum (Mindestens 18 Jahre)</label>
+        <label for="birthDate">Geburtsdatum (Mindestalter 18)</label>
         <input type="date" id="birthDate">
         
         <input type="email" id="email" placeholder="E-Mail Adresse">
@@ -119,12 +128,13 @@
         const db = getFirestore(app);
 
         window.createAccount = async () => {
-            const name = document.getElementById('fullName').value;
+            const fName = document.getElementById('firstName').value;
+            const lName = document.getElementById('lastName').value;
             const bday = document.getElementById('birthDate').value;
             const email = document.getElementById('email').value;
             const pass = document.getElementById('pass').value;
 
-            if(!name || !bday || !email || !pass) {
+            if(!fName || !lName || !bday || !email || !pass) {
                 alert("Bitte fülle alle Felder aus.");
                 return;
             }
@@ -144,24 +154,30 @@
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, email, pass);
                 
+                // Kombiniert den Namen für das Dashboard
+                const fullName = fName + " " + lName;
+                
                 // Erstellt einen eigenen Code für den neuen User
                 const myCode = Math.random().toString(36).substring(2, 10).toUpperCase();
                 
-                // Holt den Code, den der User auf der Index.html eingegeben hat
+                // Holt den Referrer-Code aus dem Speicher (falls vorhanden)
                 const usedReferrerCode = localStorage.getItem('usedInviteCode') || "DIRECT";
 
+                // Speichert alle Daten in Firestore
                 await setDoc(doc(db, "members", userCred.user.uid), {
-                    displayName: name,
+                    displayName: fullName,
+                    firstName: fName,
+                    lastName: lName,
                     birthDate: bday,
                     email: email,
                     myInviteCode: myCode,
-                    referredBy: usedReferrerCode, // Werber wird hier gespeichert
-                    paymentStatus: "pending",     // Noch nicht die 199$ gezahlt
+                    referredBy: usedReferrerCode,
+                    paymentStatus: "pending",
                     balance: 0,
                     joined: new Date().toISOString()
                 });
 
-                // Nach der Registrierung zum Dashboard (oder zur Info/Zahlungsseite)
+                // Weiterleitung zum Dashboard
                 window.location.href = "dashboard.html";
             } catch (e) {
                 alert("Fehler: " + e.message);
