@@ -48,7 +48,7 @@
         .stat-card { 
             background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             padding: 25px; border-radius: 24px; border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.03);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05);
         }
         .stat-card h3 { font-size: 11px; text-transform: uppercase; color: var(--text-sub); margin: 0; }
         .stat-card p { font-size: 26px; font-weight: 700; margin-top: 10px; }
@@ -141,53 +141,53 @@
         let currentStep = 1;
         const lessonData = {
             1: {
-                label: "Part 1: Your Mission",
-                title: "Finding and Closing High-Value Clients",
+                label: "Part 1: The Mission & The Invite Code",
+                title: "Your Gateway to High-Value Sourcing",
                 html: `
-                    <p style="color:var(--text-sub); font-size:17px; line-height:1.6;">Welcome to the <b>5-Day Cash Flow Challenge</b>. Here, you will be trained to identify, engage, and close leads like a professional. While it may seem challenging at first, you will master these skills rapidly.</p>
+                    <p style="color:var(--text-sub); font-size:17px; line-height:1.6;">Welcome to the <b>5-Day Cash Flow Challenge</b>. You are here to learn how to identify, engage, and close leads. While the start may seem demanding, the growth you will experience is exponential.</p>
                     
                     <div class="mission-box">
                         <div class="mission-item">
                             <span class="check-icon">✓</span>
-                            <span><b>Your Objective:</b> Find individuals across the internet who are actively seeking financial growth. Focus on people looking for online opportunities, side hustles, or professional Setter/Closer roles.</span>
+                            <span><b>The Objective:</b> Locate individuals across the digital landscape seeking financial freedom—primarily those looking for remote roles, side income, or professional Setting/Closing positions.</span>
                         </div>
                         <div class="mission-item">
                             <span class="check-icon">✓</span>
-                            <span><b>The Process:</b> Your task is to identify these high-intent leads and "set" them into our proven 5-Day Cash Flow Challenge.</span>
+                            <span><b>The Invite Code:</b> This is your unique identifier. When you "set" a client to our program, they must use your specific code to register. This ensures the client is permanently linked to your profile, securing your future network activity.</span>
                         </div>
                         <div class="mission-item">
                             <span class="check-icon">✓</span>
-                            <span><b>Growth Curve:</b> We provide the infrastructure; you provide the eyes. In the following parts, we will reveal exactly where these clients are hiding and how to secure them.</span>
+                            <span><b>Your Role:</b> You act as the bridge between high-intent leads and the <b>Syndicate Protocol</b>. Your mission is to facilitate their entry into this challenge.</span>
                         </div>
                     </div>
-                    <p style="font-size:14px; color:var(--apple-blue); font-weight:600;">Ready to locate your first targets? Click "Next Part" to uncover the lead sources.</p>
+                    <p style="font-size:14px; color:var(--apple-blue); font-weight:600;">Ready to deploy? Next, we define exactly where your clients are located.</p>
                 `
             },
             2: {
                 label: "Part 2: Lead Sourcing",
                 title: "The High-Ticket Sniper Method",
-                html: `<p style="font-size:17px;">We don't spam. We hunt. Go to <b>Facebook Groups</b> for High-Ticket Closing, SaaS, or Real Estate.</p>
-                       <div class="mission-box"><b>The Strategy:</b> Scan the comments of popular posts. Look for people asking for advice or showing interest in "scaling" or "income". These are your qualified targets.</div>`
+                html: `<p style="font-size:17px;">We operate with precision. Go to <b>Facebook Groups</b> dedicated to High-Ticket Sales, SaaS, or Real Estate.</p>
+                       <div class="mission-box"><b>The Strategy:</b> Monitor the comment sections of viral industry posts. Look for individuals expressing curiosity or frustration with their current income. They are your primary targets.</div>`
             },
             3: {
                 label: "Part 3: Communication",
                 title: "The Soft Setting Dialog",
-                html: `<p style="font-size:17px;">To secure your first clients, you must be strategic. Use a soft, professional approach to establish authority and trust.</p>
-                       <div style="background: #f0f7ff; padding: 18px; border-radius: 18px; border-left: 5px solid var(--apple-blue); font-style: italic; margin: 20px 0;">"Hey [Name], I noticed your interest in the post regarding automated cash flow. I'm currently utilizing a protocol that specializes in exactly that. I'd love to share how it's working."</div>`
+                html: `<p style="font-size:17px;">Professionalism is key. Use a soft, conversational approach to build immediate trust and rapport.</p>
+                       <div style="background: #f0f7ff; padding: 18px; border-radius: 18px; border-left: 5px solid var(--apple-blue); font-style: italic; margin: 20px 0;">"Hi [Name], I saw your thoughts on the post about automated systems. I'm actually using a protocol that specializes in scaling cash flow. I'd be happy to share how the challenge works."</div>`
             },
             4: {
                 label: "Part 4: The Invitation",
                 title: "Bridging to the $5 Trial",
-                html: `<p style="font-size:17px;">Once interest is established, bridge them to your link. It's a frictionless entry because the trial only requires a $5 commitment.</p>
-                       <div style="background: #f0f7ff; padding: 18px; border-radius: 18px; border-left: 5px solid var(--apple-blue); font-style: italic; margin: 20px 0;">"I'm currently engaged in the Syndicate Protocol's 5-day challenge. It's only $5 to access the dashboard and training. I can provide an invite code if you want to see the system."</div>`
+                html: `<p style="font-size:17px;">Once trust is established, introduce the entry point. The $5 trial is designed to be a "no-brainer" decision for the lead.</p>
+                       <div style="background: #f0f7ff; padding: 18px; border-radius: 18px; border-left: 5px solid var(--apple-blue); font-style: italic; margin: 20px 0;">"I'm in the middle of a 5-day challenge with Syndicate. It's just $5 to get full access to the dashboard and training. If you're interested, I can give you my invite code to join the cohort."</div>`
             },
             5: {
                 label: "Part 5: Master of the Network",
-                title: "Scaling Your Pipeline",
-                html: `<p style="font-size:17px;">Your goal is consistency. Every $5 entry you secure builds your long-term network. Focus on volume and quality communication.</p>
+                title: "Consistency & Scaling",
+                html: `<p style="font-size:17px;">Focus on daily activity. Every lead that enters with your Invite Code expands your sphere of influence.</p>
                        <div class="mission-box" style="background:var(--text-main); color:white;">
                         <h4 style="color:var(--success);">Target Achievement</h4>
-                        <p>Securing just 1-2 trial leads per day creates a massive foundation for your success. Start hunting now.</p>
+                        <p>Consistency is the only variable. Secure 1-2 trial entries daily to build an unstoppable momentum.</p>
                        </div>`
             }
         };
@@ -198,7 +198,7 @@
                 renderLesson();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                alert("Masterclass Session Complete! It's time to find your first leads.");
+                alert("Masterclass Complete. Go to your Dashboard and start using your Invite Code.");
                 showTab('dashboard', document.querySelector('[onclick*="dashboard"]'));
             }
         };
@@ -238,4 +238,3 @@
     </script>
 </body>
 </html>
-
