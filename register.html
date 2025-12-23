@@ -23,7 +23,6 @@
             color: #f5f5f7;
         }
 
-        /* Der Glassy-Container */
         .glass-card {
             background: var(--glass);
             backdrop-filter: blur(25px) saturate(180%);
@@ -50,7 +49,6 @@
             margin-bottom: 30px;
         }
 
-        /* Moderne Apple-Style Inputs */
         input {
             width: 100%;
             padding: 14px 16px;
@@ -70,7 +68,6 @@
             background: rgba(0, 0, 0, 0.3);
         }
 
-        /* Der Button */
         button {
             width: 100%;
             padding: 14px;
@@ -88,10 +85,6 @@
         button:hover {
             background: #0077ed;
             transform: scale(1.02);
-        }
-
-        button:active {
-            transform: scale(0.98);
         }
     </style>
 </head>
@@ -126,9 +119,8 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Generiert einen sauberen 8-stelligen Code ohne Sonderzeichen
         function generateCode() {
-            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Keine verwirrenden Zeichen wie O oder 0
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
             let result = "";
             for (let i = 0; i < 8; i++) {
                 result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -139,17 +131,36 @@
         window.createAccount = async () => {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('pass').value;
+
+            if (!email || !pass) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
             const myNewCode = generateCode();
-            const referrer = localStorage.getItem('referrerCode') || "RAYANSEO2025"; //
+            const referrer = localStorage.getItem('referrerCode') || "RAYANSEO2025"; 
 
             try {
+                // 1. User erstellen
                 const userCred = await createUserWithEmailAndPassword(auth, email, pass);
                 
-                // Speichert den neuen User weltweit in eur3
+                // 2. In der Datenbank speichern
                 await setDoc(doc(db, "members", userCred.user.uid), {
                     email: email,
                     myInviteCode: myNewCode,
                     referredBy: referrer,
-                    balance: 0, //
+                    balance: 0, 
                     role: "member",
                     joined: new Date().toISOString()
+                });
+
+                // 3. Sofortige Weiterleitung zum Dashboard
+                window.location.href = "dashboard.html";
+
+            } catch (e) { 
+                alert("Error: " + e.message); 
+            }
+        };
+    </script>
+</body>
+</html>
