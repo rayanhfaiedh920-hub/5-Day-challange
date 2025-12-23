@@ -8,72 +8,76 @@
         :root {
             --apple-blue: #0071e3;
             --bg-light: #f5f5f7;
-            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.75);
             --glass-border: rgba(255, 255, 255, 0.4);
             --text-main: #1d1d1f;
             --text-sub: #86868b;
             --success: #34c759;
+            --ultra-gold: #d4af37;
         }
 
         body {
             margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: radial-gradient(circle at top right, #e2e2e7, #f5f5f7);
             color: var(--text-main); display: flex; min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Sidebar Glass Effect */
+        /* Sidebar Glassmorphism */
         .sidebar {
-            width: 260px; background: var(--glass-bg); backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border);
-            display: flex; flex-direction: column; padding: 30px 20px; position: fixed; height: 100vh; z-index: 10;
+            width: 260px; background: var(--glass-bg); backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px); border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column; padding: 30px 20px; position: fixed; height: 100vh; z-index: 100;
         }
         .sidebar h2 { font-size: 18px; font-weight: 800; margin-bottom: 40px; letter-spacing: 1px; }
         .nav-item { 
             padding: 12px; margin-bottom: 8px; border-radius: 12px; 
             color: var(--text-sub); font-size: 14px; text-decoration: none; 
             cursor: pointer; border: none; background: transparent; text-align: left; width: 100%;
-            transition: 0.2s;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .nav-item.active { background: rgba(0, 113, 227, 0.1); color: var(--apple-blue); font-weight: 600; }
-        .nav-item:hover:not(.active) { background: rgba(0, 0, 0, 0.05); }
+        .nav-item:hover:not(.active) { background: rgba(0, 0, 0, 0.05); transform: translateX(5px); }
 
-        .main-content { margin-left: 300px; padding: 40px; flex-grow: 1; max-width: 1000px; }
+        .main-content { margin-left: 300px; padding: 40px; flex-grow: 1; max-width: 1000px; width: 100%; }
 
-        /* Tabs */
-        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        /* Tabs Logic */
+        .tab-content { display: none; animation: slideUp 0.5s ease; }
         .tab-content.active { display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Stats Cards Glassmorphism */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 25px 0; }
+        /* Stats Cards */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 25px 0; }
         .stat-card { 
-            background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             padding: 25px; border-radius: 24px; border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.03);
         }
-        .stat-card h3 { font-size: 11px; text-transform: uppercase; color: var(--text-sub); margin: 0; }
-        .stat-card p { font-size: 24px; font-weight: 700; margin-top: 10px; }
+        .stat-card h3 { font-size: 11px; text-transform: uppercase; color: var(--text-sub); margin: 0; letter-spacing: 0.5px; }
+        .stat-card p { font-size: 26px; font-weight: 700; margin-top: 10px; margin-bottom: 0; }
 
-        /* Learning Glass Container */
+        /* Learning Panel Style */
         .glass-panel {
-            background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            padding: 45px; border-radius: 30px; border: 1px solid var(--glass-border);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05); position: relative;
+            background: var(--glass-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            padding: 45px; border-radius: 32px; border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.06); position: relative;
         }
 
-        .step-label { font-size: 12px; font-weight: 700; color: var(--apple-blue); text-transform: uppercase; margin-bottom: 10px; display: block; }
-        .instruction-box { background: rgba(255,255,255,0.4); padding: 20px; border-radius: 18px; margin: 20px 0; border: 1px solid rgba(0,0,0,0.03); }
-        .dialog-bubble { background: #f0f7ff; padding: 15px; border-radius: 15px; border-left: 4px solid var(--apple-blue); font-style: italic; margin: 15px 0; }
+        .step-label { font-size: 11px; font-weight: 800; color: var(--apple-blue); text-transform: uppercase; margin-bottom: 12px; display: block; letter-spacing: 1px; }
+        .roadmap-box { background: rgba(255,255,255,0.4); padding: 22px; border-radius: 20px; margin: 15px 0; border: 1px solid rgba(0,0,0,0.03); transition: 0.3s; }
+        .roadmap-box:hover { background: rgba(255,255,255,0.6); transform: scale(1.01); }
+        .roadmap-box h4 { margin: 0 0 8px 0; font-size: 16px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        .dialog-bubble { background: #f0f7ff; padding: 18px; border-radius: 18px; border-left: 5px solid var(--apple-blue); font-style: italic; margin: 20px 0; line-height: 1.5; }
 
         .next-btn {
-            background: var(--apple-blue); color: white; border: none; padding: 14px 35px;
-            border-radius: 14px; font-weight: 600; cursor: pointer; float: right; transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 113, 227, 0.3);
+            background: var(--apple-blue); color: white; border: none; padding: 16px 40px;
+            border-radius: 16px; font-weight: 600; cursor: pointer; float: right; transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(0, 113, 227, 0.25); font-size: 15px;
         }
-        .next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 113, 227, 0.4); }
+        .next-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 113, 227, 0.35); }
 
-        .badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; background: rgba(0, 113, 227, 0.1); color: var(--apple-blue); }
+        .badge { padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; background: rgba(0, 113, 227, 0.1); color: var(--apple-blue); display: inline-block; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -92,28 +96,28 @@
         
         <div id="dashboard" class="tab-content active">
             <span class="badge">PRO MEMBER</span>
-            <h1 style="font-size: 36px; letter-spacing: -1px;">Welcome back, <span id="userName">User</span></h1>
+            <h1 style="font-size: 38px; letter-spacing: -1.5px; margin-top: 0;">Welcome back, <span id="userName">User</span></h1>
             
             <div class="stats-grid">
                 <div class="stat-card"><h3>Earnings</h3><p style="color: var(--success);">$<span id="userBalance">0.00</span></p></div>
-                <div class="stat-card"><h3>Challenge</h3><p>Day <span id="dayNum">1</span> / 5</p></div>
-                <div class="stat-card"><h3>My Code</h3><p id="myCode" style="font-size: 18px; color: var(--apple-blue);">---</p></div>
+                <div class="stat-card"><h3>Challenge Progress</h3><p>Day <span id="dayNum">1</span> / 5</p></div>
+                <div class="stat-card"><h3>Your Invite Code</h3><p id="myCode" style="color: var(--apple-blue);">---</p></div>
             </div>
 
-            <div class="glass-panel" style="text-align: center; padding: 60px;">
-                <h2 style="margin-bottom: 10px;">Ready to start setting?</h2>
-                <p style="color: var(--text-sub); margin-bottom: 30px;">The 5-day plan to your first commission is waiting for you.</p>
+            <div class="glass-panel" style="text-align: center; padding: 70px 40px;">
+                <h2 style="font-size: 28px; margin-bottom: 12px;">Start Your 5-Day Masterclass</h2>
+                <p style="color: var(--text-sub); margin-bottom: 35px; max-width: 500px; margin-left: auto; margin-right: auto;">Follow the step-by-step plan to secure your first clients and unlock your cash flow.</p>
                 <button class="next-btn" style="float:none;" onclick="document.querySelector('[onclick*=\'learning\']').click()">Open Strategy Plan</button>
             </div>
         </div>
 
         <div id="learning" class="tab-content">
-            <h1 style="font-size: 32px; margin-bottom: 30px;">Syndicate Masterclass</h1>
+            <h1 style="font-size: 34px; letter-spacing: -1px; margin-bottom: 30px;">Learning Content</h1>
             
             <div class="glass-panel">
                 <div id="learning-stage">
                     </div>
-                <div style="margin-top: 40px; overflow: hidden;">
+                <div style="margin-top: 50px; overflow: hidden; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 30px;">
                     <button class="next-btn" id="nextBtn" onclick="nextLesson()">Next Part →</button>
                 </div>
             </div>
@@ -139,38 +143,61 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Learning Content Data
         let currentStep = 1;
         const lessonData = {
             1: {
-                label: "Part 1: The Goldmine",
-                title: "Finding High-Ticket Groups",
-                html: `<p>To make money, you must go where the money is. Join <b>Facebook Groups</b> focused on High-Ticket Sales, SaaS, or Real Estate Investing.</p>
-                       <div class="instruction-box"><b>Task:</b> Join 5 groups with over 10k members. Look for active posts about "business growth" or "investing".</div>`
+                label: "Part 1: The Roadmap",
+                title: "How the 5-Day Challenge Works",
+                html: `
+                    <p style="color:var(--text-sub); font-size:17px;">The Syndicate Protocol is built on a specific cycle of value and conversion. Here is the exact blueprint of your journey:</p>
+                    
+                    <div class="roadmap-box">
+                        <h4>❶ The $5 Entry Phase</h4>
+                        <p style="font-size:14px; color:var(--text-sub);">New clients join via your Invite Code and pay a $5 trial fee. This low barrier allows you to "set" leads easily. This money goes to the system admin to maintain the infrastructure.</p>
+                    </div>
+
+                    <div class="roadmap-box">
+                        <h4>❷ The 5-Day Education (Your Current Stage)</h4>
+                        <p style="font-size:14px; color:var(--text-sub);">During these 5 days, clients learn the "Soft Setting" strategy. You build your pipeline while your dashboard tracks all "Pending" activity in your network.</p>
+                    </div>
+
+                    <div class="roadmap-box">
+                        <h4>❸ The High-Ticket Upgrade ($199)</h4>
+                        <p style="font-size:14px; color:var(--text-sub);">On Day 5, the true business unlocks. To earn massive commissions, you upgrade to <b>Ultra Client</b> for $199. This allows you to claim 90% of all future upgrades in your network.</p>
+                    </div>
+
+                    <div class="roadmap-box" style="border-left: 4px solid var(--success); background: rgba(52, 199, 89, 0.05);">
+                        <h4 style="color:var(--success);">❹ The Cash Flow Effect</h4>
+                        <p style="font-size:14px; color:var(--text-sub);">Once you are Ultra, every person you invited who also upgrades to Ultra pays YOU <b>$179.10</b>. Just 2 upgrades per week equals over $1,400 per month in pure profit.</p>
+                    </div>
+                `
             },
             2: {
-                label: "Part 2: The Sniper Method",
-                title: "Scanning the Comments",
-                html: `<p>Don't post ads. Look at the comments of popular posts. Look for people asking "How does this work?" or "I need help with X".</p>
-                       <div class="instruction-box">These people are already interested. They are your perfect clients.</div>`
+                label: "Part 2: Finding Leads",
+                title: "The High-Ticket Sniper Method",
+                html: `<p style="font-size:17px;">We don't spam. We hunt. Go to <b>Facebook Groups</b> for High-Ticket Closing, SaaS, or Real Estate.</p>
+                       <div class="roadmap-box"><b>The Strategy:</b> Scan the comments of popular posts. Look for people asking for advice or showing interest in "scaling" or "income". These are your qualified targets.</div>`
             },
             3: {
-                label: "Part 3: The Soft Approach",
-                title: "Starting the Conversation",
-                html: `<p>When you DM them, be soft and friendly. Never pitch in the first message.</p>
-                       <div class="dialog-bubble">"Hey [Name], saw your comment on the post about scaling. I'm actually working on a protocol that automates that. Would love to connect!"</div>`
+                label: "Part 3: Communication",
+                title: "The Soft Setting Dialog",
+                html: `<p style="font-size:17px;">To get your first clients, you must be very smart. Use a soft approach to build trust first.</p>
+                       <div class="dialog-bubble">"Hey [Name], saw your comment on the post about automated cash flow. I'm using a protocol that does exactly that. Would love to share some insights!"</div>`
             },
             4: {
-                label: "Part 4: Bridging to Syndicate",
-                title: "The $5 Invitation",
-                html: `<p>Once they reply, tell them about the Syndicate Protocol. Explain it's a 5-day trial to see how the cash flow works.</p>
-                       <div class="dialog-bubble">"I found this protocol called Syndicate. It's only $5 to start the 5-day challenge. I have an invite code if you want to see the dashboard."</div>`
+                label: "Part 4: The Invitation",
+                title: "Bridging to the $5 Trial",
+                html: `<p style="font-size:17px;">Once they are curious, bridge them to your link. It's an easy sell because it only costs $5 to see the system.</p>
+                       <div class="dialog-bubble">"I'm currently in a 5-day challenge with the Syndicate Protocol. It's only $5 to get a dashboard and see the training. I'll send you my invite code if you're interested."</div>`
             },
             5: {
-                label: "Part 5: The Cash Flow",
-                title: "Closing & Recurring Income",
-                html: `<p>Send them your <b>Invite Code</b>. When they pay $5, they are in your network. When they upgrade to Ultra for $199, you get <b>90% ($179.10)</b>.</p>
-                       <div class="instruction-box" style="background:var(--success); color:white; border:none;"><b>Goal:</b> 1 Client per day = $179 profit daily.</div>`
+                label: "Part 5: Scaling to Ultra",
+                title: "Unlocking the 90% Profit",
+                html: `<p style="font-size:17px;">Your goal is to have a pipeline of $5 leads who all reach Day 5. When they see the value, they upgrade.</p>
+                       <div class="roadmap-box" style="background:var(--text-main); color:white;">
+                        <h4 style="color:var(--ultra-gold);">The Math of Wealth</h4>
+                        <p>10 Trial Leads → 3 Ultra Upgrades = <b>$537.30 Profit</b> for you.</p>
+                       </div>`
             }
         };
 
@@ -178,8 +205,9 @@
             if(currentStep < 5) {
                 currentStep++;
                 renderLesson();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                alert("Masterclass Complete! Start setting your first clients now.");
+                alert("You have completed the Roadmap! Now, go to the Facebook groups and start setting.");
                 showTab('dashboard', document.querySelector('[onclick*="dashboard"]'));
             }
         };
@@ -188,15 +216,14 @@
             const data = lessonData[currentStep];
             document.getElementById('learning-stage').innerHTML = `
                 <span class="step-label">${data.label}</span>
-                <h2 style="font-size:28px; margin: 10px 0 20px 0;">${data.title}</h2>
+                <h2 style="font-size:30px; margin: 10px 0 25px 0; letter-spacing:-0.5px;">${data.title}</h2>
                 ${data.html}
             `;
-            document.getElementById('nextBtn').innerText = currentStep === 5 ? "Finish & Start" : "Next Part →";
+            document.getElementById('nextBtn').innerText = currentStep === 5 ? "Finish Masterclass" : "Next Part →";
         }
 
-        renderLesson(); // Initial load
+        renderLesson();
 
-        // Navigation
         window.showTab = (tabId, btn) => {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
