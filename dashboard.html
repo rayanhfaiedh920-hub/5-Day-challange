@@ -92,11 +92,25 @@
             border-radius: 24px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            position: relative;
         }
 
         .stat-label { color: var(--text-sub); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-value { font-size: 32px; font-weight: 700; margin-top: 10px; }
+        .stat-value { font-size: 28px; font-weight: 700; margin-top: 10px; }
         .stat-value.green { color: #34c759; }
+
+        .copy-btn {
+            background: var(--apple-blue);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            cursor: pointer;
+            position: absolute;
+            top: 30px;
+            right: 30px;
+        }
 
         /* Content Card */
         .content-card {
@@ -105,6 +119,23 @@
             padding: 40px;
             border: 1px solid var(--glass-border);
             box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+            position: relative;
+        }
+
+        /* Paywall Overlay */
+        #paywall {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            display: none; /* Wird via JS angezeigt wenn paymentStatus != paid */
         }
 
         .day-badge {
@@ -136,7 +167,7 @@
     <div class="main-container">
         <div class="welcome-header">
             <h1 id="userNameDisplay">Lädt...</h1>
-            <p>Deine 5-Tage-Challenge läuft. Status: Aktiv.</p>
+            <p>Deine 5-Tage-Challenge läuft. Status: <span id="statusText">Aktiv</span></p>
         </div>
 
         <div class="stats-grid">
@@ -149,15 +180,21 @@
                 <div class="stat-value">Tag 1 / 5</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Invite-Code</div>
-                <div class="stat-value" id="inviteCodeDisplay" style="font-size: 18px; font-family: monospace;">---</div>
+                <div class="stat-label">Dein Invite-Code</div>
+                <button class="copy-btn" onclick="copyCode()">Kopieren</button>
+                <div class="stat-value" id="inviteCodeDisplay" style="font-family: monospace;">---</div>
             </div>
         </div>
 
         <div class="content-card">
+            <div id="paywall">
+                <h2>Lernphase gesperrt</h2>
+                <p>Bitte schließe die Zahlung von 199$ ab, um alle Strategien freizuschalten.</p>
+                <button onclick="window.location.href='payment.html'" style="background:var(--apple-blue); color:white; border:none; padding:12px 25px; border-radius:12px; cursor:pointer; font-weight:600;">Jetzt freischalten</button>
+            </div>
             <span class="day-badge">TAG 1</span>
             <h2 style="margin-top: 15px;">System-Setup</h2>
-            <p style="color: var(--text-sub);">Willkommen im System. Deine Daten sind sicher im eur3 Rechenzentrum hinterlegt.</p>
+            <p style="color: var(--text-sub);">Willkommen im System. Deine Daten sind sicher im Syndicate Netzwerk hinterlegt.</p>
         </div>
     </div>
 
@@ -179,40 +216,42 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Daten beim Laden abrufen
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
-                    // Wir ziehen die Daten direkt über die User ID aus dem "members" Ordner
                     const docRef = doc(db, "members", user.uid);
                     const docSnap = await getDoc(docRef);
                     
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         
-                        // Begrüßung mit dem vollständigen Namen aus der Registrierung
                         document.getElementById('userNameDisplay').innerText = `Willkommen, ${data.displayName || 'User'}`;
                         document.getElementById('balanceDisplay').innerText = `$${(data.balance || 0).toFixed(2)}`;
                         document.getElementById('inviteCodeDisplay').innerText = data.myInviteCode || "Kein Code";
-                    } else {
-                        console.log("Kein Dokument für diesen User gefunden!");
-                        document.getElementById('userNameDisplay').innerText = "Willkommen!";
+
+                        // Logik für die 199$ Sperre
+                        if (data.paymentStatus !== "paid") {
+                            document.getElementById('paywall').style.display = "flex";
+                            document.getElementById('statusText').innerText = "Warten auf Zahlung";
+                        }
                     }
                 } catch (error) {
-                    console.error("Fehler beim Laden der Daten:", error);
+                    console.error("Fehler:", error);
                 }
             } else {
                 window.location.href = "index.html";
             }
         });
 
-        // Logout Funktion
-        window.logoutUser = () => {
-            signOut(auth).then(() => {
-                window.location.href = "index.html";
-            }).catch((error) => {
-                alert("Fehler beim Abmelden: " + error.message);
+        window.copyCode = () => {
+            const code = document.getElementById('inviteCodeDisplay').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Code kopiert: " + code);
             });
+        };
+
+        window.logoutUser = () => {
+            signOut(auth).then(() => { window.location.href = "index.html"; });
         };
     </script>
 </body>
