@@ -217,9 +217,9 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // DEINE ADMIN DATEN
+        // --- DEINE ADMIN DATEN ---
         const MASTER_CODE = "RAYANSEO2025";
-        const ADMIN_EMAIL = "deine-email@beispiel.de"; // HIER DEINE LOGIN-EMAIL EINTRAGEN!
+        const ADMIN_EMAIL = "rayanhfaiedh920@gmail.com"; 
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -230,19 +230,22 @@
                     if (docSnap.exists()) {
                         let data = docSnap.data();
 
-                        // MASTER-CHECK: Wenn DU eingeloggt bist
-                        if (user.email === ADMIN_EMAIL) {
-                            // Automatisch deinen Namen und Code setzen
+                        // MASTER-CHECK: Wenn DU (Rayan) eingeloggt bist
+                        if (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
                             document.getElementById('userNameDisplay').innerText = `Willkommen, Rayan (Admin)`;
                             document.getElementById('inviteCodeDisplay').innerText = MASTER_CODE;
                             document.getElementById('statusText').innerText = "Administrator";
-                            document.getElementById('paywall').style.display = "none"; // Admin hat immer Zugriff
+                            document.getElementById('paywall').style.display = "none";
+                            
+                            // Optional: Falls dein Code in der Datenbank anders ist, korrigieren wir ihn hier
+                            if(data.myInviteCode !== MASTER_CODE) {
+                                await updateDoc(docRef, { myInviteCode: MASTER_CODE });
+                            }
                         } else {
                             // NORMALER USER: Daten aus DB laden
                             document.getElementById('userNameDisplay').innerText = `Willkommen, ${data.displayName || 'User'}`;
                             document.getElementById('inviteCodeDisplay').innerText = data.myInviteCode || "Kein Code";
                             
-                            // Paywall check für User
                             if (data.paymentStatus === "paid") {
                                 document.getElementById('paywall').style.display = "none";
                                 document.getElementById('statusText').innerText = "Aktiv";
@@ -252,7 +255,6 @@
                             }
                         }
 
-                        // Guthaben für alle anzeigen
                         document.getElementById('balanceDisplay').innerText = `$${(data.balance || 0).toFixed(2)}`;
                     }
                 } catch (error) {
@@ -267,7 +269,7 @@
             const code = document.getElementById('inviteCodeDisplay').innerText;
             if(code !== "---") {
                 navigator.clipboard.writeText(code).then(() => {
-                    alert("Dein persönlicher Code wurde kopiert: " + code);
+                    alert("Code kopiert: " + code);
                 });
             }
         };
