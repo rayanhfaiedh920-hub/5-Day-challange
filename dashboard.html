@@ -3,206 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syndicate Protocol | Dashboard</title>
+    <title>Syndicate | Dashboard</title>
     <style>
         :root {
             --apple-blue: #0071e3;
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.8);
+            --bg-light: #f5f5f7;
             --text-main: #1d1d1f;
             --text-sub: #86868b;
+            --success: #34c759;
         }
 
         body {
             margin: 0;
-            padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            background: radial-gradient(circle at 85% 15%, #dce8f9 0%, #f5f5f7 45%, #e8f1ff 100%);
-            background-attachment: fixed;
+            background-color: var(--bg-light);
             color: var(--text-main);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px) saturate(180%);
-            border-right: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
+            align-items: center;
             padding: 40px 20px;
-            box-sizing: border-box;
         }
 
-        .logo-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 50px;
-            padding-left: 10px;
+        .container { width: 100%; max-width: 800px; }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            margin-bottom: 20px;
         }
 
-        .logo-square { width: 14px; height: 14px; background: #000; border-radius: 3px; }
+        h1 { font-size: 28px; font-weight: 700; margin-bottom: 5px; }
+        .welcome-text { color: var(--text-sub); margin-bottom: 30px; }
 
-        .nav-item {
-            padding: 14px 18px;
-            border-radius: 14px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            margin-bottom: 8px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            padding: 20px;
+            background: #f9f9fb;
+            border-radius: 18px;
+            border: 1px solid #eee;
+        }
+
+        .stat-label { font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; }
+        .stat-value { font-size: 24px; font-weight: 700; margin-top: 5px; color: var(--apple-blue); }
+
+        .invite-section {
+            background: var(--apple-blue);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .invite-code {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin: 15px 0;
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 10px;
             cursor: pointer;
         }
 
-        .nav-item:hover { background: rgba(255, 255, 255, 0.4); }
-        .nav-item.active { background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.05); color: var(--apple-blue); }
-
-        /* Main Content */
-        .main-container {
-            flex: 1;
-            padding: 40px 60px;
-            overflow-y: auto;
-        }
-
-        .welcome-header { margin-bottom: 40px; }
-        .welcome-header h1 { font-size: 34px; letter-spacing: -1px; margin: 0; }
-        .welcome-header p { color: var(--text-sub); font-size: 18px; margin-top: 5px; }
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-            position: relative;
-        }
-
-        .stat-label { color: var(--text-sub); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-value { font-size: 28px; font-weight: 700; margin-top: 10px; }
-        .stat-value.green { color: #34c759; }
-
-        .copy-btn {
-            background: var(--apple-blue);
+        .btn-pay {
+            background: var(--success);
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 10px;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
             cursor: pointer;
-            position: absolute;
-            top: 30px;
-            right: 30px;
+            width: 100%;
+            display: none; /* Erst nach 5 Tagen sichtbar */
         }
 
-        /* Content Card */
-        .content-card {
-            background: white;
-            border-radius: 32px;
-            padding: 40px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
-            position: relative;
-            min-height: 200px;
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
         }
-
-        /* Paywall Overlay */
-        #paywall {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 10;
-        }
-
-        .day-badge {
+        .progress-fill {
+            height: 100%;
             background: var(--apple-blue);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 700;
+            width: 0%;
+            transition: 1s ease-out;
         }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="logo-box">
-            <div class="logo-square"></div>
-            SYNDICATE
-        </div>
-        <a href="#" class="nav-item active">Übersicht</a>
-        <a href="#" class="nav-item">Lernphase (Tag 1-5)</a>
-        <a href="#" class="nav-item">Earnings-Report</a>
-        
-        <div onclick="logoutUser()" class="nav-item" style="margin-top: auto; color: #ff3b30;">
-            <span>Abmelden</span>
-        </div>
-    </div>
+    <div class="container">
+        <div class="card">
+            <h1 id="userName">Lade Profil...</h1>
+            <p class="welcome-text">Willkommen im Syndicate Protocol System.</p>
 
-    <div class="main-container">
-        <div class="welcome-header">
-            <h1 id="userNameDisplay">Lädt...</h1>
-            <p>Challenge Status: <span id="statusText" style="font-weight: bold;">Prüfung...</span></p>
-        </div>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Guthaben (Auszahlbar)</div>
+                    <div class="stat-value" id="userBalance">$0.00</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Lernphase Tag</div>
+                    <div class="stat-value" id="dayCount">0 / 5</div>
+                    <div class="progress-bar"><div class="progress-fill" id="pFill"></div></div>
+                </div>
+            </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Aktuelle Earnings</div>
-                <div class="stat-value green" id="balanceDisplay">$0.00</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Fortschritt</div>
-                <div class="stat-value">Tag 1 / 5</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Dein Invite-Code</div>
-                <button class="copy-btn" onclick="copyCode()">Kopieren</button>
-                <div class="stat-value" id="inviteCodeDisplay" style="font-family: monospace; font-size: 22px;">---</div>
+            <div id="paymentArea">
+                <p id="timerText" style="font-size: 14px; color: var(--text-sub);">
+                    Deine 5-tägige Lernphase läuft. Danach kannst du die vollen Funktionen freischalten.
+                </p>
+                <button class="btn-pay" id="payButton" onclick="startFullPayment()">Vollversion freischalten ($199)</button>
             </div>
         </div>
 
-        <div class="content-card">
-            <div id="paywall">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Lernphase gesperrt</h2>
-                <p style="color: var(--text-sub); margin-bottom: 20px;">Schließe die Aktivierung ab, um das System zu starten.</p>
-                <button onclick="window.location.href='payment.html'" style="background:var(--apple-blue); color:white; border:none; padding:14px 28px; border-radius:14px; cursor:pointer; font-weight:600; font-size: 16px;">Jetzt freischalten</button>
-            </div>
-            
-            <span class="day-badge">TAG 1</span>
-            <h2 style="margin-top: 15px;">System-Setup</h2>
-            <p style="color: var(--text-sub);">Willkommen im Syndicate Protocol. Dein Account wird im eur3-Rechenzentrum synchronisiert.</p>
+        <div class="card invite-section">
+            <div class="stat-label" style="color: rgba(255,255,255,0.8);">Dein persönlicher Invite-Code</div>
+            <div class="invite-code" id="myCode" onclick="copyCode()">---</div>
+            <p style="font-size: 13px;">Teile diesen Code. Du erhältst 90% Provision ($179.10) für jeden geworbenen Partner, sobald dieser die Vollversion aktiviert.</p>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
@@ -217,65 +153,47 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- DEINE ADMIN DATEN ---
-        const MASTER_CODE = "RAYANSEO2025";
-        const ADMIN_EMAIL = "rayanhfaiedh920@gmail.com"; 
-
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                try {
-                    const docRef = doc(db, "members", user.uid);
-                    const docSnap = await getDoc(docRef);
+                const userDoc = await getDoc(doc(db, "members", user.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    document.getElementById('userName').innerText = "Hallo, " + data.firstName;
+                    document.getElementById('myCode').innerText = data.myInviteCode;
+                    document.getElementById('userBalance').innerText = "$" + (data.balance || 0).toFixed(2);
+
+                    // LOGIK FÜR DIE 5 TAGE LERNPHASE
+                    const joinDate = new Date(data.joined);
+                    const now = new Date();
+                    const diffTime = Math.abs(now - joinDate);
+                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
                     
-                    if (docSnap.exists()) {
-                        let data = docSnap.data();
+                    let displayDays = diffDays > 5 ? 5 : diffDays;
+                    document.getElementById('dayCount').innerText = displayDays + " / 5";
+                    document.getElementById('pFill').style.width = (displayDays * 20) + "%";
 
-                        // MASTER-CHECK: Wenn DU (Rayan) eingeloggt bist
-                        if (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-                            document.getElementById('userNameDisplay').innerText = `Willkommen, Rayan (Admin)`;
-                            document.getElementById('inviteCodeDisplay').innerText = MASTER_CODE;
-                            document.getElementById('statusText').innerText = "Administrator";
-                            document.getElementById('paywall').style.display = "none";
-                            
-                            // Optional: Falls dein Code in der Datenbank anders ist, korrigieren wir ihn hier
-                            if(data.myInviteCode !== MASTER_CODE) {
-                                await updateDoc(docRef, { myInviteCode: MASTER_CODE });
-                            }
-                        } else {
-                            // NORMALER USER: Daten aus DB laden
-                            document.getElementById('userNameDisplay').innerText = `Willkommen, ${data.displayName || 'User'}`;
-                            document.getElementById('inviteCodeDisplay').innerText = data.myInviteCode || "Kein Code";
-                            
-                            if (data.paymentStatus === "paid") {
-                                document.getElementById('paywall').style.display = "none";
-                                document.getElementById('statusText').innerText = "Aktiv";
-                            } else {
-                                document.getElementById('paywall').style.display = "flex";
-                                document.getElementById('statusText').innerText = "Warten auf Zahlung";
-                            }
-                        }
-
-                        document.getElementById('balanceDisplay').innerText = `$${(data.balance || 0).toFixed(2)}`;
+                    // Wenn 5 Tage rum sind, zeige den Bezahl-Button
+                    if (diffDays >= 5 && data.paymentStatus === "learning_phase") {
+                        document.getElementById('timerText').innerText = "Lernphase abgeschlossen! Du kannst jetzt dein Konto upgraden.";
+                        document.getElementById('payButton').style.display = "block";
+                    } else if (data.paymentStatus === "full_member") {
+                        document.getElementById('paymentArea').innerHTML = "<b style='color:var(--success)'>✓ Vollmitglied des Syndicate Protocol</b>";
                     }
-                } catch (error) {
-                    console.error("Fehler beim Abrufen der Daten:", error);
                 }
             } else {
-                window.location.href = "index.html";
+                window.location.href = "login.html";
             }
         });
 
         window.copyCode = () => {
-            const code = document.getElementById('inviteCodeDisplay').innerText;
-            if(code !== "---") {
-                navigator.clipboard.writeText(code).then(() => {
-                    alert("Code kopiert: " + code);
-                });
-            }
+            const code = document.getElementById('myCode').innerText;
+            navigator.clipboard.writeText(code);
+            alert("Invite-Code kopiert: " + code);
         };
 
-        window.logoutUser = () => {
-            signOut(auth).then(() => { window.location.href = "index.html"; });
+        window.startFullPayment = () => {
+            // Hier kommt später dein Stripe-Link für die 199$ hin
+            window.location.href = "https://buy.stripe.com/DEIN_199_DOLLAR_LINK";
         };
     </script>
 </body>
