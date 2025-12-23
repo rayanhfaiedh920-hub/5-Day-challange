@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,223 +7,326 @@
     <style>
         :root {
             --apple-blue: #0071e3;
-            --glass-bg: rgba(255, 255, 255, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --sidebar-glass: rgba(255, 255, 255, 0.25);
+            --glass-bg: rgba(255, 255, 255, 0.35);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --sidebar-glass: rgba(255, 255, 255, 0.2);
             --text-dark: #1d1d1f;
-            --text-sub: #424245;
+            --success-green: #34c759;
         }
 
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            /* Exakter Hintergrundverlauf aus deinem Bild */
             background: radial-gradient(circle at top right, #b8c6db, #f5f5f7), 
                         radial-gradient(circle at bottom left, #d6e4f0, #f5f5f7);
             background-attachment: fixed;
             color: var(--text-dark);
             display: flex;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* --- SIDEBAR STYLE (FLOATING) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             width: 280px;
             margin: 30px;
             background: var(--sidebar-glass);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border: 1px solid var(--glass-border);
             border-radius: 40px;
             display: flex;
             flex-direction: column;
             padding: 40px 20px;
-            position: fixed;
             height: calc(100vh - 60px);
             box-sizing: border-box;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            position: fixed;
         }
 
-        .sidebar h2 {
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 50px;
-            padding-left: 10px;
-        }
-
-        .sidebar h2::before {
-            content: ""; /* Apple Icon Ersatz */
-            margin-right: 10px;
-            color: var(--apple-blue);
-        }
+        .sidebar h2 { font-size: 24px; font-weight: 700; margin-bottom: 50px; text-align: center; }
 
         .nav-item {
             padding: 15px 20px;
-            margin-bottom: 5px;
-            border-radius: 12px;
-            color: var(--text-sub);
+            margin-bottom: 8px;
+            border-radius: 15px;
+            color: #424245;
             font-size: 18px;
             text-decoration: none;
             cursor: pointer;
             border: none;
             background: transparent;
             text-align: left;
-            transition: 0.2s;
+            transition: 0.3s;
             font-weight: 500;
         }
 
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.3);
-            color: var(--text-dark);
-        }
-
-        .nav-item.active {
-            background: rgba(255, 255, 255, 0.5);
-            color: var(--text-dark);
-            font-weight: 600;
-        }
-
-        /* --- LOGOUT BUTTON UNTEN RECHTS --- */
-        .logout-btn {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            background: var(--apple-blue);
-            color: white;
-            padding: 15px 35px;
-            border-radius: 30px;
-            font-weight: 600;
-            text-decoration: none;
-            box-shadow: 0 10px 25px rgba(0, 113, 227, 0.3);
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            transition: 0.3s;
-            z-index: 2000;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 113, 227, 0.4);
-        }
+        .nav-item.active { background: rgba(255, 255, 255, 0.5); color: var(--text-dark); font-weight: 700; }
+        .logout-item { margin-top: auto; color: #ff3b30; font-weight: 600; }
 
         /* --- MAIN CONTENT --- */
         .main-content {
             margin-left: 340px;
-            padding: 80px 60px;
             flex-grow: 1;
-            max-width: 1200px;
+            padding: 80px 60px;
+            max-width: 1100px;
         }
 
-        .header-title {
-            font-size: 55px;
-            font-weight: 800;
-            letter-spacing: -2px;
-            margin-bottom: 10px;
-        }
+        .header-title { font-size: 60px; font-weight: 800; letter-spacing: -2px; margin: 0; }
+        .header-sub { font-size: 22px; color: #6e6e73; margin-bottom: 50px; }
 
-        .header-sub {
-            font-size: 22px;
-            color: var(--text-sub);
-            margin-bottom: 60px;
-        }
-
-        /* --- STAT CARDS --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-
+        /* --- CARDS & PANELS --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 40px; }
+        
         .stat-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            padding: 30px;
-            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 35px;
             border: 1px solid var(--glass-border);
             box-shadow: 0 10px 30px rgba(0,0,0,0.03);
         }
 
-        .stat-card h3 { font-size: 16px; color: var(--text-sub); margin: 0; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-card p { font-size: 32px; font-weight: 700; margin: 10px 0; }
+        .stat-card h3 { font-size: 16px; color: #86868b; margin: 0; text-transform: uppercase; }
+        .stat-card p { font-size: 36px; font-weight: 700; margin: 10px 0 0 0; }
 
-        /* --- CONTENT PANEL --- */
-        .content-panel {
+        .mastering-box {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            padding: 50px;
-            border-radius: 40px;
+            backdrop-filter: blur(25px);
+            padding: 80px 40px;
+            border-radius: 50px;
             border: 1px solid var(--glass-border);
-            margin-bottom: 30px;
-            position: relative;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .content-panel h2 { font-size: 28px; font-weight: 700; margin-top: 0; }
-        .content-panel p { font-size: 20px; color: var(--text-sub); line-height: 1.6; }
+        .script-box {
+            background: rgba(255, 255, 255, 0.5);
+            border-left: 4px solid var(--apple-blue);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            color: #1d1d1f;
+        }
 
-        .verify-btn {
+        .glow-btn {
             background: var(--apple-blue);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 12px;
-            font-weight: 600;
+            padding: 22px 50px;
+            border-radius: 20px;
+            font-size: 22px;
+            font-weight: 700;
             cursor: pointer;
-            position: absolute;
-            bottom: 40px;
-            right: 40px;
+            transition: 0.4s;
+            box-shadow: 0 0 25px rgba(0, 113, 227, 0.4);
+            margin-top: 20px;
         }
 
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .glow-btn:hover { transform: scale(1.03); box-shadow: 0 0 40px rgba(0, 113, 227, 0.6); }
 
+        /* --- LEARNING PHASE CONTENT --- */
+        .blueprint-list { list-style: none; padding: 0; margin: 30px 0; }
+        .blueprint-item {
+            display: flex;
+            align-items: flex-start;
+            background: rgba(255,255,255,0.4);
+            padding: 25px;
+            border-radius: 25px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .check-icon { color: var(--success-green); font-size: 28px; margin-right: 20px; font-weight: bold; }
+        .blueprint-text b { font-size: 20px; display: block; margin-bottom: 5px; }
+        .screenshot-img { width: 100%; border-radius: 15px; margin-top: 15px; border: 1px solid rgba(0,0,0,0.1); }
+
+        .tab-content { display: none; width: 100%; }
+        .tab-content.active { display: block; animation: slideUp 0.6s ease; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <h2>Syndicate</h2>
-        <button class="nav-item active" onclick="showTab('dashboard', this)">Dashboard</button>
-        <button class="nav-item" onclick="showTab('learning', this)">Masterclass</button>
+        <h2> SYNDICATE</h2>
+        <button class="nav-item active" id="nav-dash" onclick="showTab('dashboard', this)">Dashboard</button>
+        <button class="nav-item" id="nav-learn" onclick="showTab('learning', this)">Masterclass</button>
         <button class="nav-item">Assets</button>
         <button class="nav-item">Settings</button>
+        <button onclick="handleLogout()" class="nav-item logout-item">Sign Out</button>
     </div>
-
-    <button onclick="handleLogout()" class="logout-btn">Abmelden</button>
 
     <div class="main-content">
         <div id="dashboard" class="tab-content active">
-            <p style="color: var(--apple-blue); font-weight: 700; margin-bottom: 0;">inde.then</p>
+            <p style="color: var(--apple-blue); font-weight: 700;">PROFILE: ACTIVE</p>
             <h1 class="header-title">The future of cash flow.</h1>
-            <p class="header-sub">Exclusive access to the 5-Day Challenge.</p>
+            <p class="header-sub">Exclusive access to the Syndicate protocol.</p>
 
             <div class="stats-grid">
                 <div class="stat-card"><h3>Earnings</h3><p>$<span id="userBalance">0.00</span></p></div>
-                <div class="stat-card"><h3>Testphase</h3><p>Tag 1 / 5</p></div>
-                <div class="stat-card"><h3>Invite-Code</h3><p id="myCode" style="color: var(--apple-blue);">---</p></div>
+                <div class="stat-card"><h3>Status</h3><p>Training</p></div>
+                <div class="stat-card"><h3>Invite Code</h3><p id="myCode" style="color: var(--apple-blue);">---</p></div>
             </div>
 
-            <div class="content-panel">
-                <h2>Learning Title</h2>
-                <p>Join the future of digital assets and master the protocol today.</p>
-                <button class="verify-btn" onclick="showTab('learning', document.querySelectorAll('.nav-item')[1])">Verify Protocol</button>
-            </div>
-
-            <div class="content-panel">
-                <h2>Masterclass</h2>
-                <p>Start your 5-day journey to financial freedom with our expert guides.</p>
-                <button class="verify-btn">Verify Protocol</button>
+            <div class="mastering-box">
+                <h2 style="font-size: 34px; margin-bottom: 10px;">Ready to dominate?</h2>
+                <p style="font-size: 20px; color: #6e6e73; margin-bottom: 30px;">Learn how to make the system work for you.</p>
+                <button class="glow-btn" onclick="showTab('learning', document.getElementById('nav-learn'))">START MASTERING</button>
             </div>
         </div>
 
         <div id="learning" class="tab-content">
-            <h1 class="header-title">Masterclass</h1>
-            <div class="content-panel" id="learning-stage">
+            <h1 class="header-title">The Blueprint</h1>
+            
+            <div id="phase-1-ui">
+                <p class="header-sub">Phase 1: Strategy & Cashflow System</p>
+                <div class="stat-card" style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.2);">
+                    <h2 style="font-size: 42px; letter-spacing: -1.5px;">Phase 1: The Foundation</h2>
+                    <p style="font-size: 20px; line-height: 1.6;">Welcome to the Syndicate. Master <b>Setting</b> and generate massive cash flow.</p>
+
+                    <div class="blueprint-list">
+                        <div class="blueprint-item">
+                            <span class="check-icon">✅</span>
+                            <div class="blueprint-text">
+                                <b>Step 1: Acquisition & Setting</b>
+                                <p>Once you convince a client, send them your personal <b>Invite Code</b>.</p>
+                            </div>
+                        </div>
+                        <div class="blueprint-item">
+                            <span class="check-icon">✅</span>
+                            <div class="blueprint-text">
+                                <b>Step 2: The $5 Validation</b>
+                                <p>Every client pays a $5 fee to validate their account via system admin.</p>
+                            </div>
+                        </div>
+                        <div class="blueprint-item">
+                            <span class="check-icon">✅</span>
+                            <div class="blueprint-text">
+                                <b>Step 3: High-Ticket Commission (90%)</b>
+                                <p>Clients invest $199 after training. <b>You receive 90% commission.</b></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 40px; display: flex; justify-content: flex-end;">
+                        <button class="glow-btn" style="padding: 18px 40px; font-size: 18px;" onclick="goToPhase(2)">Continue to Phase 2 →</button>
+                    </div>
                 </div>
-        </div>
+            </div>
+
+            <div id="phase-2-ui" style="display: none;">
+                <p class="header-sub">Phase 2: Target Sourcing & Hunting</p>
+                <div class="stat-card" style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.2);">
+                    <h2 style="font-size: 42px; letter-spacing: -1.5px;">Hunting for High-Value Leads</h2>
+                    <p style="font-size: 20px; line-height: 1.6;">We use <b>Niche-Mining</b> to find the most motivated leads.</p>
+
+                    <div class="blueprint-list">
+                        <div class="blueprint-item">
+                            <span class="check-icon">🎯</span>
+                            <div class="blueprint-text">
+                                <b>Step 1: Online Job Groups</b>
+                                <img src="screenshot_fb_1.png.png" class="screenshot-img">
+                            </div>
+                        </div>
+                        <div class="blueprint-item">
+                            <span class="check-icon">🎯</span>
+                            <div class="blueprint-text">
+                                <b>Step 2: The "Cleaning Jobs" Niche</b>
+                                <img src="screenshot_fb_2.png.png" class="screenshot-img">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 40px; display: flex; justify-content: space-between;">
+                        <button class="glow-btn" style="background: rgba(0,0,0,0.1); color: #1d1d1f; box-shadow: none;" onclick="goToPhase(1)">← Back</button>
+                        <button class="glow-btn" style="padding: 18px 40px; font-size: 18px;" onclick="goToPhase(3)">Unlock Phase 3 →</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="phase-3-ui" style="display: none;">
+                <p class="header-sub">Phase 3: Lead Sniping & Closing</p>
+                <div class="stat-card" style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.2);">
+                    <h2 style="font-size: 42px; letter-spacing: -1.5px;">The Art of Lead Sniping</h2>
+                    <p style="font-size: 20px; line-height: 1.6;">Don't wait for leads to come to you. "Snipe" interested people from other posts.</p>
+
+                    <div class="blueprint-list">
+                        <div class="blueprint-item">
+                            <span class="check-icon">🏹</span>
+                            <div class="blueprint-text">
+                                <b>Step 1: Find Interested Leads</b>
+                                <p>Search for "Interested" or "How?" comments on remote work posts.</p>
+                                <img src="Image 1.png" class="screenshot-img" alt="Finding Leads Example">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 40px; display: flex; justify-content: space-between;">
+                        <button class="glow-btn" style="background: rgba(0,0,0,0.1); color: #1d1d1f; box-shadow: none;" onclick="goToPhase(2)">← Back</button>
+                        <button class="glow-btn" style="padding: 18px 40px; font-size: 18px;" onclick="goToPhase(4)">Final Phase 4 →</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="phase-4-ui" style="display: none;">
+                <p class="header-sub">Phase 4: High-Ticket Closing & Commission</p>
+                <div class="stat-card" style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.2);">
+                    <h2 style="font-size: 42px; letter-spacing: -1.5px;">The Closing Sequence</h2>
+                    <p style="font-size: 20px; line-height: 1.6;">Here you will learn how to approach cold leads and close them professionally.</p>
+            
+                    <div class="blueprint-list">
+                        <div class="blueprint-item">
+                            <span class="check-icon">✉️</span>
+                            <div class="blueprint-text" style="width: 100%;">
+                                <b>Step 1: The Outreach Script (Cold DM)</b>
+                                <p>Use this script for people who have shown interest in online business or remote work.</p>
+                                
+                                <div id="outreachScript" class="script-box" style="background: rgba(0,0,0,0.05); border: 1px solid var(--apple-blue); font-style: normal; position: relative; padding-top: 45px;">
+                                    <button onclick="copyToClipboard('outreachScript')" style="position: absolute; top: 10px; right: 10px; background: var(--apple-blue); color: white; border: none; border-radius: 8px; padding: 5px 15px; cursor: pointer; font-size: 14px;">Copy Text</button>
+                                    "Hi [Name],<br><br>
+                                    I just came across your profile and thought a project I’m currently involved with might catch your interest. It’s called the '5-Day Cashflow Challenge' – an approach that’s currently creating quite a buzz in the digital acquisition space.<br><br>
+                                    In short: It teaches you the fundamentals of Setting and Closing within 5 days and provides a direct model to apply those skills with very high margins (we’re talking about a 90% commission).<br><br>
+                                    It’s essentially a 'Business-in-a-Box' designed to bridge the gap between learning and earning without any detours. Would you be open to me sending over some details for you to take a look at?"
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="blueprint-item">
+                            <span class="check-icon">🤝</span>
+                            <div class="blueprint-text">
+                                <b>Step 2: Trust & Psychology</b>
+                                <p>When the person responds, you must build trust (Social Proof). Explain why <b>you</b> are involved:</p>
+                                <ul style="padding-left: 20px; color: #424245;">
+                                    <li><b>Authenticity:</b> Mention that the $5 hurdle only serves to filter out "time wasters."</li>
+                                    <li><b>Your Role:</b> "I am your mentor within the Syndicate. I only earn when you also learn how to close successfully."</li>
+                                    <li><b>Urgency:</b> Mention that you can only personally assist 2-3 people per week.</li>
+                                </ul>
+                            </div>
+                        </div>
+            
+                        <div class="blueprint-item">
+                            <span class="check-icon">💰</span>
+                            <div class="blueprint-text">
+                                <b>Step 3: The Close (URL & Code)</b>
+                                <p>Once they are ready, send the link and your code. **No code, no commission!**</p>
+                                <div class="script-box" style="border-left-color: var(--success-green); background: rgba(52, 199, 89, 0.1); font-style: normal;">
+                                    "Perfect. Register here and use my code to be activated immediately:<br><br>
+                                    🔗 <b>URL:</b> [Your-Website.com]<br>
+                                    🔑 <b>Code:</b> <span id="finalCodeDisplay" style="color: var(--apple-blue); font-weight: bold;">---</span>"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div style="margin-top: 40px; display: flex; justify-content: space-between;">
+                        <button class="glow-btn" style="background: rgba(0,0,0,0.1); color: #1d1d1f; box-shadow: none;" onclick="goToPhase(3)">← Back</button>
+                        <button class="glow-btn" style="padding: 18px 40px; font-size: 18px; background: var(--success-green);" onclick="alert('Masterclass completed!')">Finish Masterclass ✅</button>
+                    </div>
+                </div>
+            </div>
+            </div>
     </div>
 
     <script type="module">
@@ -231,7 +334,6 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Firebase Konfiguration (Deine Daten)
         const firebaseConfig = {
             apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
             authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
@@ -244,7 +346,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Tab-System
+        // UI Logic
         window.showTab = (tabId, btn) => {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -252,14 +354,37 @@
             if(btn) btn.classList.add('active');
         };
 
-        // Firebase Daten laden
+        window.goToPhase = (phaseNumber) => {
+            document.getElementById('phase-1-ui').style.display = (phaseNumber === 1) ? 'block' : 'none';
+            document.getElementById('phase-2-ui').style.display = (phaseNumber === 2) ? 'block' : 'none';
+            document.getElementById('phase-3-ui').style.display = (phaseNumber === 3) ? 'block' : 'none';
+            document.getElementById('phase-4-ui').style.display = (phaseNumber === 4) ? 'block' : 'none';
+            window.scrollTo(0,0);
+        };
+
+        window.copyToClipboard = (elementId) => {
+            const text = document.getElementById(elementId).innerText.replace('Copy Text', '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Script copied to clipboard!");
+            });
+        };
+
+        // Firebase Sync
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "members", user.uid));
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
-                    document.getElementById('myCode').innerText = data.myInviteCode || "N/A";
+                    const code = data.myInviteCode || "N/A";
+                    document.getElementById('myCode').innerText = code;
+                    
+                    if(document.getElementById('displayMyCode')) {
+                        document.getElementById('displayMyCode').innerText = code;
+                    }
+                    if(document.getElementById('finalCodeDisplay')) {
+                        document.getElementById('finalCodeDisplay').innerText = code;
+                    }
                 }
             } else {
                 window.location.href = "login.html";
@@ -269,5 +394,4 @@
         window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
     </script>
 </body>
-</html>
-
+</html> 
