@@ -230,7 +230,7 @@
 
                 <div class="card-footer">
                     <span style="color: #8e8e93; font-size: 0.9rem;">Verification required</span>
-                    <button class="verify-btn" onclick="verify()">Verify Protocol</button>
+                    <button class="verify-btn" onclick="verifyCode()">Verify Protocol</button>
                 </div>
             </div>
         </div>
@@ -251,60 +251,47 @@
         </div>
     </div>
 
-<script type="module">
-    // 1. Firebase Importe
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // 2. Deine Konfiguration
-    const firebaseConfig = {
-        apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
-        authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
-        projectId: "syndicate-protocol-48f8c",
-        storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
-        appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+            authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+            projectId: "syndicate-protocol-48f8c",
+            storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+            appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    // 3. Die Funktion global verfügbar machen, damit der Button sie findet
-    window.verifyCode = async function() {
-        const inputField = document.getElementById('inviteCode');
-        const inviteCode = inputField ? inputField.value.trim() : "";
-        const errorMsg = document.getElementById('errorMessage');
-
-        if (!inviteCode) {
-            if (errorMsg) errorMsg.style.display = 'block';
-            alert("Please enter a code.");
-            return;
-        }
-
-        try {
-            console.log("Prüfe Code:", inviteCode.toUpperCase()); // Zum Testen in der Konsole
+        window.verifyCode = async function() {
+            const inviteCode = document.getElementById('inviteCode').value;
             
-            const q = query(collection(db, "members"), where("myInviteCode", "==", inviteCode.toUpperCase()));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                console.log("Code gültig!");
-                // Code im Browser speichern
-                sessionStorage.setItem("verifiedCode", inviteCode.toUpperCase());
-                // Weiterleiten
-                window.location.href = "info.html";
-            } else {
-                console.log("Code ungültig!");
-                alert("ACCESS DENIED: Invalid Invite Code.");
+            if (!inviteCode) {
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
             }
-        } catch (error) {
-            console.error("Firebase Fehler:", error);
-            alert("System Error: Check your connection.");
+
+            try {
+                const q = query(collection(db, "members"), where("myInviteCode", "==", inviteCode.trim().toUpperCase()));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    sessionStorage.setItem("verifiedCode", inviteCode.trim().toUpperCase());
+                    window.location.href = "info.html";
+                } else {
+                    alert("Invalid Invite Code.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("System Error.");
+            }
         }
-    };
-</script>
+    </script>
 </body>
 </html>
-
         .
 
         .
