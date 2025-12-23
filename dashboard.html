@@ -13,14 +13,12 @@
             --text-main: #1d1d1f;
             --text-sub: #86868b;
             --success: #34c759;
-            --ultra-gold: #d4af37;
         }
 
         body {
             margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: radial-gradient(circle at top right, #e2e2e7, #f5f5f7);
             color: var(--text-main); display: flex; min-height: 100vh;
-            overflow-x: hidden;
         }
 
         /* Sidebar Glassmorphism */
@@ -34,18 +32,16 @@
             padding: 12px; margin-bottom: 8px; border-radius: 12px; 
             color: var(--text-sub); font-size: 14px; text-decoration: none; 
             cursor: pointer; border: none; background: transparent; text-align: left; width: 100%;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.3s;
         }
         .nav-item.active { background: rgba(0, 113, 227, 0.1); color: var(--apple-blue); font-weight: 600; }
-        .nav-item:hover:not(.active) { background: rgba(0, 0, 0, 0.05); transform: translateX(5px); }
+        .nav-item:hover:not(.active) { background: rgba(0, 0, 0, 0.05); }
 
         .main-content { margin-left: 300px; padding: 40px; flex-grow: 1; max-width: 1000px; width: 100%; }
 
-        /* Tabs Logic */
-        .tab-content { display: none; animation: slideUp 0.5s ease; }
+        .tab-content { display: none; animation: fadeIn 0.5s ease; }
         .tab-content.active { display: block; }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Stats Cards */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 25px 0; }
@@ -54,26 +50,25 @@
             padding: 25px; border-radius: 24px; border: 1px solid var(--glass-border);
             box-shadow: 0 8px 32px rgba(0,0,0,0.03);
         }
-        .stat-card h3 { font-size: 11px; text-transform: uppercase; color: var(--text-sub); margin: 0; letter-spacing: 0.5px; }
-        .stat-card p { font-size: 26px; font-weight: 700; margin-top: 10px; margin-bottom: 0; }
+        .stat-card h3 { font-size: 11px; text-transform: uppercase; color: var(--text-sub); margin: 0; }
+        .stat-card p { font-size: 26px; font-weight: 700; margin-top: 10px; }
 
-        /* Learning Panel Style */
+        /* Learning Panel */
         .glass-panel {
             background: var(--glass-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
             padding: 45px; border-radius: 32px; border: 1px solid var(--glass-border);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.06); position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.06);
         }
 
         .step-label { font-size: 11px; font-weight: 800; color: var(--apple-blue); text-transform: uppercase; margin-bottom: 12px; display: block; letter-spacing: 1px; }
-        .roadmap-box { background: rgba(255,255,255,0.4); padding: 22px; border-radius: 20px; margin: 15px 0; border: 1px solid rgba(0,0,0,0.03); transition: 0.3s; }
-        .roadmap-box:hover { background: rgba(255,255,255,0.6); transform: scale(1.01); }
-        .roadmap-box h4 { margin: 0 0 8px 0; font-size: 16px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
-        .dialog-bubble { background: #f0f7ff; padding: 18px; border-radius: 18px; border-left: 5px solid var(--apple-blue); font-style: italic; margin: 20px 0; line-height: 1.5; }
+        .mission-box { background: rgba(255,255,255,0.4); padding: 22px; border-radius: 20px; margin: 15px 0; border: 1px solid rgba(0,0,0,0.03); }
+        .mission-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 15px; font-size: 15px; line-height: 1.5; }
+        .check-icon { color: var(--success); font-weight: bold; font-size: 18px; }
 
         .next-btn {
             background: var(--apple-blue); color: white; border: none; padding: 16px 40px;
             border-radius: 16px; font-weight: 600; cursor: pointer; float: right; transition: 0.3s;
-            box-shadow: 0 10px 25px rgba(0, 113, 227, 0.25); font-size: 15px;
+            box-shadow: 0 10px 25px rgba(0, 113, 227, 0.25);
         }
         .next-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 113, 227, 0.35); }
 
@@ -104,15 +99,15 @@
                 <div class="stat-card"><h3>Your Invite Code</h3><p id="myCode" style="color: var(--apple-blue);">---</p></div>
             </div>
 
-            <div class="glass-panel" style="text-align: center; padding: 70px 40px;">
-                <h2 style="font-size: 28px; margin-bottom: 12px;">Start Your 5-Day Masterclass</h2>
-                <p style="color: var(--text-sub); margin-bottom: 35px; max-width: 500px; margin-left: auto; margin-right: auto;">Follow the step-by-step plan to secure your first clients and unlock your cash flow.</p>
-                <button class="next-btn" style="float:none;" onclick="document.querySelector('[onclick*=\'learning\']').click()">Open Strategy Plan</button>
+            <div class="glass-panel" style="text-align: center; padding: 60px 40px;">
+                <h2 style="font-size: 26px; margin-bottom: 12px;">Initiate Your Sourcing Mission</h2>
+                <p style="color: var(--text-sub); margin-bottom: 35px; max-width: 500px; margin-left: auto; margin-right: auto;">Master the art of high-ticket setting. Your path to consistent cash flow starts here.</p>
+                <button class="next-btn" style="float:none;" onclick="document.querySelector('[onclick*=\'learning\']').click()">Access Masterclass</button>
             </div>
         </div>
 
         <div id="learning" class="tab-content">
-            <h1 style="font-size: 34px; letter-spacing: -1px; margin-bottom: 30px;">Learning Content</h1>
+            <h1 style="font-size: 34px; letter-spacing: -1px; margin-bottom: 30px;">Strategy & Execution</h1>
             
             <div class="glass-panel">
                 <div id="learning-stage">
@@ -146,57 +141,53 @@
         let currentStep = 1;
         const lessonData = {
             1: {
-                label: "Part 1: The Roadmap",
-                title: "How the 5-Day Challenge Works",
+                label: "Part 1: Your Mission",
+                title: "Finding and Closing High-Value Clients",
                 html: `
-                    <p style="color:var(--text-sub); font-size:17px;">The Syndicate Protocol is built on a specific cycle of value and conversion. Here is the exact blueprint of your journey:</p>
+                    <p style="color:var(--text-sub); font-size:17px; line-height:1.6;">Welcome to the <b>5-Day Cash Flow Challenge</b>. Here, you will be trained to identify, engage, and close leads like a professional. While it may seem challenging at first, you will master these skills rapidly.</p>
                     
-                    <div class="roadmap-box">
-                        <h4>❶ The $5 Entry Phase</h4>
-                        <p style="font-size:14px; color:var(--text-sub);">New clients join via your Invite Code and pay a $5 trial fee. This low barrier allows you to "set" leads easily. This money goes to the system admin to maintain the infrastructure.</p>
+                    <div class="mission-box">
+                        <div class="mission-item">
+                            <span class="check-icon">✓</span>
+                            <span><b>Your Objective:</b> Find individuals across the internet who are actively seeking financial growth. Focus on people looking for online opportunities, side hustles, or professional Setter/Closer roles.</span>
+                        </div>
+                        <div class="mission-item">
+                            <span class="check-icon">✓</span>
+                            <span><b>The Process:</b> Your task is to identify these high-intent leads and "set" them into our proven 5-Day Cash Flow Challenge.</span>
+                        </div>
+                        <div class="mission-item">
+                            <span class="check-icon">✓</span>
+                            <span><b>Growth Curve:</b> We provide the infrastructure; you provide the eyes. In the following parts, we will reveal exactly where these clients are hiding and how to secure them.</span>
+                        </div>
                     </div>
-
-                    <div class="roadmap-box">
-                        <h4>❷ The 5-Day Education (Your Current Stage)</h4>
-                        <p style="font-size:14px; color:var(--text-sub);">During these 5 days, clients learn the "Soft Setting" strategy. You build your pipeline while your dashboard tracks all "Pending" activity in your network.</p>
-                    </div>
-
-                    <div class="roadmap-box">
-                        <h4>❸ The High-Ticket Upgrade ($199)</h4>
-                        <p style="font-size:14px; color:var(--text-sub);">On Day 5, the true business unlocks. To earn massive commissions, you upgrade to <b>Ultra Client</b> for $199. This allows you to claim 90% of all future upgrades in your network.</p>
-                    </div>
-
-                    <div class="roadmap-box" style="border-left: 4px solid var(--success); background: rgba(52, 199, 89, 0.05);">
-                        <h4 style="color:var(--success);">❹ The Cash Flow Effect</h4>
-                        <p style="font-size:14px; color:var(--text-sub);">Once you are Ultra, every person you invited who also upgrades to Ultra pays YOU <b>$179.10</b>. Just 2 upgrades per week equals over $1,400 per month in pure profit.</p>
-                    </div>
+                    <p style="font-size:14px; color:var(--apple-blue); font-weight:600;">Ready to locate your first targets? Click "Next Part" to uncover the lead sources.</p>
                 `
             },
             2: {
-                label: "Part 2: Finding Leads",
+                label: "Part 2: Lead Sourcing",
                 title: "The High-Ticket Sniper Method",
                 html: `<p style="font-size:17px;">We don't spam. We hunt. Go to <b>Facebook Groups</b> for High-Ticket Closing, SaaS, or Real Estate.</p>
-                       <div class="roadmap-box"><b>The Strategy:</b> Scan the comments of popular posts. Look for people asking for advice or showing interest in "scaling" or "income". These are your qualified targets.</div>`
+                       <div class="mission-box"><b>The Strategy:</b> Scan the comments of popular posts. Look for people asking for advice or showing interest in "scaling" or "income". These are your qualified targets.</div>`
             },
             3: {
                 label: "Part 3: Communication",
                 title: "The Soft Setting Dialog",
-                html: `<p style="font-size:17px;">To get your first clients, you must be very smart. Use a soft approach to build trust first.</p>
-                       <div class="dialog-bubble">"Hey [Name], saw your comment on the post about automated cash flow. I'm using a protocol that does exactly that. Would love to share some insights!"</div>`
+                html: `<p style="font-size:17px;">To secure your first clients, you must be strategic. Use a soft, professional approach to establish authority and trust.</p>
+                       <div style="background: #f0f7ff; padding: 18px; border-radius: 18px; border-left: 5px solid var(--apple-blue); font-style: italic; margin: 20px 0;">"Hey [Name], I noticed your interest in the post regarding automated cash flow. I'm currently utilizing a protocol that specializes in exactly that. I'd love to share how it's working."</div>`
             },
             4: {
                 label: "Part 4: The Invitation",
                 title: "Bridging to the $5 Trial",
-                html: `<p style="font-size:17px;">Once they are curious, bridge them to your link. It's an easy sell because it only costs $5 to see the system.</p>
-                       <div class="dialog-bubble">"I'm currently in a 5-day challenge with the Syndicate Protocol. It's only $5 to get a dashboard and see the training. I'll send you my invite code if you're interested."</div>`
+                html: `<p style="font-size:17px;">Once interest is established, bridge them to your link. It's a frictionless entry because the trial only requires a $5 commitment.</p>
+                       <div style="background: #f0f7ff; padding: 18px; border-radius: 18px; border-left: 5px solid var(--apple-blue); font-style: italic; margin: 20px 0;">"I'm currently engaged in the Syndicate Protocol's 5-day challenge. It's only $5 to access the dashboard and training. I can provide an invite code if you want to see the system."</div>`
             },
             5: {
-                label: "Part 5: Scaling to Ultra",
-                title: "Unlocking the 90% Profit",
-                html: `<p style="font-size:17px;">Your goal is to have a pipeline of $5 leads who all reach Day 5. When they see the value, they upgrade.</p>
-                       <div class="roadmap-box" style="background:var(--text-main); color:white;">
-                        <h4 style="color:var(--ultra-gold);">The Math of Wealth</h4>
-                        <p>10 Trial Leads → 3 Ultra Upgrades = <b>$537.30 Profit</b> for you.</p>
+                label: "Part 5: Master of the Network",
+                title: "Scaling Your Pipeline",
+                html: `<p style="font-size:17px;">Your goal is consistency. Every $5 entry you secure builds your long-term network. Focus on volume and quality communication.</p>
+                       <div class="mission-box" style="background:var(--text-main); color:white;">
+                        <h4 style="color:var(--success);">Target Achievement</h4>
+                        <p>Securing just 1-2 trial leads per day creates a massive foundation for your success. Start hunting now.</p>
                        </div>`
             }
         };
@@ -207,7 +198,7 @@
                 renderLesson();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                alert("You have completed the Roadmap! Now, go to the Facebook groups and start setting.");
+                alert("Masterclass Session Complete! It's time to find your first leads.");
                 showTab('dashboard', document.querySelector('[onclick*="dashboard"]'));
             }
         };
@@ -216,10 +207,10 @@
             const data = lessonData[currentStep];
             document.getElementById('learning-stage').innerHTML = `
                 <span class="step-label">${data.label}</span>
-                <h2 style="font-size:30px; margin: 10px 0 25px 0; letter-spacing:-0.5px;">${data.title}</h2>
+                <h2 style="font-size:28px; margin: 10px 0 25px 0; letter-spacing:-0.5px;">${data.title}</h2>
                 ${data.html}
             `;
-            document.getElementById('nextBtn').innerText = currentStep === 5 ? "Finish Masterclass" : "Next Part →";
+            document.getElementById('nextBtn').innerText = currentStep === 5 ? "Finish Session" : "Next Part →";
         }
 
         renderLesson();
@@ -247,3 +238,4 @@
     </script>
 </body>
 </html>
+
