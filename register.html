@@ -25,7 +25,7 @@
 
         .register-card {
             background: white;
-            padding: 48px;
+            padding: 40px;
             border-radius: 30px;
             width: 100%;
             max-width: 440px;
@@ -33,47 +33,35 @@
             text-align: center;
         }
 
-        h1 { font-size: 32px; font-weight: 700; margin-bottom: 10px; }
-        p.subtitle { color: var(--text-sub); margin-bottom: 30px; font-size: 17px; }
+        h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        p.subtitle { color: var(--text-sub); margin-bottom: 25px; font-size: 16px; }
 
-        .name-row {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .input-group {
-            text-align: left;
-            margin-bottom: 15px;
-        }
+        .name-row { display: flex; gap: 12px; margin-bottom: 12px; }
+        .input-group { text-align: left; margin-bottom: 12px; }
 
         label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             color: var(--text-sub);
             text-transform: uppercase;
             margin-left: 5px;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             display: block;
         }
 
         input {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             border-radius: 12px;
             border: 1px solid #d2d2d7;
             background-color: #f5f5f7;
-            font-size: 16px;
+            font-size: 15px;
             box-sizing: border-box;
-            transition: all 0.2s;
             outline: none;
+            transition: 0.2s;
         }
 
-        input:focus {
-            border-color: var(--apple-blue);
-            background-color: white;
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
-        }
+        input:focus { border-color: var(--apple-blue); background-color: white; }
 
         button {
             width: 100%;
@@ -85,13 +73,10 @@
             font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 20px;
-            transition: opacity 0.2s;
+            margin-top: 15px;
         }
 
-        button:hover { opacity: 0.9; }
-
-        .footer { margin-top: 25px; color: var(--text-sub); font-size: 14px; }
+        .footer { margin-top: 20px; color: var(--text-sub); font-size: 13px; }
         .footer a { color: var(--apple-blue); text-decoration: none; font-weight: 500; }
     </style>
 </head>
@@ -107,11 +92,16 @@
         </div>
 
         <div class="input-group">
-            <label>Geburtsdatum (Mindestalter 18)</label>
+            <label>PayPal Email (für deine Provisionen)</label>
+            <input type="email" id="paypalEmail" placeholder="paypal@beispiel.de">
+        </div>
+
+        <div class="input-group">
+            <label>Geburtsdatum</label>
             <input type="date" id="birthDate">
         </div>
 
-        <input type="email" id="email" placeholder="E-Mail" style="margin-bottom: 15px;">
+        <input type="email" id="email" placeholder="E-Mail Adresse" style="margin-bottom: 12px;">
         <input type="password" id="pass" placeholder="Passwort">
 
         <button onclick="handleRegister()">Registrierung abschließen</button>
@@ -139,12 +129,12 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- SCHUTZ: NUR NACH ZAHLUNG ZUGÄNGLICH ---
+        // STRIPE SCHUTZ
         const urlParams = new URLSearchParams(window.location.search);
         if (!urlParams.has('session_id')) {
             document.getElementById('mainCard').innerHTML = `
                 <h2 style="color: #ff3b30;">Zugriff verweigert</h2>
-                <p>Bitte schließen Sie erst die Zahlung der Lernphase (5$) ab.</p>
+                <p>Bitte schließen Sie erst die Zahlung ab.</p>
                 <button onclick="window.location.href='info.html'">Zurück zur Info</button>
             `;
         }
@@ -152,41 +142,39 @@
         window.handleRegister = async () => {
             const firstName = document.getElementById('fName').value;
             const lastName = document.getElementById('lName').value;
+            const paypal = document.getElementById('paypalEmail').value;
             const bday = document.getElementById('birthDate').value;
             const email = document.getElementById('email').value;
             const pass = document.getElementById('pass').value;
 
-            if(!firstName || !lastName || !bday || !email || !pass) {
+            if(!firstName || !lastName || !paypal || !bday || !email || !pass) {
                 alert("Bitte alle Felder ausfüllen.");
                 return;
             }
 
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-                
-                // 1. Eigener Invite-Code generieren (Eindeutig für diesen User)
                 const myCode = "SYN-" + Math.random().toString(36).substring(2, 8).toUpperCase();
-                
-                // 2. Werber-Code aus localStorage (von der index.html) holen
                 const refCode = localStorage.getItem('usedInviteCode') || "DIRECT";
 
-                // 3. In Firestore speichern
+                // Alles in EINEM Dokument speichern
                 await setDoc(doc(db, "members", userCred.user.uid), {
                     displayName: firstName + " " + lastName,
                     firstName: firstName,
                     lastName: lastName,
+                    paypalEmail: paypal,
                     email: email,
                     birthDate: bday,
-                    myInviteCode: myCode,    // Sein Code zum Weitergeben
-                    referredBy: refCode,    // Derjenige, der die 90% Provision bekommt
-                    balance: 0,             // Aktuelles Guthaben des Users
-                    paymentStatus: "learning_phase", // Status: 5$ gezahlt, 5-Tage-Challenge läuft
+                    myInviteCode: myCode,
+                    referredBy: refCode,
+                    balance: 0,
+                    paymentStatus: "learning_phase", 
+                    commissionLocked: true, // Geld ist noch gesperrt (5 Tage warten)
+                    referralValue: 179.10,  // Dein 90% Anteil
                     joined: new Date().toISOString()
                 });
 
-                // Invite-Code aus Speicher löschen, da er jetzt fest im Profil steht
                 localStorage.removeItem('usedInviteCode');
-
                 window.location.href = "dashboard.html";
             } catch (e) {
                 alert("Fehler: " + e.message);
