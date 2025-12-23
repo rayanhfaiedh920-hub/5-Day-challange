@@ -14,7 +14,7 @@
         }
 
         body {
-            /* Die Seite bleibt unsichtbar, bis der Code bestätigt wurde */
+            /* Die Seite bleibt unsichtbar, bis der Speicher-Check erfolgreich war */
             display: none; 
             margin: 0;
             padding: 0;
@@ -211,37 +211,36 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        async function protectPage() {
-            // Verzögerung um sicherzustellen, dass das Prompt nicht blockiert wird
-            setTimeout(async () => {
-                const inviteCode = prompt("SECURITY CHECK: Enter your Admin Invite Code:");
-                
-                if (!inviteCode || inviteCode.trim() === "") {
-                    window.location.href = "index.html";
-                    return;
-                }
+        async function checkAccess() {
+            // Wir lesen den Code aus dem Speicher aus, den die index.html gesetzt hat
+            const savedCode = sessionStorage.getItem("verifiedCode");
 
-                try {
-                    // Suche nach dem Code in der "members" Collection (Großschreibung wird ignoriert durch .toUpperCase())
-                    const q = query(collection(db, "members"), where("myInviteCode", "==", inviteCode.trim().toUpperCase()));
-                    const querySnapshot = await getDocs(q);
+            if (!savedCode) {
+                // Falls kein Code im Speicher ist, direkt zurück zur Startseite
+                window.location.href = "index.html";
+                return;
+            }
 
-                    if (!querySnapshot.empty) {
-                        // Code gefunden -> Seite anzeigen
-                        document.body.style.display = "flex";
-                    } else {
-                        alert("ACCESS DENIED: Invalid Code.");
-                        window.location.href = "index.html";
-                    }
-                } catch (error) {
-                    console.error("Firebase Error Details:", error);
-                    alert("System Error: Please check your connection or database rules.");
+            try {
+                // Wir validieren den gespeicherten Code sicherheitshalber nochmal gegen Firebase
+                const q = query(collection(db, "members"), where("myInviteCode", "==", savedCode));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    // Code gültig -> Seite anzeigen
+                    document.body.style.display = "flex";
+                } else {
+                    // Code ungültig -> Speicher löschen und zurück
+                    sessionStorage.removeItem("verifiedCode");
                     window.location.href = "index.html";
                 }
-            }, 100);
+            } catch (error) {
+                console.error("Firebase Error Details:", error);
+                window.location.href = "index.html";
+            }
         }
 
-        protectPage();
+        checkAccess();
     </script>
 </body>
 </html>
