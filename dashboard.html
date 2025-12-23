@@ -60,6 +60,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
         }
 
         .nav-item:hover { background: rgba(255, 255, 255, 0.4); }
@@ -97,7 +98,7 @@
         .stat-value { font-size: 32px; font-weight: 700; margin-top: 10px; }
         .stat-value.green { color: #34c759; }
 
-        /* Lernphase Card */
+        /* Content Card */
         .content-card {
             background: white;
             border-radius: 32px;
@@ -126,7 +127,10 @@
         <a href="#" class="nav-item active">Übersicht</a>
         <a href="#" class="nav-item">Lernphase (Tag 1-5)</a>
         <a href="#" class="nav-item">Earnings-Report</a>
-        <a href="#" onclick="logout()" class="nav-item" style="margin-top: auto; color: #ff3b30;">Abmelden</a>
+        
+        <div onclick="logoutUser()" class="nav-item" style="margin-top: auto; color: #ff3b30;">
+            <span>Abmelden</span>
+        </div>
     </div>
 
     <div class="main-container">
@@ -175,7 +179,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Daten live aus Firebase laden
+        // Daten beim Laden abrufen
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const q = query(collection(db, "members"), where("email", "==", user.email));
@@ -186,4 +190,23 @@
                         const data = doc.data();
                         document.getElementById('userNameDisplay').innerText = `Willkommen, ${data.email.split('@')[0]}`;
                         document.getElementById('balanceDisplay').innerText = `$${data.balance.toFixed(2)}`;
-                        document.getElementById('invite
+                        document.getElementById('inviteCodeDisplay').innerText = data.myInviteCode || "Kein Code";
+                    });
+                }
+            } else {
+                // Wenn nicht eingeloggt, ab zur Startseite
+                window.location.href = "index.html";
+            }
+        });
+
+        // Logout Funktion
+        window.logoutUser = () => {
+            signOut(auth).then(() => {
+                window.location.href = "index.html";
+            }).catch((error) => {
+                alert("Fehler beim Abmelden: " + error.message);
+            });
+        };
+    </script>
+</body>
+</html>
