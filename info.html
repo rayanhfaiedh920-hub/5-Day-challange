@@ -14,7 +14,7 @@
         }
 
         body {
-            /* Initial versteckt für den Schutz */
+            /* Die Seite bleibt unsichtbar, bis der Code bestätigt wurde */
             display: none; 
             margin: 0;
             padding: 0;
@@ -76,7 +76,7 @@
         }
 
         .primary-card {
-            background: #ffffff; /* Solider Hintergrund für besseren Fokus */
+            background: #ffffff;
             border: 1px solid var(--glass-border);
             border-radius: 32px;
             padding: 50px 40px;
@@ -98,7 +98,7 @@
         }
 
         .price-text {
-            font-size: 96px; /* Größerer Fokus auf den Preis */
+            font-size: 96px;
             font-weight: 700;
             letter-spacing: -4px;
         }
@@ -212,28 +212,33 @@
         const db = getFirestore(app);
 
         async function protectPage() {
-            const inviteCode = prompt("SECURITY CHECK: Enter your Admin Invite Code to access this page:");
-            
-            if (!inviteCode) {
-                window.location.href = "index.html";
-                return;
-            }
+            // Verzögerung um sicherzustellen, dass das Prompt nicht blockiert wird
+            setTimeout(async () => {
+                const inviteCode = prompt("SECURITY CHECK: Enter your Admin Invite Code:");
+                
+                if (!inviteCode || inviteCode.trim() === "") {
+                    window.location.href = "index.html";
+                    return;
+                }
 
-            try {
-                const q = query(collection(db, "members"), where("myInviteCode", "==", inviteCode.trim().toUpperCase()));
-                const querySnapshot = await getDocs(q);
+                try {
+                    // Suche nach dem Code in der "members" Collection (Großschreibung wird ignoriert durch .toUpperCase())
+                    const q = query(collection(db, "members"), where("myInviteCode", "==", inviteCode.trim().toUpperCase()));
+                    const querySnapshot = await getDocs(q);
 
-                if (!querySnapshot.empty) {
-                    document.body.style.display = "flex";
-                } else {
-                    alert("ACCESS DENIED: Invalid Code.");
+                    if (!querySnapshot.empty) {
+                        // Code gefunden -> Seite anzeigen
+                        document.body.style.display = "flex";
+                    } else {
+                        alert("ACCESS DENIED: Invalid Code.");
+                        window.location.href = "index.html";
+                    }
+                } catch (error) {
+                    console.error("Firebase Error Details:", error);
+                    alert("System Error: Please check your connection or database rules.");
                     window.location.href = "index.html";
                 }
-            } catch (error) {
-                console.error(error);
-                alert("System Error.");
-                window.location.href = "index.html";
-            }
+            }, 100);
         }
 
         protectPage();
