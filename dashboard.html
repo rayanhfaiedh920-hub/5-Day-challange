@@ -65,12 +65,23 @@
         .mission-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 15px; font-size: 15px; line-height: 1.5; }
         .check-icon { color: var(--success); font-weight: bold; font-size: 18px; }
 
+        /* Navigation Buttons */
+        .nav-btn-container {
+            margin-top: 50px; overflow: hidden; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
         .next-btn {
             background: var(--apple-blue); color: white; border: none; padding: 16px 40px;
-            border-radius: 16px; font-weight: 600; cursor: pointer; float: right; transition: 0.3s;
+            border-radius: 16px; font-weight: 600; cursor: pointer; transition: 0.3s;
             box-shadow: 0 10px 25px rgba(0, 113, 227, 0.25);
         }
         .next-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 113, 227, 0.35); }
+        
+        .back-btn {
+            background: transparent; color: var(--text-sub); border: 1px solid #d2d2d7; padding: 16px 30px;
+            border-radius: 16px; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .back-btn:hover { background: rgba(0,0,0,0.05); color: var(--text-main); }
 
         .badge { padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; background: rgba(0, 113, 227, 0.1); color: var(--apple-blue); display: inline-block; margin-bottom: 15px; }
     </style>
@@ -112,7 +123,8 @@
             <div class="glass-panel">
                 <div id="learning-stage">
                     </div>
-                <div style="margin-top: 50px; overflow: hidden; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 30px;">
+                <div class="nav-btn-container">
+                    <button class="back-btn" id="backBtn" onclick="prevLesson()" style="visibility: hidden;">← Back</button>
                     <button class="next-btn" id="nextBtn" onclick="nextLesson()">Next Part →</button>
                 </div>
             </div>
@@ -153,14 +165,13 @@
                         </div>
                         <div class="mission-item">
                             <span class="check-icon">✓</span>
-                            <span><b>The Invite Code:</b> This is your unique identifier. When you "set" a client to our program, they must use your specific code to register. This ensures the client is permanently linked to your profile, securing your future network activity.</span>
+                            <span><b>The Invite Code:</b> This is your unique identifier (found on your dashboard). When you "set" a client to our program, they must use your specific code to register. This ensures the client is permanently linked to your profile.</span>
                         </div>
                         <div class="mission-item">
                             <span class="check-icon">✓</span>
-                            <span><b>Your Role:</b> You act as the bridge between high-intent leads and the <b>Syndicate Protocol</b>. Your mission is to facilitate their entry into this challenge.</span>
+                            <span><b>The Tracking:</b> Your code allows the system to track every person you bring in. Without this code, we cannot attribute the lead to you. Always ensure your client enters it correctly.</span>
                         </div>
                     </div>
-                    <p style="font-size:14px; color:var(--apple-blue); font-weight:600;">Ready to deploy? Next, we define exactly where your clients are located.</p>
                 `
             },
             2: {
@@ -198,8 +209,16 @@
                 renderLesson();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                alert("Masterclass Complete. Go to your Dashboard and start using your Invite Code.");
+                alert("Masterclass Session Complete!");
                 showTab('dashboard', document.querySelector('[onclick*="dashboard"]'));
+            }
+        };
+
+        window.prevLesson = () => {
+            if(currentStep > 1) {
+                currentStep--;
+                renderLesson();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         };
 
@@ -210,6 +229,9 @@
                 <h2 style="font-size:28px; margin: 10px 0 25px 0; letter-spacing:-0.5px;">${data.title}</h2>
                 ${data.html}
             `;
+            
+            // Toggle Back Button Visibility
+            document.getElementById('backBtn').style.visibility = currentStep === 1 ? 'hidden' : 'visible';
             document.getElementById('nextBtn').innerText = currentStep === 5 ? "Finish Session" : "Next Part →";
         }
 
