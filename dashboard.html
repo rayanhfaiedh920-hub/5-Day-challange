@@ -1,275 +1,273 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Syndicate | Executive Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syndicate | The Future of Cash Flow</title>
+    <style>
+        :root {
+            --apple-blue: #0071e3;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --sidebar-glass: rgba(255, 255, 255, 0.25);
+            --text-dark: #1d1d1f;
+            --text-sub: #424245;
+        }
 
-<style>
-:root {
-    --apple-blue: #0a84ff;
-    --apple-green: #34c759;
-    --bg-gradient:
-        radial-gradient(1200px 800px at 80% -20%, #c7ddff 0%, transparent 60%),
-        radial-gradient(900px 700px at -10% 20%, #d7f3ff 0%, transparent 55%),
-        #eef1f6;
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            /* Exakter Hintergrundverlauf aus deinem Bild */
+            background: radial-gradient(circle at top right, #b8c6db, #f5f5f7), 
+                        radial-gradient(circle at bottom left, #d6e4f0, #f5f5f7);
+            background-attachment: fixed;
+            color: var(--text-dark);
+            display: flex;
+            min-height: 100vh;
+        }
 
-    --glass-bg: rgba(255, 255, 255, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.35);
-    --text-main: #1d1d1f;
-    --text-sub: #6e6e73;
-}
+        /* --- SIDEBAR STYLE (FLOATING) --- */
+        .sidebar {
+            width: 280px;
+            margin: 30px;
+            background: var(--sidebar-glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 20px;
+            position: fixed;
+            height: calc(100vh - 60px);
+            box-sizing: border-box;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
 
-* {
-    box-sizing: border-box;
-}
+        .sidebar h2 {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 50px;
+            padding-left: 10px;
+        }
 
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
-    background: var(--bg-gradient);
-    color: var(--text-main);
-    min-height: 100vh;
-    display: flex;
-    overflow-x: hidden;
-}
+        .sidebar h2::before {
+            content: ""; /* Apple Icon Ersatz */
+            margin-right: 10px;
+            color: var(--apple-blue);
+        }
 
-/* ===== SIDEBAR ===== */
-.sidebar {
-    width: 280px;
-    position: fixed;
-    inset: 20px auto 20px 20px;
-    padding: 35px 22px;
-    border-radius: 28px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.08);
-}
+        .nav-item {
+            padding: 15px 20px;
+            margin-bottom: 5px;
+            border-radius: 12px;
+            color: var(--text-sub);
+            font-size: 18px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            text-align: left;
+            transition: 0.2s;
+            font-weight: 500;
+        }
 
-.sidebar h2 {
-    font-size: 20px;
-    letter-spacing: -0.5px;
-    margin-bottom: 45px;
-}
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: var(--text-dark);
+        }
 
-/* ===== NAV ===== */
-.nav-item {
-    border: none;
-    background: transparent;
-    padding: 14px 18px;
-    border-radius: 16px;
-    font-size: 17px;
-    font-weight: 500;
-    color: var(--text-sub);
-    text-align: left;
-    cursor: pointer;
-    transition: all .25s ease;
-}
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-dark);
+            font-weight: 600;
+        }
 
-.nav-item:hover {
-    background: rgba(255,255,255,0.6);
-}
+        /* --- LOGOUT BUTTON UNTEN RECHTS --- */
+        .logout-btn {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: var(--apple-blue);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(0, 113, 227, 0.3);
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.3s;
+            z-index: 2000;
+        }
 
-.nav-item.active {
-    background: rgba(255,255,255,0.9);
-    color: var(--apple-blue);
-    font-weight: 700;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
+        .logout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 113, 227, 0.4);
+        }
 
-/* ===== MAIN ===== */
-.main-content {
-    margin-left: 340px;
-    padding: 80px 80px;
-    width: 100%;
-    max-width: 1500px;
-}
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            margin-left: 340px;
+            padding: 80px 60px;
+            flex-grow: 1;
+            max-width: 1200px;
+        }
 
-/* ===== HEADINGS ===== */
-h1 {
-    font-size: 56px;
-    letter-spacing: -1.6px;
-    margin-bottom: 20px;
-}
+        .header-title {
+            font-size: 55px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+        }
 
-/* ===== STATS ===== */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
-    margin-top: 45px;
-}
+        .header-sub {
+            font-size: 22px;
+            color: var(--text-sub);
+            margin-bottom: 60px;
+        }
 
-.stat-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(25px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    border-radius: 30px;
-    padding: 36px;
-    box-shadow: 0 25px 55px rgba(0,0,0,0.08);
-}
+        /* --- STAT CARDS --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 50px;
+        }
 
-.stat-card h3 {
-    margin: 0;
-    font-size: 15px;
-    color: var(--text-sub);
-}
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
 
-.stat-card p {
-    margin-top: 16px;
-    font-size: 40px;
-    font-weight: 700;
-}
+        .stat-card h3 { font-size: 16px; color: var(--text-sub); margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card p { font-size: 32px; font-weight: 700; margin: 10px 0; }
 
-/* ===== CTA BOX ===== */
-.welcome-box {
-    margin-top: 55px;
-    padding: 55px;
-    border-radius: 36px;
-    background: linear-gradient(
-        135deg,
-        rgba(255,255,255,0.85),
-        rgba(255,255,255,0.6)
-    );
-    backdrop-filter: blur(30px);
-    border: 1px solid var(--glass-border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 35px 70px rgba(0,0,0,0.1);
-}
+        /* --- CONTENT PANEL --- */
+        .content-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+            position: relative;
+        }
 
-/* ===== BUTTON ===== */
-.btn-primary {
-    background: linear-gradient(180deg, #0a84ff, #0066cc);
-    color: white;
-    border: none;
-    padding: 16px 42px;
-    border-radius: 18px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .25s ease;
-    box-shadow: 0 12px 30px rgba(10,132,255,0.35);
-}
+        .content-panel h2 { font-size: 28px; font-weight: 700; margin-top: 0; }
+        .content-panel p { font-size: 20px; color: var(--text-sub); line-height: 1.6; }
 
-.btn-primary:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 18px 40px rgba(10,132,255,0.45);
-}
+        .verify-btn {
+            background: var(--apple-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+        }
 
-/* ===== GLASS PANEL ===== */
-.glass-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(30px) saturate(180%);
-    border-radius: 40px;
-    border: 1px solid var(--glass-border);
-    padding: 60px;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.12);
-}
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-/* ===== IMAGES ===== */
-.image-gallery {
-    display: flex;
-    gap: 24px;
-    margin: 35px 0;
-}
-
-.image-gallery img {
-    width: 48%;
-    border-radius: 22px;
-    border: 1px solid rgba(255,255,255,0.6);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.15);
-}
-
-/* ===== TABS ===== */
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-    animation: fadeIn .45s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-</style>
+    </style>
 </head>
-
 <body>
 
-<div class="sidebar">
-    <h2>■ SYNDICATE</h2>
-    <button class="nav-item active" onclick="showTab('dashboard', this)">Dashboard</button>
-    <button class="nav-item" onclick="showTab('learning', this)">Masterclass</button>
-    <button class="nav-item">Assets</button>
-    <button onclick="handleLogout()" class="nav-item" style="margin-top:auto;color:#ff3b30;">Abmelden</button>
-</div>
+    <div class="sidebar">
+        <h2>Syndicate</h2>
+        <button class="nav-item active" onclick="showTab('dashboard', this)">Dashboard</button>
+        <button class="nav-item" onclick="showTab('learning', this)">Masterclass</button>
+        <button class="nav-item">Assets</button>
+        <button class="nav-item">Settings</button>
+    </div>
 
-<div class="main-content">
+    <button onclick="handleLogout()" class="logout-btn">Abmelden</button>
 
-    <div id="dashboard" class="tab-content active">
-        <h1>Willkommen, <span id="userName">...</span></h1>
+    <div class="main-content">
+        <div id="dashboard" class="tab-content active">
+            <p style="color: var(--apple-blue); font-weight: 700; margin-bottom: 0;">inde.then</p>
+            <h1 class="header-title">The future of cash flow.</h1>
+            <p class="header-sub">Exclusive access to the 5-Day Challenge.</p>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Earnings</h3>
-                <p style="color:var(--apple-green);">$<span id="userBalance">0.00</span></p>
+            <div class="stats-grid">
+                <div class="stat-card"><h3>Earnings</h3><p>$<span id="userBalance">0.00</span></p></div>
+                <div class="stat-card"><h3>Testphase</h3><p>Tag 1 / 5</p></div>
+                <div class="stat-card"><h3>Invite-Code</h3><p id="myCode" style="color: var(--apple-blue);">---</p></div>
             </div>
-            <div class="stat-card">
-                <h3>Testphase</h3>
-                <p>Tag 1 / 5</p>
+
+            <div class="content-panel">
+                <h2>Learning Title</h2>
+                <p>Join the future of digital assets and master the protocol today.</p>
+                <button class="verify-btn" onclick="showTab('learning', document.querySelectorAll('.nav-item')[1])">Verify Protocol</button>
             </div>
-            <div class="stat-card">
-                <h3>Invite-Code</h3>
-                <p id="myCode" style="color:var(--apple-blue);">...</p>
+
+            <div class="content-panel">
+                <h2>Masterclass</h2>
+                <p>Start your 5-day journey to financial freedom with our expert guides.</p>
+                <button class="verify-btn">Verify Protocol</button>
             </div>
         </div>
 
-        <div class="welcome-box">
-            <div>
-                <h2>Bereit für die nächste Stufe?</h2>
-                <p style="color:var(--text-sub);font-size:20px;">
-                    Starte jetzt mit der Masterclass und lerne das System.
-                </p>
-            </div>
-            <button class="btn-primary"
-                onclick="showTab('learning', document.querySelectorAll('.nav-item')[1])">
-                Masterclass starten
-            </button>
+        <div id="learning" class="tab-content">
+            <h1 class="header-title">Masterclass</h1>
+            <div class="content-panel" id="learning-stage">
+                </div>
         </div>
     </div>
 
-    <div id="learning" class="tab-content">
-        <div class="glass-panel">
-            <div id="learning-stage"></div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-            <div style="margin-top:50px;display:flex;justify-content:space-between;">
-                <button id="backBtn" onclick="prevLesson()"
-                    style="background:none;border:none;color:var(--text-sub);font-size:18px;cursor:pointer;">
-                    ← Zurück
-                </button>
-                <button class="btn-primary" id="nextBtn" onclick="nextLesson()">
-                    Nächste Phase →
-                </button>
-            </div>
-        </div>
-    </div>
+        // Firebase Konfiguration (Deine Daten)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+            authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+            projectId: "syndicate-protocol-48f8c",
+            storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+            appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+        };
 
-</div>
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-<!-- ===== DEIN ORIGINAL JS (UNVERÄNDERT) ===== -->
-<script type="module">
-/* exakt dein bestehender Firebase + Logic Code */
-</script>
+        // Tab-System
+        window.showTab = (tabId, btn) => {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            if(btn) btn.classList.add('active');
+        };
 
+        // Firebase Daten laden
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "members", user.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
+                    document.getElementById('myCode').innerText = data.myInviteCode || "N/A";
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
+    </script>
 </body>
 </html>
 
