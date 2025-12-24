@@ -111,68 +111,91 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
-            authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
-            projectId: "syndicate-protocol-48f8c",
-            storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
-            messagingSenderId: "47535029358",
-            appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+        authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+        projectId: "syndicate-protocol-48f8c",
+        storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+        messagingSenderId: "47535029358",
+        appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const codeFromUrl = urlParams.get('ref');
-        if (codeFromUrl) {
-            document.getElementById('usedCodeInput').value = codeFromUrl;
+    const urlParams = new URLSearchParams(window.location.search);
+    const codeFromUrl = urlParams.get('ref');
+    if (codeFromUrl) {
+        document.getElementById('usedCodeInput').value = codeFromUrl;
+    }
+
+    window.handleRegister = async () => {
+        const firstName = document.getElementById('fName').value;
+        const lastName = document.getElementById('lName').value;
+        const paypal = document.getElementById('paypalEmail').value;
+        const email = document.getElementById('email').value.trim();
+        const pass = document.getElementById('pass').value;
+        const refCode = document.getElementById('usedCodeInput').value.trim() || "DIRECT";
+
+        if(!firstName || !lastName || !paypal || !email || !pass) {
+            alert("Please fill in all fields.");
+            return;
         }
 
-        window.handleRegister = async () => {
-            const firstName = document.getElementById('fName').value;
-            const lastName = document.getElementById('lName').value;
-            const paypal = document.getElementById('paypalEmail').value;
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('pass').value;
-            const refCode = document.getElementById('usedCodeInput').value.trim() || "DIRECT";
+        let user;
 
-            if(!firstName || !lastName || !paypal || !email || !pass) {
-                alert("Please fill in all fields.");
+        try {
+            // 1. Versuch: Account neu erstellen
+            const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+            user = userCred.user;
+        } catch (e) {
+            if (e.code === 'auth/email-already-in-use') {
+                // 2. Versuch: Wenn Email existiert, versuchen einzuloggen
+                try {
+                    const userCred = await signInWithEmailAndPassword(auth, email, pass);
+                    user = userCred.user;
+                } catch (loginError) {
+                    alert("This email is already in use. If it's yours, please use the correct password.");
+                    return;
+                }
+            } else {
+                alert("Error: " + e.message);
                 return;
             }
+        }
 
-            try {
-                const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-                
-                const myCode = firstName.toUpperCase() + Math.floor(Math.random() * 1000);
+        // 3. Datenbank-Eintrag erstellen oder überschreiben (Firestore)
+        // Das stellt sicher, dass der User IMMER in der Datenbank landet
+        try {
+            const myCode = firstName.toUpperCase() + Math.floor(Math.random() * 1000);
 
-                await setDoc(doc(db, "members", userCred.user.uid), {
-                    displayName: firstName + " " + lastName,
-                    firstName: firstName,
-                    email: email,
-                    paypalEmail: paypal,
-                    myInviteCode: myCode,      
-                    referredBy: refCode,       
-                    balance: 0,
-                    paymentStatus: "learning_phase", 
-                    commissionLocked: true, 
-                    referralValue: 179.10,     
-                    joined: new Date().toISOString()
-                });
+            await setDoc(doc(db, "members", user.uid), {
+                displayName: firstName + " " + lastName,
+                firstName: firstName,
+                email: email,
+                paypalEmail: paypal,
+                myInviteCode: myCode,      
+                referredBy: refCode,       
+                balance: 0,
+                paymentStatus: "learning_phase", 
+                commissionLocked: true, 
+                referralValue: 179.10,     
+                joined: new Date().toISOString()
+            });
 
-                alert("Account successfully created!");
-                window.location.href = "dashboard.html";
-            } catch (e) {
-                alert("Error: " + e.message);
-            }
-        };
-    </script>
+            alert("Registration successful!");
+            window.location.href = "dashboard.html";
+        } catch (dbError) {
+            console.error("Database Error:", dbError);
+            alert("Account created, but database entry failed. Please contact support.");
+        }
+    };
+</script>
 </body>
 </html>
