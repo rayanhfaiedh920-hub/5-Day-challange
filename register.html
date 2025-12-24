@@ -129,93 +129,106 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
-            authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
-            projectId: "syndicate-protocol-48f8c",
-            storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
-            messagingSenderId: "47535029358",
-            appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+        authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+        projectId: "syndicate-protocol-48f8c",
+        storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+        messagingSenderId: "47535029358",
+        appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        // Passwort-Auge Logik
-        const togglePassword = document.querySelector('#togglePassword');
-        const passwordInput = document.querySelector('#pass');
+    // --- NEU: SICHERHEITS-CHECK ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasPaid = urlParams.get('pay');
 
+    // Wenn der Parameter "pay=success" fehlt, sperren wir die Seite
+    if (hasPaid !== 'success') {
+        alert("Access Denied: Please complete the payment first.");
+        window.location.replace("info.html"); 
+    }
+    // ------------------------------
+
+    // Passwort-Auge Logik
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#pass');
+
+    if(togglePassword && passwordInput) {
         togglePassword.addEventListener('click', () => {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
             togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
         });
+    }
 
-        // URL Ref-Code Logik
-        const urlParams = new URLSearchParams(window.location.search);
-        const codeFromUrl = urlParams.get('ref');
-        if (codeFromUrl) {
-            document.getElementById('usedCodeInput').value = codeFromUrl;
+    // URL Ref-Code Logik (für Einladungen)
+    const codeFromUrl = urlParams.get('ref');
+    if (codeFromUrl) {
+        const refInput = document.getElementById('usedCodeInput');
+        if(refInput) refInput.value = codeFromUrl;
+    }
+
+    window.handleRegister = async () => {
+        const firstName = document.getElementById('fName').value.trim();
+        const lastName = document.getElementById('lName').value.trim();
+        const paypal = document.getElementById('paypalEmail').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const pass = document.getElementById('pass').value;
+        const refCode = document.getElementById('usedCodeInput').value.trim() || "DIRECT";
+
+        if(!firstName || !lastName || !paypal || !email || !pass) {
+            alert("Please fill in all fields.");
+            return;
         }
 
-        window.handleRegister = async () => {
-            const firstName = document.getElementById('fName').value.trim();
-            const lastName = document.getElementById('lName').value.trim();
-            const paypal = document.getElementById('paypalEmail').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const pass = document.getElementById('pass').value;
-            const refCode = document.getElementById('usedCodeInput').value.trim() || "DIRECT";
-
-            if(!firstName || !lastName || !paypal || !email || !pass) {
-                alert("Please fill in all fields.");
-                return;
-            }
-
-            let user;
-            try {
-                const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-                user = userCred.user;
-            } catch (e) {
-                if (e.code === 'auth/email-already-in-use') {
-                    try {
-                        const userCred = await signInWithEmailAndPassword(auth, email, pass);
-                        user = userCred.user;
-                    } catch (loginError) {
-                        alert("Email already in use. Please check your password or use another email.");
-                        return;
-                    }
-                } else {
-                    alert("Error: " + e.message);
+        let user;
+        try {
+            const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+            user = userCred.user;
+        } catch (e) {
+            if (e.code === 'auth/email-already-in-use') {
+                try {
+                    const userCred = await signInWithEmailAndPassword(auth, email, pass);
+                    user = userCred.user;
+                } catch (loginError) {
+                    alert("Email already in use. Please check your password or use another email.");
                     return;
                 }
+            } else {
+                alert("Error: " + e.message);
+                return;
             }
+        }
 
-            try {
-                const myCode = firstName.toUpperCase() + Math.floor(Math.random() * 1000);
-                await setDoc(doc(db, "members", user.uid), {
-                    displayName: firstName + " " + lastName,
-                    firstName: firstName,
-                    email: email,
-                    paypalEmail: paypal,
-                    myInviteCode: myCode,      
-                    referredBy: refCode,       
-                    balance: 0,
-                    paymentStatus: "learning_phase", 
-                    joined: new Date().toISOString()
-                });
+        try {
+            const myCode = firstName.toUpperCase() + Math.floor(Math.random() * 1000);
+            await setDoc(doc(db, "members", user.uid), {
+                displayName: firstName + " " + lastName,
+                firstName: firstName,
+                email: email,
+                paypalEmail: paypal,
+                myInviteCode: myCode,      
+                referredBy: refCode,       
+                balance: 0,
+                paymentStatus: "learning_phase", 
+                joined: new Date().toISOString()
+            });
 
-                alert("Registration successful!");
-                window.location.href = "dashboard.html";
-            } catch (dbError) {
-                alert("Database Error: " + dbError.message);
-            }
-        };
-    </script>
+            alert("Registration successful!");
+            window.location.href = "dashboard.html";
+        } catch (dbError) {
+            alert("Database Error: " + dbError.message);
+        }
+    };
+</script>
 </body>
 </html>
