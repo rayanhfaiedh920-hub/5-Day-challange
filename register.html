@@ -107,7 +107,12 @@
         </div>
 
         <input type="email" id="email" placeholder="Email Address" style="margin-bottom: 12px;">
-        <input type="password" id="pass" placeholder="Password">
+       <div class="input-group" style="position: relative;">
+    <input type="password" id="pass" placeholder="Password" style="padding-right: 45px;">
+    <span id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-sub); font-size: 18px;">
+        👁️
+    </span>
+</div>
 
         <button onclick="handleRegister()">Complete Registration</button>
 
@@ -139,6 +144,17 @@
     if (codeFromUrl) {
         document.getElementById('usedCodeInput').value = codeFromUrl;
     }
+      const togglePassword = document.querySelector('#togglePassword');
+const password = document.querySelector('#pass');
+
+togglePassword.addEventListener('click', function (e) {
+    // Wechselt zwischen 'password' und 'text'
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    
+    // Wechselt das Icon (optional)
+    this.textContent = type === 'password' ? '👁️' : '🙈';
+});
 
     window.handleRegister = async () => {
         const firstName = document.getElementById('fName').value;
@@ -200,17 +216,7 @@
             console.error("Database Error:", dbError);
             alert("Account created, but database entry failed. Please contact support.");
         }
-        const togglePassword = document.querySelector('#togglePassword');
-const password = document.querySelector('#pass');
-
-togglePassword.addEventListener('click', function (e) {
-    // Wechselt zwischen 'password' und 'text'
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-    password.setAttribute('type', type);
-    
-    // Wechselt das Icon (optional)
-    this.textContent = type === 'password' ? '👁️' : '🙈';
-});
+   
     };
 </script>
 </body>
