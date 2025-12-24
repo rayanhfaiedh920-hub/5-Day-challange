@@ -19,7 +19,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             color: var(--text-main);
         }
 
@@ -31,13 +31,14 @@
             max-width: 440px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.04);
             text-align: center;
+            box-sizing: border-box;
         }
 
         h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
         p.subtitle { color: var(--text-sub); margin-bottom: 25px; font-size: 16px; }
 
         .name-row { display: flex; gap: 12px; margin-bottom: 12px; }
-        .input-group { text-align: left; margin-bottom: 12px; }
+        .input-group { text-align: left; margin-bottom: 12px; position: relative; }
 
         label {
             font-size: 10px;
@@ -78,16 +79,20 @@
 
         .footer { margin-top: 20px; color: var(--text-sub); font-size: 13px; }
         .footer a { color: var(--apple-blue); text-decoration: none; font-weight: 500; }
+
+        #togglePassword {
+            position: absolute;
+            right: 15px;
+            top: 38px; /* Angepasst an die Label-Höhe */
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
-<div class="input-group" style="position: relative;">
-    <input type="password" id="pass" placeholder="Password" style="padding-right: 45px;">
-    <span id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-sub); font-size: 18px;">
-        👁️
-    </span>
-</div>
-    <div class="register-card" id="mainCard">
+
+    <div class="register-card">
         <h1>Create Account</h1>
         <p class="subtitle">Join the Syndicate Protocol.</p>
 
@@ -97,22 +102,25 @@
         </div>
 
         <div class="input-group">
-            <label>PayPal Email (for your commissions)</label>
+            <label>PayPal Email (for commissions)</label>
             <input type="email" id="paypalEmail" placeholder="paypal@example.com">
         </div>
 
         <div class="input-group">
             <label>Invite Code</label>
-            <input type="text" id="usedCodeInput" placeholder="E.G. RAYANSEO2025">
+            <input type="text" id="usedCodeInput" placeholder="E.G. RAYAN2025">
         </div>
 
-        <input type="email" id="email" placeholder="Email Address" style="margin-bottom: 12px;">
-       <div class="input-group" style="position: relative;">
-    <input type="password" id="pass" placeholder="Password" style="padding-right: 45px;">
-    <span id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-sub); font-size: 18px;">
-        👁️
-    </span>
-</div>
+        <div class="input-group">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="email@example.com">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="pass" placeholder="••••••••">
+            <span id="togglePassword">👁️</span>
+        </div>
 
         <button onclick="handleRegister()">Complete Registration</button>
 
@@ -121,103 +129,93 @@
         </div>
     </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
-        authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
-        projectId: "syndicate-protocol-48f8c",
-        storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
-        messagingSenderId: "47535029358",
-        appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+            authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+            projectId: "syndicate-protocol-48f8c",
+            storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+            messagingSenderId: "47535029358",
+            appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const codeFromUrl = urlParams.get('ref');
-    if (codeFromUrl) {
-        document.getElementById('usedCodeInput').value = codeFromUrl;
-    }
-      const togglePassword = document.querySelector('#togglePassword');
-const password = document.querySelector('#pass');
+        // Passwort-Auge Logik
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#pass');
 
-togglePassword.addEventListener('click', function (e) {
-    // Wechselt zwischen 'password' und 'text'
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-    password.setAttribute('type', type);
-    
-    // Wechselt das Icon (optional)
-    this.textContent = type === 'password' ? '👁️' : '🙈';
-});
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+        });
 
-    window.handleRegister = async () => {
-        const firstName = document.getElementById('fName').value;
-        const lastName = document.getElementById('lName').value;
-        const paypal = document.getElementById('paypalEmail').value;
-        const email = document.getElementById('email').value.trim();
-        const pass = document.getElementById('pass').value;
-        const refCode = document.getElementById('usedCodeInput').value.trim() || "DIRECT";
-
-        if(!firstName || !lastName || !paypal || !email || !pass) {
-            alert("Please fill in all fields.");
-            return;
+        // URL Ref-Code Logik
+        const urlParams = new URLSearchParams(window.location.search);
+        const codeFromUrl = urlParams.get('ref');
+        if (codeFromUrl) {
+            document.getElementById('usedCodeInput').value = codeFromUrl;
         }
 
-        let user;
+        window.handleRegister = async () => {
+            const firstName = document.getElementById('fName').value.trim();
+            const lastName = document.getElementById('lName').value.trim();
+            const paypal = document.getElementById('paypalEmail').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const pass = document.getElementById('pass').value;
+            const refCode = document.getElementById('usedCodeInput').value.trim() || "DIRECT";
 
-        try {
-            // 1. Versuch: Account neu erstellen
-            const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-            user = userCred.user;
-        } catch (e) {
-            if (e.code === 'auth/email-already-in-use') {
-                // 2. Versuch: Wenn Email existiert, versuchen einzuloggen
-                try {
-                    const userCred = await signInWithEmailAndPassword(auth, email, pass);
-                    user = userCred.user;
-                } catch (loginError) {
-                    alert("This email is already in use. If it's yours, please use the correct password.");
-                    return;
-                }
-            } else {
-                alert("Error: " + e.message);
+            if(!firstName || !lastName || !paypal || !email || !pass) {
+                alert("Please fill in all fields.");
                 return;
             }
-        }
 
-        // 3. Datenbank-Eintrag erstellen oder überschreiben (Firestore)
-        // Das stellt sicher, dass der User IMMER in der Datenbank landet
-        try {
-            const myCode = firstName.toUpperCase() + Math.floor(Math.random() * 1000);
+            let user;
+            try {
+                const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+                user = userCred.user;
+            } catch (e) {
+                if (e.code === 'auth/email-already-in-use') {
+                    try {
+                        const userCred = await signInWithEmailAndPassword(auth, email, pass);
+                        user = userCred.user;
+                    } catch (loginError) {
+                        alert("Email already in use. Please check your password or use another email.");
+                        return;
+                    }
+                } else {
+                    alert("Error: " + e.message);
+                    return;
+                }
+            }
 
-            await setDoc(doc(db, "members", user.uid), {
-                displayName: firstName + " " + lastName,
-                firstName: firstName,
-                email: email,
-                paypalEmail: paypal,
-                myInviteCode: myCode,      
-                referredBy: refCode,       
-                balance: 0,
-                paymentStatus: "learning_phase", 
-                commissionLocked: true, 
-                referralValue: 179.10,     
-                joined: new Date().toISOString()
-            });
+            try {
+                const myCode = firstName.toUpperCase() + Math.floor(Math.random() * 1000);
+                await setDoc(doc(db, "members", user.uid), {
+                    displayName: firstName + " " + lastName,
+                    firstName: firstName,
+                    email: email,
+                    paypalEmail: paypal,
+                    myInviteCode: myCode,      
+                    referredBy: refCode,       
+                    balance: 0,
+                    paymentStatus: "learning_phase", 
+                    joined: new Date().toISOString()
+                });
 
-            alert("Registration successful!");
-            window.location.href = "dashboard.html";
-        } catch (dbError) {
-            console.error("Database Error:", dbError);
-            alert("Account created, but database entry failed. Please contact support.");
-        }
-   
-    };
-</script>
+                alert("Registration successful!");
+                window.location.href = "dashboard.html";
+            } catch (dbError) {
+                alert("Database Error: " + dbError.message);
+            }
+        };
+    </script>
 </body>
 </html>
