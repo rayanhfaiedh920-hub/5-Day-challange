@@ -156,7 +156,7 @@
 <body>
 
     <div class="sidebar">
-        <h2> SYNDICATE</h2>
+        <h2> SYNDICATE</h2>    
         <button class="nav-item active" id="nav-dash" onclick="showTab('dashboard', this)">Dashboard</button>
         <button class="nav-item" id="nav-learn" onclick="showTab('learning', this)">Masterclass</button>
         <button class="nav-item">Assets</button>
@@ -164,17 +164,7 @@
         <button onclick="handleLogout()" class="nav-item logout-item">Sign Out</button>
     </div>
 
-  <div class="main-content">
-        <div id="admin-search-container" class="stat-card" style="display: none; margin-bottom: 25px; border: 2px solid var(--apple-blue); background: #ffffff;">
-            <h3 style="margin-bottom: 15px; color: #1d1d1f;">🔍 Admin Search</h3>
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="adminSearchInput" placeholder="Invite Code suchen..." 
-                       style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
-                <button onclick="searchInviteCode()" class="glow-btn" style="margin-top:0; padding: 10px 20px;">Search</button>
-            </div>
-            <div id="adminSearchResult" style="margin-top: 15px; display: none; padding: 15px; border-radius: 8px; background: #f5f5f7; border-left: 5px solid var(--apple-blue);">
-                </div>
-        </div>
+
 
         <div id="dashboard" class="tab-content active">
             <p style="color: var(--apple-blue); font-weight: 700;">
@@ -405,6 +395,27 @@
             </div>
             </div>
     </div>
+<div id="assets" class="tab-content">
+        <h1 class="header-title">Assets</h1>
+        <p class="header-sub">Manage your network and search users.</p>
+
+        <div id="admin-search-container" class="stat-card" style="display: none; margin-bottom: 25px; border: 2px solid var(--apple-blue); background: #ffffff;">
+            <h3 style="margin-bottom: 15px; color: #1d1d1f;">🔍 Admin Search</h3>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="adminSearchInput" placeholder="Invite Code suchen..." 
+                       style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px; color: black;">
+                <button onclick="searchInviteCode()" class="glow-btn" style="margin-top:0; padding: 10px 20px;">Search</button>
+            </div>
+            <div id="adminSearchResult" style="margin-top: 15px; display: none; padding: 15px; border-radius: 8px; background: #f5f5f7; border-left: 5px solid var(--apple-blue); color: black;">
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Network Assets</h3>
+            <p>Your network data will appear here.</p>
+        </div>
+    </div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -546,6 +557,42 @@
     };
 
     window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
+
+
+    // Admin Suchfunktion: Sucht Nutzer anhand ihres Invite-Codes
+window.searchInviteCode = async () => {
+    const input = document.getElementById('adminSearchInput').value.trim();
+    const resultDiv = document.getElementById('adminSearchResult');
+    
+    if (!input) {
+        alert("Bitte gib einen Invite Code ein.");
+        return;
+    }
+
+    try {
+        // Suche in der Firestore-Datenbank
+        const q = query(collection(db, "members"), where("myInviteCode", "==", input));
+        const querySnapshot = await getDocs(q);
+
+        resultDiv.style.display = 'block';
+        
+        if (!querySnapshot.empty) {
+            const found = querySnapshot.docs[0].data();
+            resultDiv.innerHTML = `
+                <div style="color: #1d1d1f; line-height: 1.5;">
+                    <p style="margin: 5px 0;"><strong>Nutzer:</strong> ${found.email}</p>
+                    <p style="margin: 5px 0;"><strong>Guthaben:</strong> $${(found.balance || 0).toFixed(2)}</p>
+                    <p style="margin: 5px 0;"><strong>Status:</strong> ${found.hasPaid ? '<span style="color:#34c759;">Aktiv (Bezahlt)</span>' : '<span style="color:#ff3b30;">Inaktiv (Nicht bezahlt)</span>'}</p>
+                </div>
+            `;
+        } else {
+            resultDiv.innerHTML = "<p style='color: #ff3b30;'>Kein Nutzer mit diesem Code gefunden.</p>";
+        }
+    } catch (error) {
+        console.error("Fehler bei Admin-Suche:", error);
+        alert("Datenbankfehler. Prüfe die Konsole.");
+    }
+};
 </script>
 </body>
 </html>
