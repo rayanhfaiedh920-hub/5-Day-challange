@@ -346,72 +346,108 @@
     </div>
 
 <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
-            authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
-            projectId: "syndicate-protocol-48f8c",
-            storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
-            appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+        authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+        projectId: "syndicate-protocol-48f8c",
+        storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+        appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        // UI Logic
-        window.showTab = (tabId, btn) => {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            if(btn) btn.classList.add('active');
-        };
+    // Admin-Liste
+    const admins = ["royaroya138@yahoo.com", "rayanhfaiedh920@gmail.com"];
 
-        window.goToPhase = (phaseNumber) => {
-            document.getElementById('phase-1-ui').style.display = (phaseNumber === 1) ? 'block' : 'none';
-            document.getElementById('phase-2-ui').style.display = (phaseNumber === 2) ? 'block' : 'none';
-            document.getElementById('phase-3-ui').style.display = (phaseNumber === 3) ? 'block' : 'none';
-            document.getElementById('phase-4-ui').style.display = (phaseNumber === 4) ? 'block' : 'none';
-            window.scrollTo(0,0);
-        };
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userDocRef = doc(db, "members", user.uid);
+            const userDoc = await getDoc(userDocRef);
 
-        window.copyToClipboard = (elementId) => {
-            const text = document.getElementById(elementId).innerText.replace('Copy Text', '').trim();
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Script copied to clipboard!");
-            });
-        };
+            if (userDoc.exists()) {
+                const data = userDoc.data();
+                const userEmail = user.email.toLowerCase();
+                const isAdmin = admins.includes(userEmail);
 
-        window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
+                // --- 1. REGISTRIERUNGSDATUM PRÜFEN/SETZEN ---
+                let joinDate;
+                if (!data.createdAt) {
+                    // Falls noch kein Datum da ist (alte Accounts), jetzt eins setzen
+                    joinDate = new Date();
+                    await updateDoc(userDocRef, { createdAt: joinDate });
+                } else {
+                    joinDate = data.createdAt.toDate();
+                }
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userDoc = await getDoc(doc(db, "members", user.uid));
-                if (userDoc.exists()) {
-                    const data = userDoc.data();
-                    
-                    // Sperre für unbezahlte Nutzer
-                    if (data.hasPaid !== true) {
-                        alert("Please complete your payment to access the Masterclass.");
+                // --- 2. ZEIT-LOGIK (5 Tage = 432.000.000 ms) ---
+                const now = new Date();
+                const fiveDaysInMs = 5 * 24 * 60 * 60 * 1000;
+                const isExpired = (now - joinDate) > fiveDaysInMs;
+
+                // --- 3. ZUGRIFFS-CHECK ---
+                if (!isAdmin) {
+                    // Wenn kein Admin, prüfe die 5-Tage-Regel
+                    if (isExpired) {
+                        alert("Your 5-day access has expired. Please contact support.");
                         window.location.href = "index.html"; 
                         return;
                     }
 
-                    document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
-                    const code = data.myInviteCode || "---";
-                    document.getElementById('myCode').innerText = code;
-                    
-                    if(document.getElementById('finalCodeDisplay')) {
-                        document.getElementById('finalCodeDisplay').innerText = code;
+                    // Checke trotzdem, ob er bezahlt hat (deine bestehende Regel)
+                    if (data.hasPaid !== true) {
+                        alert("Please complete your payment.");
+                        window.location.href = "index.html";
+                        return;
                     }
                 }
-            } else {
-                window.location.href = "login.html";
+
+                // --- UI DATEN LADEN ---
+                document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
+                const code = data.myInviteCode || "---";
+                document.getElementById('myCode').innerText = code;
+                if(document.getElementById('finalCodeDisplay')) {
+                    document.getElementById('finalCodeDisplay').innerText = code;
+                }
+                
+                // Optional: Admin-Status in der UI anzeigen
+                if(isAdmin) {
+                    console.log("Admin-Zugriff gewährt");
+                }
+
             }
-        });
-    </script>
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    // Sidebar & Logout Funktionen
+    window.showTab = (tabId, btn) => {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        if(btn) btn.classList.add('active');
+    };
+
+    window.goToPhase = (phaseNumber) => {
+        for(let i=1; i<=4; i++) {
+            const el = document.getElementById(`phase-${i}-ui`);
+            if(el) el.style.display = (phaseNumber === i) ? 'block' : 'none';
+        }
+        window.scrollTo(0,0);
+    };
+
+    window.copyToClipboard = (id) => {
+        const text = document.getElementById(id).innerText.replace('Copy Text', '').trim();
+        navigator.clipboard.writeText(text).then(() => alert("Script copied!"));
+    };
+
+    window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
+</script>
 </body>
 </html>
