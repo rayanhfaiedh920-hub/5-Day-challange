@@ -366,24 +366,62 @@
     const admins = ["royaroya138@yahoo.com", "rayanhfaiedh920@gmail.com"];
 
     onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const userDocRef = doc(db, "members", user.uid);
-            const userDoc = await getDoc(userDocRef);
+    if (user) {
+        const userDocRef = doc(db, "members", user.uid);
+        const userDoc = await getDoc(userDocRef);
 
-            if (userDoc.exists()) {
-                const data = userDoc.data();
-                const userEmail = user.email.toLowerCase();
-                const isAdmin = admins.includes(userEmail);
+        if (userDoc.exists()) {
+            const data = userDoc.data();
+            const userEmail = user.email.toLowerCase();
+            
+            // 1. Prüfen, ob es ein Admin ist
+            const isAdmin = admins.includes(userEmail);
 
-                // --- 1. REGISTRIERUNGSDATUM PRÜFEN/SETZEN ---
+            if (isAdmin) {
+                // ADMINS HABEN VOLLZUGRIFF - Wir überspringen alle Sperren
+                console.log("Admin-Login erkannt: " + userEmail);
+            } else {
+                // 2. LOGIK FÜR NORMALE NUTZER
+                
+                // Datum prüfen/setzen für die 5-Tage-Regel
                 let joinDate;
                 if (!data.createdAt) {
-                    // Falls noch kein Datum da ist (alte Accounts), jetzt eins setzen
                     joinDate = new Date();
                     await updateDoc(userDocRef, { createdAt: joinDate });
                 } else {
                     joinDate = data.createdAt.toDate();
                 }
+
+                const now = new Date();
+                const fiveDaysInMs = 5 * 24 * 60 * 60 * 1000;
+                
+                // Ablauf-Sperre
+                if ((now - joinDate) > fiveDaysInMs) {
+                    alert("Your 5-day access has expired.");
+                    window.location.href = "index.html";
+                    return;
+                }
+
+                // Zahlungs-Sperre
+                if (data.hasPaid !== true) {
+                    alert("Please complete your payment to access the Masterclass.");
+                    window.location.href = "index.html";
+                    return;
+                }
+            }
+
+            // UI DATEN LADEN (für Admins und gültige Nutzer)
+            document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
+            const code = data.myInviteCode || "---";
+            document.getElementById('myCode').innerText = code;
+            if(document.getElementById('finalCodeDisplay')) {
+                document.getElementById('finalCodeDisplay').innerText = code;
+            }
+        }
+    } else {
+        window.location.href = "login.html";
+    }
+});
 
                 // --- 2. ZEIT-LOGIK (5 Tage = 432.000.000 ms) ---
                 const now = new Date();
