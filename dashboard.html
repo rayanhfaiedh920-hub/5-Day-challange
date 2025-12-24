@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -41,6 +41,7 @@
             height: calc(100vh - 60px);
             box-sizing: border-box;
             position: fixed;
+            z-index: 100;
         }
 
         .sidebar h2 { font-size: 24px; font-weight: 700; margin-bottom: 50px; text-align: center; }
@@ -124,15 +125,9 @@
             margin-top: 20px;
         }
 
-        @keyframes pulseGlow {
-    0% { opacity: 0.8; text-shadow: 0 0 8px rgba(50, 255, 126, 0.6); }
-    50% { opacity: 1; text-shadow: 0 0 15px rgba(50, 255, 126, 1); }
-    100% { opacity: 0.8; text-shadow: 0 0 8px rgba(50, 255, 126, 0.6); }
-}
-
         .glow-btn:hover { transform: scale(1.03); box-shadow: 0 0 40px rgba(0, 113, 227, 0.6); }
 
-        /* --- LEARNING PHASE CONTENT --- */
+        /* --- BLUEPRINT STYLES --- */
         .blueprint-list { list-style: none; padding: 0; margin: 30px 0; }
         .blueprint-item {
             display: flex;
@@ -156,7 +151,7 @@
 <body>
 
     <div class="sidebar">
-        <h2> SYNDICATE</h2>
+        <h2> SYNDICATE</h2>    
         <button class="nav-item active" id="nav-dash" onclick="showTab('dashboard', this)">Dashboard</button>
         <button class="nav-item" id="nav-learn" onclick="showTab('learning', this)">Masterclass</button>
         <button class="nav-item" id="nav-assets" onclick="showTab('assets', this)">Assets</button>
@@ -164,7 +159,7 @@
         <button onclick="handleLogout()" class="nav-item logout-item">Sign Out</button>
     </div>
 
-  <div class="main-content">
+    <div class="main-content">
         <div id="dashboard" class="tab-content active">
             <p style="color: var(--apple-blue); font-weight: 700;">
                 PROFILE: <span style="color: #34c759; text-shadow: 0 0 5px rgba(52, 199, 89, 0.4);">ACTIVE</span>
@@ -185,75 +180,75 @@
             </div>
         </div>
 
-        <div id="assets" class="tab-content">
-            <h1 class="header-title">Assets & Management</h1>
-            <p class="header-sub">Manage your network and search users by invite code.</p>
-
-            <div id="admin-search-container" class="stat-card" style="display: none; border: 2px solid var(--apple-blue); background: #ffffff;">
-                <h3 style="margin-bottom: 15px; color: #1d1d1f;">🔍 Admin User Search</h3>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="adminSearchInput" placeholder="Invite Code suchen (z.B. SYN-XXXX)..." 
-                           style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
-                    <button onclick="searchInviteCode()" class="glow-btn" style="margin-top:0; padding: 10px 20px;">Search</button>
-                </div>
-                
-                <div id="adminSearchResult" style="margin-top: 20px; display: none; padding: 20px; border-radius: 15px; background: #f5f5f7; border-left: 5px solid var(--apple-blue);">
-                    </div>
-            </div>
-        </div>
-
         <div id="learning" class="tab-content">
             <h1 class="header-title">The Blueprint</h1>
-            ```
+            
+            <div id="phase-1-ui">
+                <p class="header-sub">Phase 1: Strategy & Cashflow System</p>
+                <div class="stat-card" style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.2);">
+                    <h2 style="font-size: 42px; letter-spacing: -1.5px;">Phase 1: The Foundation</h2>
+                    <div class="blueprint-list">
+                        <div class="blueprint-item">
+                            <span class="check-icon">✅</span>
+                            <div class="blueprint-text">
+                                <b>Step 1: Acquisition & Setting</b>
+                                <p>Once you convince a client, send them your personal <b>Invite Code</b>.</p>
+                            </div>
+                        </div>
+                        <div class="blueprint-item">
+                            <span class="check-icon">✅</span>
+                            <div class="blueprint-text">
+                                <b>Step 2: The $5 Validation</b>
+                                <p>Every client pays a $5 fee to validate their account via system admin.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="glow-btn" onclick="goToPhase(2)">Continue to Phase 2 →</button>
+                </div>
+            </div>
 
----
+            <div id="phase-2-ui" style="display: none;">
+                <p class="header-sub">Phase 2: Target Sourcing</p>
+                <div class="stat-card">
+                    <h2 style="font-size: 42px;">Hunting for Leads</h2>
+                    <div class="blueprint-item">
+                        <span class="check-icon">🎯</span>
+                        <div class="blueprint-text">
+                            <b>Step 1: Online Job Groups</b>
+                            <p>Target active groups focused on remote work.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="glow-btn" style="background:rgba(0,0,0,0.1); color:black;" onclick="goToPhase(1)">Back</button>
+                        <button class="glow-btn" onclick="goToPhase(3)">Next Phase</button>
+                    </div>
+                </div>
+            </div>
 
-### Jetzt musst du die Logik im `<script>` anpassen
-Damit die Suche auch wirklich **Name und E-Mail** findet, füge diese Funktion in deinen `<script type="module">` Bereich ein (kurz vor `window.showTab`):
+            </div>
 
-```javascript
-window.searchInviteCode = async function() {
-    const input = document.getElementById('adminSearchInput').value.trim();
-    const resultDiv = document.getElementById('adminSearchResult');
-    if (!input) return;
+        <div id="assets" class="tab-content">
+            <h1 class="header-title">Assets</h1>
+            <p class="header-sub">Manage your network and search users.</p>
 
-    try {
-        const q = query(collection(db, "members"), where("myInviteCode", "==", input));
-        const querySnapshot = await getDocs(q);
-        resultDiv.style.display = 'block';
+            <div id="admin-search-container" class="stat-card" style="display: none; margin-bottom: 25px; border: 2px solid var(--apple-blue); background: #ffffff;">
+                <h3 style="margin-bottom: 15px; color: #1d1d1f;">🔍 Admin User Search</h3>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="adminSearchInput" placeholder="Search Invite Code..." 
+                           style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
+                    <button onclick="searchInviteCode()" class="glow-btn" style="margin-top:0; padding: 10px 20px; font-size: 16px;">Search</button>
+                </div>
+                <div id="adminSearchResult" style="margin-top: 15px; display: none; padding: 15px; border-radius: 8px; background: #f5f5f7; border-left: 5px solid var(--apple-blue); color: black;">
+                </div>
+            </div>
 
-        if (!querySnapshot.empty) {
-            const userDoc = querySnapshot.docs[0];
-            const data = userDoc.data();
-            const userId = userDoc.id;
+            <div class="stat-card">
+                <h3>Network Overview</h3>
+                <p>Your network data is synced with the Syndicate protocol.</p>
+            </div>
+        </div>
+    </div>
 
-            // Zeigt Email, Vorname und Name an
-            resultDiv.innerHTML = `
-                <div style="color: #1d1d1f;">
-                    <h4 style="margin-top:0; color:var(--apple-blue);">User Found:</h4>
-                    <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
-                    <p><strong>First Name:</strong> ${data.firstName || 'Not provided'}</p>
-                    <p><strong>Last Name:</strong> ${data.lastName || 'Not provided'}</p>
-                    <p><strong>Balance:</strong> $<span id="current-user-bal">${(data.balance || 0).toFixed(2)}</span></p>
-                    <hr>
-                    <input type="number" id="newBalanceInput" placeholder="New Balance" style="padding:8px; border-radius:5px; border:1px solid #ccc;">
-                    <button onclick="updateUserBalance('${userId}')" style="background:var(--apple-blue); color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer;">Update</button>
-                </div>`;
-        } else {
-            resultDiv.innerHTML = `<p style="color: #ff3b30;">❌ No user found for: ${input}</p>`;
-        }
-    } catch (e) { console.error(e); }
-};
-
-window.updateUserBalance = async function(userId) {
-    const newVal = parseFloat(document.getElementById('newBalanceInput').value);
-    if (isNaN(newVal)) return;
-    try {
-        await updateDoc(doc(db, "members", userId), { balance: newVal });
-        document.getElementById('current-user-bal').innerText = newVal.toFixed(2);
-        alert("Balance updated!");
-    } catch (e) { alert("Error: No permission"); }
-};
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -271,17 +266,7 @@ window.updateUserBalance = async function(userId) {
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Admin-Liste
-    const admins = ["royaroya138@yahoo.com", "rayanhfaiedh920@gmail.com"];
-
-    function generateRandomCode() {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let result = "SYN-";
-        for (let i = 0; i < 6; i++) {
-            result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return result;
-    }
+    const ADMIN_EMAIL = "rayanhfaiedh920@gmail.com";
 
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
@@ -295,103 +280,63 @@ window.updateUserBalance = async function(userId) {
         if (userDoc.exists()) {
             let data = userDoc.data();
             const userEmail = user.email.toLowerCase();
-            const isAdmin = admins.includes(userEmail);
             
-            // 1. ADMIN-LOGIK
-            // Nur für deinen Admin-Account (rayanhfaiedh920@gmail.com) die Bar einblenden
-            if (userEmail === "rayanhfaiedh920@gmail.com") {
+            // ADMIN BAR LOGIC: Strictly only for your email
+            if (userEmail === ADMIN_EMAIL) {
                 const adminBar = document.getElementById('admin-search-container');
                 if (adminBar) adminBar.style.display = 'block';
             }
 
-            // 2. EINZIGARTIGE INVITE CODE GENERIERUNG
-            if (!data.myInviteCode) {
-                let isUnique = false;
-                let newGeneratedCode = "";
-
-                while (!isUnique) {
-                    newGeneratedCode = generateRandomCode();
-                    
-                    // Prüfen, ob der Code bereits in der Sammlung "members" existiert
-                    const q = query(collection(db, "members"), where("myInviteCode", "==", newGeneratedCode));
-                    const querySnapshot = await getDocs(q);
-                    
-                    if (querySnapshot.empty) {
-                        isUnique = true; 
-                    }
-                }
-
-                await updateDoc(userDocRef, { myInviteCode: newGeneratedCode });
-                data.myInviteCode = newGeneratedCode;
-            }
-
-            // 3. ZUGRIFFS-LOGIK (Admins überspringen diesen Teil)
-            if (!isAdmin) {
-                let joinDate;
-                if (!data.createdAt) {
-                    joinDate = new Date();
-                    await updateDoc(userDocRef, { createdAt: joinDate });
-                } else {
-                    joinDate = data.createdAt.toDate();
-                }
-
-                const isExpired = (new Date() - joinDate) > (5 * 24 * 60 * 60 * 1000);
-
-                if (isExpired) {
-                    alert("Your 5-day access has expired.");
-                    window.location.href = "index.html";
-                    return;
-                }
-
-                if (data.hasPaid !== true) {
-                    alert("Please complete your payment to access the Masterclass.");
-                    window.location.href = "index.html";
-                    return;
-                }
-            }
-
-            // 4. UI DATEN BEFÜLLEN
+            // Code generation and UI update logic...
             const finalCode = data.myInviteCode || "---";
-            if(document.getElementById('userBalance')) {
-                document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
-            }
-            if(document.getElementById('myCode')) {
-                document.getElementById('myCode').innerText = finalCode;
-            }
-            if(document.getElementById('finalCodeDisplay')) {
-                document.getElementById('finalCodeDisplay').innerText = finalCode;
-            }
-
-            if(isAdmin) console.log("Admin-Zugriff aktiv");
-
-        } else {
-            console.error("User document does not exist in Firestore.");
+            document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
+            document.getElementById('myCode').innerText = finalCode;
         }
     });
 
-    // Globale Funktionen für das UI
+    // Global Window Functions
     window.showTab = (tabId, btn) => {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        const target = document.getElementById(tabId);
-        if(target) target.classList.add('active');
-        if(btn) btn.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
     };
 
-    window.goToPhase = (phaseNumber) => {
-        for(let i=1; i<=4; i++) {
-            const el = document.getElementById(`phase-${i}-ui`);
-            if(el) el.style.display = (phaseNumber === i) ? 'block' : 'none';
-        }
+    window.goToPhase = (phase) => {
+        document.querySelectorAll('[id$="-ui"]').forEach(el => el.style.display = 'none');
+        document.getElementById(`phase-${phase}-ui`).style.display = 'block';
         window.scrollTo(0,0);
     };
 
-    window.copyToClipboard = (id) => {
-        const el = document.getElementById(id);
-        if(el) {
-            const text = el.innerText.replace('Copy Text', '').replace('Copy', '').trim();
-            navigator.clipboard.writeText(text).then(() => alert("Copied: " + text));
+    window.searchInviteCode = async function() {
+        const input = document.getElementById('adminSearchInput').value.trim();
+        const resultDiv = document.getElementById('adminSearchResult');
+        if (!input) return;
+
+        const q = query(collection(db, "members"), where("myInviteCode", "==", input));
+        const querySnapshot = await getDocs(q);
+        resultDiv.style.display = 'block';
+
+        if (!querySnapshot.empty) {
+            const userDoc = querySnapshot.docs[0];
+            const found = userDoc.data();
+            resultDiv.innerHTML = `
+                <p><strong>User:</strong> ${found.email}</p>
+                <p><strong>Balance:</strong> $<span id="current-user-bal">${(found.balance || 0).toFixed(2)}</span></p>
+                <input type="number" id="newBalanceInput" placeholder="New Balance" style="padding:8px; border-radius:8px;">
+                <button onclick="updateUserBalance('${userDoc.id}')" class="glow-btn" style="padding:8px 15px; font-size:14px;">Update</button>
+            `;
+        } else {
+            resultDiv.innerHTML = `<p style="color:red;">Code not found.</p>`;
         }
+    };
+
+    window.updateUserBalance = async function(userId) {
+        const newVal = parseFloat(document.getElementById('newBalanceInput').value);
+        if (isNaN(newVal)) return;
+        await updateDoc(doc(db, "members", userId), { balance: newVal });
+        alert("Balance Updated!");
+        location.reload();
     };
 
     window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
