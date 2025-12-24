@@ -172,8 +172,18 @@
                        style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
                 <button onclick="searchInviteCode()" class="glow-btn" style="margin-top:0; padding: 10px 20px;">Search</button>
             </div>
-            <div id="adminSearchResult" style="margin-top: 15px; display: none; padding: 15px; border-radius: 8px; background: #f5f5f7; border-left: 5px solid var(--apple-blue);">
-                </div>
+    <div id="adminSearchResult" style="margin-top: 15px; display: none; padding: 20px; border-radius: 12px; background: #f5f5f7; border-left: 5px solid var(--apple-blue); box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+    <div id="searchData" style="color: #1d1d1f;">
+        <p style="margin: 5px 0;"><strong>👤 Name:</strong> <span id="resName"></span></p>
+        <p style="margin: 5px 0;"><strong>📧 Email:</strong> <span id="resEmail"></span></p>
+        <p style="margin: 10px 0; padding: 10px; background: #fff; border-radius: 8px; border: 1px solid #ddd;">
+            <strong>💰 PayPal:</strong> <span id="resPaypal" style="color: var(--apple-blue); font-weight: bold;"></span>
+        </p>
+        <button id="resPayBtn" class="glow-btn" style="background: #34c759; padding: 10px 20px; font-size: 16px; width: 100%;">
+            PayPal.me öffnen
+        </button>
+    </div>
+</div>
         </div>
 
         <div id="dashboard" class="tab-content active">
@@ -546,6 +556,55 @@
     };
 
     window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
+
+    // Diese Funktion sucht den Besitzer des Invite-Codes in deiner Datenbank
+window.searchInviteCode = async () => {
+    const searchInput = document.getElementById('adminSearchInput').value.trim();
+    const resultDiv = document.getElementById('adminSearchResult');
+    
+    if (!searchInput) {
+        alert("Bitte gib einen Invite Code ein!");
+        return;
+    }
+
+    try {
+        // Suche in deiner Firebase-Sammlung "members" nach dem Code
+        const q = query(collection(db, "members"), where("myInviteCode", "==", searchInput));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            alert("Kein User mit diesem Code gefunden.");
+            resultDiv.style.display = 'none';
+            return;
+        }
+
+        // Wenn ein Partner gefunden wurde, zeige seine Daten an
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            resultDiv.style.display = 'block';
+            
+            document.getElementById('resName').innerText = data.fullName || "Nicht angegeben";
+            document.getElementById('resEmail').innerText = data.email || "Keine Email";
+            
+            const paypal = data.paypalEmail || "Keine PayPal hinterlegt";
+            document.getElementById('resPaypal').innerText = paypal;
+
+            // Der PayPal-Button öffnet direkt die Zahlung
+            const payBtn = document.getElementById('resPayBtn');
+            if (data.paypalEmail) {
+                payBtn.onclick = () => {
+                    window.open(`https://www.paypal.com/paypalme/${data.paypalEmail}`, '_blank');
+                };
+            }
+        });
+
+    } catch (error) {
+        console.error("Fehler bei der Suche:", error);
+        alert("Datenbank-Fehler!");
+    }
+};
+
+    
 </script>
 </body>
 </html>
