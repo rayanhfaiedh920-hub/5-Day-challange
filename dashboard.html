@@ -76,7 +76,7 @@
 
         /* --- CARDS & PANELS --- */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 40px; }
-        
+
         .stat-card {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -187,7 +187,7 @@
 
         <div id="learning" class="tab-content">
             <h1 class="header-title">The Blueprint</h1>
-            
+
             <div id="phase-1-ui">
                 <p class="header-sub">Phase 1: Strategy & Cashflow System</p>
                 <div class="stat-card" style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.2);">
@@ -234,6 +234,7 @@
             <span class="check-icon">🎯</span>
             <div class="blueprint-text">
                 <b>Step 1: Online Job Groups</b>
+                <img src="https://raw.githubusercontent.com/rayanhfaiedh920-hub/5-Day-challange/main/screenshot_fb_1.png" class="screenshot-img" alt="Step 1">
                 <img src="screenshot_fb_1.png" class="screenshot-img" alt="Step 1">
             </div>
         </div>
@@ -241,33 +242,28 @@
             <span class="check-icon">🎯</span>
             <div class="blueprint-text">
                 <b>Step 2: The "Cleaning Jobs" Niche</b>
+                <img src="https://raw.githubusercontent.com/rayanhfaiedh920-hub/5-Day-challange/main/screenshot_fb_2.png" class="screenshot-img" alt="Step 2">
                 <img src="screenshot_fb_2.png" class="screenshot-img" alt="Step 2">
             </div>
         </div>
 
-        <div style="margin-top: 40px; display: flex; justify-content: space-between;">
-            <button class="glow-btn" style="background: rgba(0,0,0,0.1); color: #1d1d1f; box-shadow: none;" onclick="goToPhase(1)">← Back</button>
-            <button class="glow-btn" style="padding: 18px 40px; font-size: 18px;" onclick="goToPhase(3)">Unlock Phase 3 →</button>
-        </div>
-    </div>
-</div>
-
-<div id="phase-3-ui" style="display: none;">
-    <p class="header-sub">Phase 3: Lead Sniping & Closing</p>
-    <div class="stat-card" style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.2);">
-        <h2 style="font-size: 42px; letter-spacing: -1.5px;">The Art of Lead Sniping</h2>
-        <p style="font-size: 20px; line-height: 1.6;">Don't wait for leads to come to you. "Snipe" interested people from other posts.</p>
-
-        <div class="blueprint-list">
-            <div class="blueprint-item">
-                <span class="check-icon">🏹</span>
+@@ -264,200 +264,200 @@
                 <div class="blueprint-text">
                     <b>Step 1: Find Interested Leads</b>
                     <p>Search for "Interested" or "How?" comments on remote work posts.</p>
+                    <img src="https://raw.githubusercontent.com/rayanhfaiedh920-hub/5-Day-challange/main/findingleadsexample.png" class="screenshot-img" alt="Finding Leads">
                     <img src="findingleadsexample.png" class="screenshot-img" alt="Finding Leads">
                 </div>
             </div>
         </div>
+
+        <div style="margin-top: 40px; display: flex; justify-content: space-between;">
+            <button class="glow-btn" style="background: rgba(0,0,0,0.1); color: #1d1d1f; box-shadow: none;" onclick="goToPhase(2)">← Back</button>
+            <button class="glow-btn" style="padding: 188px 40px; font-size: 18px;" onclick="goToPhase(4)">Final Phase 4 →</button>
+            <button class="glow-btn" style="padding: 18px 40px; font-size: 18px;" onclick="goToPhase(4)">Final Phase 4 →</button>
+        </div>
+    </div>
+</div>
 
         <div style="margin-top: 40px; display: flex; justify-content: space-between;">
             <button class="glow-btn" style="background: rgba(0,0,0,0.1); color: #1d1d1f; box-shadow: none;" onclick="goToPhase(2)">← Back</button>
@@ -276,11 +272,13 @@
     </div>
 </div>
 
-     
-    </div>
-</div>
+<div id="phase-4-ui" style="display: none;">
+    <p class="header-sub">Phase 4: High-Ticket Closing & Commission</p>
+                <div class="stat-card" style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.2);">
+                    <h2 style="font-size: 42px; letter-spacing: -1.5px;">The Closing Sequence</h2>
+                    <p style="font-size: 20px; line-height: 1.6;">Here you will learn how to approach cold leads and close them professionally.</p>
 
-  <div class="blueprint-list">
+                    <div class="blueprint-list">
                         <div class="blueprint-item">
                             <span class="check-icon">✉️</span>
                             <div class="blueprint-text" style="width: 100%;">
@@ -296,7 +294,34 @@
                                 </div>
                             </div>
                         </div>
-            
+
+                        <div class="blueprint-item">
+                            <span class="check-icon">🤝</span>
+                            <div class="blueprint-text">
+                                <b>Step 2: Trust & Psychology</b>
+                                <p>When the person responds, you must build trust (Social Proof). Explain why <b>you</b> are involved:</p>
+                                <ul style="padding-left: 20px; color: #424245;">
+                                    <li><b>Authenticity:</b> Mention that the $5 hurdle only serves to filter out "time wasters."</li>
+                                    <li><b>Your Role:</b> "I am your mentor within the Syndicate. I only earn when you also learn how to close successfully."</li>
+                                    <li><b>Urgency:</b> Mention that you can only personally assist 2-3 people per week.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="blueprint-item">
+                            <span class="check-icon">💰</span>
+                            <div class="blueprint-text">
+                                <b>Step 3: The Close (URL & Code)</b>
+                                <p>Once they are ready, send the link and your code. **No code, no commission!**</p>
+                                <div class="script-box" style="border-left-color: var(--success-green); background: rgba(52, 199, 89, 0.1); font-style: normal;">
+                                    "Perfect. Register here and use my code to be activated immediately:<br><br>
+                                    🔗 <b>URL:</b> https://rayanhfaiedh920-hub.github.io/5-Day-challange/<br>
+                                    🔑 <b>Code:</b> <span id="finalCodeDisplay" style="color: var(--apple-blue); font-weight: bold;">---</span>"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div style="margin-top: 40px; display: flex; justify-content: space-between;">
                         <button class="glow-btn" style="background: rgba(0,0,0,0.1); color: #1d1d1f; box-shadow: none;" onclick="goToPhase(3)">← Back</button>
                         <button class="glow-btn" style="padding: 18px 40px; font-size: 18px; background: var(--success-green);" onclick="alert('Masterclass completed!')">Finish Masterclass ✅</button>
@@ -381,7 +406,7 @@ const admins = ["royaroya138@yahoo.com", "rayanhfaiedh920@gmail.com"];
 
             // 3. UI DATEN BEFÜLLEN
             const finalCode = data.myInviteCode || "---";
-            
+
             if(document.getElementById('userBalance')) {
                 document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
             }
@@ -391,7 +416,7 @@ const admins = ["royaroya138@yahoo.com", "rayanhfaiedh920@gmail.com"];
             if(document.getElementById('finalCodeDisplay')) {
                 document.getElementById('finalCodeDisplay').innerText = finalCode;
             }
-            
+
             if(isAdmin) console.log("Admin-Zugriff aktiv");
         }
     });
@@ -425,3 +450,4 @@ const admins = ["royaroya138@yahoo.com", "rayanhfaiedh920@gmail.com"];
 </script>
 </body>
 </html>
+
