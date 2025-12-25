@@ -547,7 +547,7 @@
 
     window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
 
-    // Diese Funktion sucht den Besitzer des Invite-Codes in deiner Datenbank
+// Diese Funktion sucht den Besitzer des Invite-Codes und alle von ihm geworbenen Mitglieder
 window.searchInviteCode = async () => {
     const searchInput = document.getElementById('adminSearchInput').value.trim();
     const resultDiv = document.getElementById('adminSearchResult');
@@ -562,89 +562,103 @@ window.searchInviteCode = async () => {
     resultDiv.innerHTML = '<p>Suche...</p>';
 
     try {
-        // 1. Finde den Benutzer mit dem eingegebenen Invite Code
-        const userQuery = query(collection(db, "members"), where("myInviteCode", "==", searchInput));
-        const userSnapshot = await getDocs(userQuery);
-
-        if (userSnapshot.empty) {
-            resultDiv.innerHTML = "<p>Kein Benutzer mit diesem Einladungscode gefunden.</p>";
-            return;
-        }
-
-        const searchedUserDoc = userSnapshot.docs[0];
-        const searchedUserData = searchedUserDoc.data();
-        const searchedUserUid = searchedUserDoc.id;
-
-        // 2. Finde den Werber basierend auf 'invitedBy'
-        const referrerInviteCode = searchedUserData.invitedBy;
-        if (!referrerInviteCode) {
-            resultDiv.innerHTML = `
-                <h4>Benutzer gefunden: ${searchedUserData.fullName}</h4>
-                <p><strong>Registrierte Email:</strong> ${searchedUserData.email}</p>
-                <p>Dieser Benutzer wurde von niemandem direkt eingeladen.</p>`;
-            return;
-        }
-
-        const referrerQuery = query(collection(db, "members"), where("myInviteCode", "==", referrerInviteCode));
+        // 1. Finde den Werber (Besitzer des Invite Codes)
+        const referrerQuery = query(collection(db, "members"), where("myInviteCode", "==", searchInput));
         const referrerSnapshot = await getDocs(referrerQuery);
 
         if (referrerSnapshot.empty) {
-             resultDiv.innerHTML = `
-                <h4>Benutzer: ${searchedUserData.fullName}</h4>
-                <p><strong>Registrierte Email:</strong> ${searchedUserData.email}</p>
-                <p><strong>Werber-Code:</strong> ${referrerInviteCode}</p>
-                <p style="color: red;">Fehler: Der Werber zu diesem Code konnte nicht gefunden werden.</p>`;
+            resultDiv.innerHTML = "<p>Kein Inhaber für diesen Einladungscode gefunden.</p>";
             return;
         }
 
-        const referrerData = referrerSnapshot.docs[0].data();
-        const lastProvisionDate = searchedUserData.lastProvisionDate || 'Nicht festgelegt';
+        const referrerDoc = referrerSnapshot.docs[0];
+        const referrerData = referrerDoc.data();
+        const referrerUid = referrerDoc.id;
+        const lastProvisionDate = referrerData.lastProvisionDate || 'Noch keine';
 
-        // 3. Zeige alle Informationen an
+        // 2. Finde alle Mitglieder, die von diesem Werber eingeladen wurden
+        const referredUsersQuery = query(collection(db, "members"), where("referredBy", "==", searchInput));
+        const referredUsersSnapshot = await getDocs(referredUsersQuery);
+
+        const referredUsers = [];
+        referredUsersSnapshot.forEach(doc => {
+            referredUsers.push(doc.data());
+        });
+
+        const totalReferred = referredUsers.length;
+        const totalProvision = totalReferred * 180;
+
+        // 3. Baue die HTML-Ausgabe dynamisch auf
+        let referredListHtml = referredUsers.map(user =>
+            `<li>${user.fullName} (Registriert am: ${user.joined ? new Date(user.joined).toLocaleDateString('de-DE') : 'N/A'})</li>`
+        ).join('');
+
+        if (referredUsers.length === 0) {
+            referredListHtml = "<p>Dieser Nutzer hat noch niemanden eingeladen.</p>";
+        } else {
+            referredListHtml = `<ul style="list-style-type: disc; padding-left: 20px;">${referredListHtml}</ul>`;
+        }
+
+        // 4. Zeige alle Informationen an
         resultDiv.innerHTML = `
             <div style="color: #1d1d1f;">
-                <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">👤 Gefundener Benutzer</h5>
-                <p><strong>Vollständiger Name:</strong> ${searchedUserData.fullName}</p>
-                <p><strong>Registrierte Email:</strong> ${searchedUserData.email}</p>
-
-                <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">🤝 Geworben von</h5>
-                <p><strong>Vollständiger Name des Werbers:</strong> ${referrerData.fullName}</p>
-                <p><strong>Registrierte Email des Werbers:</strong> ${referrerData.email}</p>
+                <!-- Werber-Informationen -->
+                <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">👑 Inhaber des Codes</h5>
+                <p><strong>Vollständiger Name:</strong> ${referrerData.fullName}</p>
                 <p style="padding: 10px; background: #fff; border-radius: 8px; border: 1px solid #ddd;">
-                    <strong>💰 PayPal Email des Werbers:</strong> <span style="color: var(--apple-blue); font-weight: bold;">${referrerData.paypalEmail || 'Nicht angegeben'}</span>
+                    <strong>💰 PayPal Email:</strong> <span style="color: var(--apple-blue); font-weight: bold;">${referrerData.paypalEmail || 'Nicht angegeben'}</span>
                 </p>
 
-                <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">Provision-Status</h5>
-                <p><strong>Letzte Provisionszahlung am:</strong> <span id="lastProvisionDate-${searchedUserUid}">${lastProvisionDate}</span></p>
+                <!-- Provisions-Status -->
+                <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">🗓️ Provisions-Status</h5>
+                <p><strong>Letzte Provisionszahlung am:</strong> <span id="lastProvisionDate-${referrerUid}">${lastProvisionDate}</span></p>
                 <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <input type="date" class="form-control" id="provisionDateInput-${searchedUserUid}" style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
-                    <button class="glow-btn" style="margin-top:0; padding: 10px 20px; background: var(--success-green);" onclick="updateProvisionDate('${searchedUserUid}')">Aktualisieren</button>
+                    <input type="date" class="form-control" id="provisionDateInput-${referrerUid}" style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
+                    <button class="glow-btn" style="margin-top:0; padding: 10px 20px; background: var(--success-green);" onclick="updateProvisionDate('${referrerUid}')">Datum aktualisieren</button>
                 </div>
+
+                <!-- Geworbene Mitglieder -->
+                <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">👥 Eingeladene Mitglieder</h5>
+                ${referredListHtml}
+
+                <!-- Provisions-Zusammenfassung -->
+                <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">💸 Zusammenfassung</h5>
+                <p><strong>Anzahl der Einladungen:</strong> ${totalReferred}</p>
+                <p><strong>Gesamtprovision:</strong> <span style="font-weight: bold; color: var(--success-green); font-size: 20px;">$${totalProvision.toFixed(2)}</span></p>
             </div>
         `;
 
     } catch (error) {
-        console.error("Fehler bei der Suche:", error);
-        resultDiv.innerHTML = "<p>Ein Datenbank-Fehler ist aufgetreten.</p>";
+        console.error("Fehler bei der Admin-Suche:", error);
+        resultDiv.innerHTML = "<p>Ein Datenbank-Fehler ist aufgetreten. Prüfe die Konsole für Details.</p>";
     }
 };
 
 window.updateProvisionDate = async (userId) => {
-    const newDate = document.getElementById(`provisionDateInput-${userId}`).value;
-    if (!newDate) {
-        alert("Bitte wählen Sie ein Datum aus.");
+    const dateInput = document.getElementById(`provisionDateInput-${userId}`);
+    if (!dateInput || !dateInput.value) {
+        alert("Bitte wählen Sie ein gültiges Datum aus.");
         return;
     }
+    const newDate = dateInput.value;
+
     try {
         const userDocRef = doc(db, "members", userId);
         await updateDoc(userDocRef, {
             lastProvisionDate: newDate
         });
+
+        // UI sofort aktualisieren
+        const dateDisplay = document.getElementById(`lastProvisionDate-${userId}`);
+        if (dateDisplay) {
+            dateDisplay.textContent = newDate;
+        }
+
         alert("Datum der Provisionszahlung erfolgreich aktualisiert!");
-        document.getElementById(`lastProvisionDate-${userId}`).textContent = newDate;
+
     } catch (error) {
-        console.error("Error updating provision date: ", error);
-        alert("Fehler beim Aktualisieren des Datums.");
+        console.error("Fehler beim Aktualisieren des Provisionsdatums:", error);
+        alert("Fehler beim Aktualisieren des Datums. Prüfen Sie die Konsole für Details.");
     }
 };
 
