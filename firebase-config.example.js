@@ -1,4 +1,4 @@
-const firebaseConfig = {
+window.firebaseConfig = {
     apiKey: "DEIN_API_KEY",
     authDomain: "DEIN_AUTH_DOMAIN",
     projectId: "DEIN_PROJEKT_ID",
