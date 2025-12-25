@@ -17,7 +17,7 @@
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: radial-gradient(circle at top right, #b8c6db, #f5f5f7),
+            background: radial-gradient(circle at top right, #b8c6db, #f5f5f7), 
                         radial-gradient(circle at bottom left, #d6e4f0, #f5f5f7);
             background-attachment: fixed;
             color: var(--text-dark);
@@ -168,11 +168,21 @@
         <div id="admin-search-container" class="stat-card" style="display: none; margin-bottom: 25px; border: 2px solid var(--apple-blue); background: #ffffff;">
             <h3 style="margin-bottom: 15px; color: #1d1d1f;">🔍 Admin Search</h3>
             <div style="display: flex; gap: 10px;">
-                <input type="text" id="adminSearchInput" placeholder="Invite Code suchen..."
+                <input type="text" id="adminSearchInput" placeholder="Invite Code suchen..." 
                        style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
                 <button onclick="searchInviteCode()" class="glow-btn" style="margin-top:0; padding: 10px 20px;">Search</button>
             </div>
     <div id="adminSearchResult" style="margin-top: 15px; display: none; padding: 20px; border-radius: 12px; background: #f5f5f7; border-left: 5px solid var(--apple-blue); box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+    <div id="searchData" style="color: #1d1d1f;">
+        <p style="margin: 5px 0;"><strong>👤 Name:</strong> <span id="resName"></span></p>
+        <p style="margin: 5px 0;"><strong>📧 Email:</strong> <span id="resEmail"></span></p>
+        <p style="margin: 10px 0; padding: 10px; background: #fff; border-radius: 8px; border: 1px solid #ddd;">
+            <strong>💰 PayPal:</strong> <span id="resPaypal" style="color: var(--apple-blue); font-weight: bold;"></span>
+        </p>
+        <button id="resPayBtn" class="glow-btn" style="background: #34c759; padding: 10px 20px; font-size: 16px; width: 100%;">
+            PayPal.me öffnen
+        </button>
+    </div>
 </div>
         </div>
 
@@ -447,7 +457,7 @@
             let data = userDoc.data();
             const userEmail = user.email.toLowerCase();
             const isAdmin = admins.includes(userEmail);
-
+            
             // 1. ADMIN-LOGIK
             // Nur für deinen Admin-Account (rayanhfaiedh920@gmail.com) die Bar einblenden
             if (userEmail === "rayanhfaiedh920@gmail.com") {
@@ -462,13 +472,13 @@
 
                 while (!isUnique) {
                     newGeneratedCode = generateRandomCode();
-
+                    
                     // Prüfen, ob der Code bereits in der Sammlung "members" existiert
                     const q = query(collection(db, "members"), where("myInviteCode", "==", newGeneratedCode));
                     const querySnapshot = await getDocs(q);
-
+                    
                     if (querySnapshot.empty) {
-                        isUnique = true;
+                        isUnique = true; 
                     }
                 }
 
@@ -547,104 +557,54 @@
 
     window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
 
-    window.searchInviteCode = async () => {
-        const searchInput = document.getElementById('adminSearchInput').value.trim();
-        const resultDiv = document.getElementById('adminSearchResult');
-        
-        if (!searchInput) {
-            alert("Bitte gib einen Invite Code ein!");
+    // Diese Funktion sucht den Besitzer des Invite-Codes in deiner Datenbank
+window.searchInviteCode = async () => {
+    const searchInput = document.getElementById('adminSearchInput').value.trim();
+    const resultDiv = document.getElementById('adminSearchResult');
+    
+    if (!searchInput) {
+        alert("Bitte gib einen Invite Code ein!");
+        return;
+    }
+
+    try {
+        // Suche in deiner Firebase-Sammlung "members" nach dem Code
+        const q = query(collection(db, "members"), where("myInviteCode", "==", searchInput));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            alert("Kein User mit diesem Code gefunden.");
             resultDiv.style.display = 'none';
             return;
         }
-    
-        resultDiv.style.display = 'block';
-        resultDiv.innerHTML = '<p>Suche...</p>';
-    
-        try {
-            // 1. Finde den Besitzer des Invite Codes
-            const ownerQuery = query(collection(db, "members"), where("myInviteCode", "==", searchInput));
-            const ownerSnapshot = await getDocs(ownerQuery);
-    
-            if (ownerSnapshot.empty) {
-                resultDiv.innerHTML = "<p>Kein Inhaber für diesen Einladungscode gefunden.</p>";
-                return;
-            }
-    
-            const ownerDoc = ownerSnapshot.docs[0];
-            const ownerData = ownerDoc.data();
-            const ownerId = ownerDoc.id;
-    
-            // 2. Finde alle Benutzer, die von diesem Code eingeladen wurden
-            const referredQuery = query(collection(db, "members"), where("invitedBy", "==", searchInput));
-            const referredSnapshot = await getDocs(referredQuery);
-    
-            let referredUsersHtml = '<ul>';
-            if (referredSnapshot.empty) {
-                referredUsersHtml = '<p>Noch keine Mitglieder mit diesem Code eingeladen.</p>';
-            } else {
-                referredSnapshot.forEach(doc => {
-                    const userData = doc.data();
-                    const joinDate = userData.createdAt ? userData.createdAt.toDate().toLocaleDateString('de-DE') : 'Unbekannt';
-                    referredUsersHtml += `<li>${userData.fullName} (Beigetreten am: ${joinDate})</li>`;
-                });
-                referredUsersHtml += '</ul>';
-            }
-    
-            const totalCommission = referredSnapshot.size * 180;
-            const lastProvisionDate = ownerData.lastProvisionDate || 'Nicht festgelegt';
-    
-            // 3. Zeige alle Informationen an
-            resultDiv.innerHTML = \`
-                <div style="color: #1d1d1f;">
-                    <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">Code-Inhaber</h5>
-                    <p><strong>Vollständiger Name:</strong> \${ownerData.fullName}</p>
-                    <p><strong>Registrierte Email:</strong> \${ownerData.email}</p>
-                    <p style="padding: 10px; background: #fff; border-radius: 8px; border: 1px solid #ddd;">
-                        <strong>💰 PayPal Email:</strong> <span style="color: var(--apple-blue); font-weight: bold;">\${ownerData.paypalEmail || 'Nicht angegeben'}</span>
-                    </p>
-    
-                    <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">Geworbene Mitglieder (\${referredSnapshot.size})</h5>
-                    \${referredUsersHtml}
-    
-                    <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">Provisions-Berechnung</h5>
-                    <p><strong>Gesamtprovision:</strong> <span style="font-size: 20px; color: var(--success-green); font-weight: bold;">$\${totalCommission.toFixed(2)}</span> (\${referredSnapshot.size} x $180)</p>
-    
-                    <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">Provision-Status</h5>
-                    <p><strong>Letzte Provisionszahlung am:</strong> <span id="lastProvisionDate-\${ownerId}">\${lastProvisionDate}</span></p>
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <input type="date" class="form-control" id="provisionDateInput-\${ownerId}" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px;">
-                        <button class="glow-btn" style="margin-top:0; padding: 10px 20px; font-size: 14px; background: var(--success-green);" onclick="updateProvisionDate('\${ownerId}')">Datum speichern</button>
-                    </div>
-                </div>
-            \`;
-    
-        } catch (error) {
-            console.error("Fehler bei der Suche:", error);
-            resultDiv.innerHTML = "<p>Ein Datenbank-Fehler ist aufgetreten.</p>";
-        }
-    };
-    
-    window.updateProvisionDate = async (userId) => {
-        const newDate = document.getElementById(\`provisionDateInput-\${userId}\`).value;
-        if (!newDate) {
-            alert("Bitte wählen Sie ein Datum aus.");
-            return;
-        }
-        try {
-            const userDocRef = doc(db, "members", userId);
-            await updateDoc(userDocRef, {
-                lastProvisionDate: newDate
-            });
-            alert("Datum der Provisionszahlung erfolgreich aktualisiert!");
-            document.getElementById(\`lastProvisionDate-\${userId}\`).textContent = newDate;
-        } catch (error) {
-            console.error("Error updating provision date: ", error);
-            alert("Fehler beim Aktualisieren des Datums.");
-        }
-    };
 
+        // Wenn ein Partner gefunden wurde, zeige seine Daten an
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            resultDiv.style.display = 'block';
+            
+            document.getElementById('resName').innerText = data.fullName || "Nicht angegeben";
+            document.getElementById('resEmail').innerText = data.email || "Keine Email";
+            
+            const paypal = data.paypalEmail || "Keine PayPal hinterlegt";
+            document.getElementById('resPaypal').innerText = paypal;
+
+            // Der PayPal-Button öffnet direkt die Zahlung
+            const payBtn = document.getElementById('resPayBtn');
+            if (data.paypalEmail) {
+                payBtn.onclick = () => {
+                    window.open(`https://www.paypal.com/paypalme/${data.paypalEmail}`, '_blank');
+                };
+            }
+        });
+
+    } catch (error) {
+        console.error("Fehler bei der Suche:", error);
+        alert("Datenbank-Fehler!");
+    }
+};
+
+    
 </script>
 </body>
 </html>
-
-
