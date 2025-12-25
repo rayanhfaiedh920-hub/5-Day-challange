@@ -394,13 +394,20 @@
             </div>
             </div>
     </div>
-<script src="firebase-config.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, updateDoc, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    const app = initializeApp(window.firebaseConfig);
+    const firebaseConfig = {
+        apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+        authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+        projectId: "syndicate-protocol-48f8c",
+        storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+        appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+    };
+
+    const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
@@ -431,10 +438,10 @@
             const isAdmin = admins.includes(userEmail);
             
             // 1. ADMIN-LOGIK
-            // Nur für deinen Admin-Account (rayanhfaiedh920@gmail.com) den Admin-Link einblenden
-            if (userEmail === "rayanhfaiedh920@gmail.com") {
+            if (isAdmin) {
                 const adminLink = document.getElementById('admin-link');
                 if (adminLink) adminLink.style.display = 'block';
+                console.log("Admin-Zugriff aktiv");
             }
 
             // 2. EINZIGARTIGE INVITE CODE GENERIERUNG
@@ -528,7 +535,6 @@
     };
 
     window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
-
 
 </script>
 </body>
