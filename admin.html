@@ -1,1 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Suche</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; }
+        .container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; }
+        input { padding: 0.5rem; margin-top: 1rem; width: 80%; }
+        button { padding: 0.7rem 1.5rem; margin-top: 1rem; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        #results { margin-top: 1.5rem; text-align: left; }
+        a { color: #007bff; text-decoration: none; margin-top: 1rem; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Admin Suche</h2>
+        <p>Suche nach einem Mitglied über den Einladungscode.</p>
+        <input type="text" id="inviteCode" placeholder="Einladungscode eingeben">
+        <button id="searchButton">Suchen</button>
+        <div id="results"></div>
+        <a href="dashboard.html">Zurück zum Dashboard</a>
+    </div>
 
+    <script>
+        if (!firebase.apps.length) {
+            firebase.initializeApp(window.firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                if (user.email !== 'rayanhfaiedh920@gmail.com') {
+                    window.location.href = 'dashboard.html';
+                }
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        document.getElementById('searchButton').addEventListener('click', () => {
+            const inviteCode = document.getElementById('inviteCode').value.trim();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            if (!inviteCode) {
+                resultsDiv.innerHTML = 'Bitte geben Sie einen Einladungscode ein.';
+                return;
+            }
+
+            db.collection('members').where('myInviteCode', '==', inviteCode).get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        resultsDiv.innerHTML = 'Kein Mitglied mit diesem Code gefunden.';
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        const member = doc.data();
+                        const memberId = doc.id;
+
+                        let resultsHTML = `
+                            <p><strong>Name:</strong> ${member.fullName}</p>
+                            <p><strong>Email:</strong> ${member.email}</p>
+                            <p><strong>PayPal Email:</strong> ${member.paypalEmail || 'Nicht angegeben'}</p>
+                            <p><strong>Eingeladen von Code:</strong> ${member.referredBy || 'Nicht angegeben'}</p>
+                            <p><strong>Tarif:</strong> ${member.proMember ? 'Pro' : 'Basic'}</p>
+                        `;
+
+                        if (member.proMember && member.proMemberSince) {
+                            resultsHTML += `<p><strong>Pro seit:</strong> ${member.proMemberSince.toDate().toLocaleDateString('de-DE')}</p>`;
+                        }
+
+                        // Input für das Datum der letzten Provisionssendung
+                        resultsHTML += `
+                            <p><strong>Letzte Provision gesendet am:</strong></p>
+                            <input type="date" id="lastProvisionDate-${memberId}" value="${member.lastProvisionSent ? member.lastProvisionSent.toDate().toISOString().split('T')[0] : ''}">
+                            <button onclick="updateProvisionDate('${memberId}')">Speichern</button>
+                        `;
+
+                        resultsDiv.innerHTML = resultsHTML;
+                    });
+                })
+                .catch(error => {
+                    console.error("Fehler bei der Suche: ", error);
+                    resultsDiv.innerHTML = 'Ein Fehler ist aufgetreten.';
+                });
+        });
+
+        function updateProvisionDate(memberId) {
+            const dateValue = document.getElementById(`lastProvisionDate-${memberId}`).value;
+            if (dateValue) {
+                const newDate = new Date(dateValue);
+                db.collection('members').doc(memberId).update({
+                    lastProvisionSent: firebase.firestore.Timestamp.fromDate(newDate)
+                })
+                .then(() => {
+                    alert('Datum der letzten Provision aktualisiert!');
+                })
+                .catch(error => {
+                    console.error("Fehler beim Aktualisieren des Datums: ", error);
+                    alert('Fehler beim Speichern.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
