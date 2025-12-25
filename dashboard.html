@@ -17,7 +17,7 @@
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: radial-gradient(circle at top right, #b8c6db, #f5f5f7), 
+            background: radial-gradient(circle at top right, #b8c6db, #f5f5f7),
                         radial-gradient(circle at bottom left, #d6e4f0, #f5f5f7);
             background-attachment: fixed;
             color: var(--text-dark);
@@ -168,7 +168,7 @@
         <div id="admin-search-container" class="stat-card" style="display: none; margin-bottom: 25px; border: 2px solid var(--apple-blue); background: #ffffff;">
             <h3 style="margin-bottom: 15px; color: #1d1d1f;">🔍 Admin Search</h3>
             <div style="display: flex; gap: 10px;">
-                <input type="text" id="adminSearchInput" placeholder="Invite Code suchen..." 
+                <input type="text" id="adminSearchInput" placeholder="Invite Code suchen..."
                        style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
                 <button onclick="searchInviteCode()" class="glow-btn" style="margin-top:0; padding: 10px 20px;">Search</button>
             </div>
@@ -447,7 +447,7 @@
             let data = userDoc.data();
             const userEmail = user.email.toLowerCase();
             const isAdmin = admins.includes(userEmail);
-            
+
             // 1. ADMIN-LOGIK
             // Nur für deinen Admin-Account (rayanhfaiedh920@gmail.com) die Bar einblenden
             if (userEmail === "rayanhfaiedh920@gmail.com") {
@@ -462,13 +462,13 @@
 
                 while (!isUnique) {
                     newGeneratedCode = generateRandomCode();
-                    
+
                     // Prüfen, ob der Code bereits in der Sammlung "members" existiert
                     const q = query(collection(db, "members"), where("myInviteCode", "==", newGeneratedCode));
                     const querySnapshot = await getDocs(q);
-                    
+
                     if (querySnapshot.empty) {
-                        isUnique = true; 
+                        isUnique = true;
                     }
                 }
 
@@ -547,109 +547,104 @@
 
     window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
 
-    // Diese Funktion sucht den Besitzer des Invite-Codes in deiner Datenbank
-window.searchInviteCode = async () => {
-    const searchInput = document.getElementById('adminSearchInput').value.trim();
-    const resultDiv = document.getElementById('adminSearchResult');
+    window.searchInviteCode = async () => {
+        const searchInput = document.getElementById('adminSearchInput').value.trim();
+        const resultDiv = document.getElementById('adminSearchResult');
+        
+        if (!searchInput) {
+            alert("Bitte gib einen Invite Code ein!");
+            resultDiv.style.display = 'none';
+            return;
+        }
     
-    if (!searchInput) {
-        alert("Bitte gib einen Invite Code ein!");
-        resultDiv.style.display = 'none';
-        return;
-    }
-
-    resultDiv.style.display = 'block';
-    resultDiv.innerHTML = '<p>Suche...</p>';
-
-    try {
-        // 1. Finde den Benutzer mit dem eingegebenen Invite Code
-        const userQuery = query(collection(db, "members"), where("myInviteCode", "==", searchInput));
-        const userSnapshot = await getDocs(userQuery);
-
-        if (userSnapshot.empty) {
-            resultDiv.innerHTML = "<p>Kein Benutzer mit diesem Einladungscode gefunden.</p>";
-            return;
-        }
-
-        const searchedUserDoc = userSnapshot.docs[0];
-        const searchedUserData = searchedUserDoc.data();
-        const searchedUserUid = searchedUserDoc.id;
-        
-        // 2. Finde den Werber basierend auf 'invitedBy'
-        const referrerInviteCode = searchedUserData.invitedBy;
-        if (!referrerInviteCode) {
-            resultDiv.innerHTML = `
-                <h4>Benutzer gefunden: ${searchedUserData.fullName}</h4>
-                <p><strong>Registrierte Email:</strong> ${searchedUserData.email}</p>
-                <p>Dieser Benutzer wurde von niemandem direkt eingeladen.</p>`;
-            return;
-        }
-
-        const referrerQuery = query(collection(db, "members"), where("myInviteCode", "==", referrerInviteCode));
-        const referrerSnapshot = await getDocs(referrerQuery);
-
-        if (referrerSnapshot.empty) {
-             resultDiv.innerHTML = `
-                <h4>Benutzer: ${searchedUserData.fullName}</h4>
-                <p><strong>Registrierte Email:</strong> ${searchedUserData.email}</p>
-                <p><strong>Werber-Code:</strong> ${referrerInviteCode}</p>
-                <p style="color: red;">Fehler: Der Werber zu diesem Code konnte nicht gefunden werden.</p>`;
-            return;
-        }
-        
-        const referrerData = referrerSnapshot.docs[0].data();
-        const lastProvisionDate = searchedUserData.lastProvisionDate || 'Nicht festgelegt';
-
-        // 3. Zeige alle Informationen an
-        resultDiv.innerHTML = `
-            <div style="color: #1d1d1f;">
-                <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">👤 Gefundener Benutzer</h5>
-                <p><strong>Vollständiger Name:</strong> ${searchedUserData.fullName}</p>
-                <p><strong>Registrierte Email:</strong> ${searchedUserData.email}</p>
-                
-                <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">🤝 Geworben von</h5>
-                <p><strong>Vollständiger Name des Werbers:</strong> ${referrerData.fullName}</p>
-                <p><strong>Registrierte Email des Werbers:</strong> ${referrerData.email}</p>
-                <p style="padding: 10px; background: #fff; border-radius: 8px; border: 1px solid #ddd;">
-                    <strong>💰 PayPal Email des Werbers:</strong> <span style="color: var(--apple-blue); font-weight: bold;">${referrerData.paypalEmail || 'Nicht angegeben'}</span>
-                </p>
-
-                <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">Provision-Status</h5>
-                <p><strong>Letzte Provisionszahlung am:</strong> <span id="lastProvisionDate-${searchedUserUid}">${lastProvisionDate}</span></p>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <input type="date" class="form-control" id="provisionDateInput-${searchedUserUid}" style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
-                    <button class="glow-btn" style="margin-top:0; padding: 10px 20px; background: var(--success-green);" onclick="updateProvisionDate('${searchedUserUid}')">Aktualisieren</button>
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<p>Suche...</p>';
+    
+        try {
+            // 1. Finde den Besitzer des Invite Codes
+            const ownerQuery = query(collection(db, "members"), where("myInviteCode", "==", searchInput));
+            const ownerSnapshot = await getDocs(ownerQuery);
+    
+            if (ownerSnapshot.empty) {
+                resultDiv.innerHTML = "<p>Kein Inhaber für diesen Einladungscode gefunden.</p>";
+                return;
+            }
+    
+            const ownerDoc = ownerSnapshot.docs[0];
+            const ownerData = ownerDoc.data();
+            const ownerId = ownerDoc.id;
+    
+            // 2. Finde alle Benutzer, die von diesem Code eingeladen wurden
+            const referredQuery = query(collection(db, "members"), where("invitedBy", "==", searchInput));
+            const referredSnapshot = await getDocs(referredQuery);
+    
+            let referredUsersHtml = '<ul>';
+            if (referredSnapshot.empty) {
+                referredUsersHtml = '<p>Noch keine Mitglieder mit diesem Code eingeladen.</p>';
+            } else {
+                referredSnapshot.forEach(doc => {
+                    const userData = doc.data();
+                    const joinDate = userData.createdAt ? userData.createdAt.toDate().toLocaleDateString('de-DE') : 'Unbekannt';
+                    referredUsersHtml += `<li>${userData.fullName} (Beigetreten am: ${joinDate})</li>`;
+                });
+                referredUsersHtml += '</ul>';
+            }
+    
+            const totalCommission = referredSnapshot.size * 180;
+            const lastProvisionDate = ownerData.lastProvisionDate || 'Nicht festgelegt';
+    
+            // 3. Zeige alle Informationen an
+            resultDiv.innerHTML = \`
+                <div style="color: #1d1d1f;">
+                    <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">Code-Inhaber</h5>
+                    <p><strong>Vollständiger Name:</strong> \${ownerData.fullName}</p>
+                    <p><strong>Registrierte Email:</strong> \${ownerData.email}</p>
+                    <p style="padding: 10px; background: #fff; border-radius: 8px; border: 1px solid #ddd;">
+                        <strong>💰 PayPal Email:</strong> <span style="color: var(--apple-blue); font-weight: bold;">\${ownerData.paypalEmail || 'Nicht angegeben'}</span>
+                    </p>
+    
+                    <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">Geworbene Mitglieder (\${referredSnapshot.size})</h5>
+                    \${referredUsersHtml}
+    
+                    <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">Provisions-Berechnung</h5>
+                    <p><strong>Gesamtprovision:</strong> <span style="font-size: 20px; color: var(--success-green); font-weight: bold;">$\${totalCommission.toFixed(2)}</span> (\${referredSnapshot.size} x $180)</p>
+    
+                    <h5 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px;">Provision-Status</h5>
+                    <p><strong>Letzte Provisionszahlung am:</strong> <span id="lastProvisionDate-\${ownerId}">\${lastProvisionDate}</span></p>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <input type="date" class="form-control" id="provisionDateInput-\${ownerId}" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px;">
+                        <button class="glow-btn" style="margin-top:0; padding: 10px 20px; font-size: 14px; background: var(--success-green);" onclick="updateProvisionDate('\${ownerId}')">Datum speichern</button>
+                    </div>
                 </div>
-            </div>
-        `;
-
-    } catch (error) {
-        console.error("Fehler bei der Suche:", error);
-        resultDiv.innerHTML = "<p>Ein Datenbank-Fehler ist aufgetreten.</p>";
-    }
-};
-
-window.updateProvisionDate = async (userId) => {
-    const newDate = document.getElementById(`provisionDateInput-${userId}`).value;
-    if (!newDate) {
-        alert("Bitte wählen Sie ein Datum aus.");
-        return;
-    }
-    try {
-        const userDocRef = doc(db, "members", userId);
-        await updateDoc(userDocRef, {
-            lastProvisionDate: newDate
-        });
-        alert("Datum der Provisionszahlung erfolgreich aktualisiert!");
-        document.getElementById(`lastProvisionDate-${userId}`).textContent = newDate;
-    } catch (error) {
-        console.error("Error updating provision date: ", error);
-        alert("Fehler beim Aktualisieren des Datums.");
-    }
-};
-
+            \`;
     
+        } catch (error) {
+            console.error("Fehler bei der Suche:", error);
+            resultDiv.innerHTML = "<p>Ein Datenbank-Fehler ist aufgetreten.</p>";
+        }
+    };
+    
+    window.updateProvisionDate = async (userId) => {
+        const newDate = document.getElementById(\`provisionDateInput-\${userId}\`).value;
+        if (!newDate) {
+            alert("Bitte wählen Sie ein Datum aus.");
+            return;
+        }
+        try {
+            const userDocRef = doc(db, "members", userId);
+            await updateDoc(userDocRef, {
+                lastProvisionDate: newDate
+            });
+            alert("Datum der Provisionszahlung erfolgreich aktualisiert!");
+            document.getElementById(\`lastProvisionDate-\${userId}\`).textContent = newDate;
+        } catch (error) {
+            console.error("Error updating provision date: ", error);
+            alert("Fehler beim Aktualisieren des Datums.");
+        }
+    };
+
 </script>
 </body>
 </html>
+
 
