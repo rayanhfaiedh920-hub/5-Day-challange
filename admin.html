@@ -1,1 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syndicate | Admin Panel</title>
+    <style>
+        :root {
+            --apple-blue: #0071e3;
+            --glass-bg: rgba(255, 255, 255, 0.35);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --sidebar-glass: rgba(255, 255, 255, 0.2);
+            --text-dark: #1d1d1f;
+            --success-green: #34c759;
+            --warn-red: #ff3b30;
+        }
 
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: radial-gradient(circle at top right, #b8c6db, #f5f5f7),
+                        radial-gradient(circle at bottom left, #d6e4f0, #f5f5f7);
+            background-attachment: fixed;
+            color: var(--text-dark);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            margin: 30px;
+            background: var(--sidebar-glass);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 20px;
+            height: calc(100vh - 60px);
+            box-sizing: border-box;
+            position: fixed;
+        }
+
+        .sidebar h2 { font-size: 24px; font-weight: 700; margin-bottom: 50px; text-align: center; }
+
+        .nav-item {
+            padding: 15px 20px;
+            margin-bottom: 8px;
+            border-radius: 15px;
+            color: #424245;
+            font-size: 18px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            text-align: left;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-item.active { background: rgba(255, 255, 255, 0.5); color: var(--text-dark); font-weight: 700; }
+        .logout-item { margin-top: auto; color: var(--warn-red); font-weight: 600; }
+
+        .main-content {
+            margin-left: 340px;
+            flex-grow: 1;
+            padding: 80px 60px;
+            max-width: 1100px;
+        }
+
+        .header-title { font-size: 60px; font-weight: 800; letter-spacing: -2px; margin: 0; }
+        .header-sub { font-size: 22px; color: #6e6e73; margin-bottom: 50px; }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 35px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .glow-btn {
+            background: var(--apple-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 0 20px rgba(0, 113, 227, 0.3);
+        }
+
+        .glow-btn:hover { transform: scale(1.03); box-shadow: 0 0 30px rgba(0, 113, 227, 0.5); }
+
+        #adminSearchResult p {
+            font-size: 16px;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+         #adminSearchResult p strong {
+            display: inline-block;
+            width: 180px;
+            color: #6e6e73;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2> SYNDICATE</h2>
+        <a href="dashboard.html" class="nav-item">Dashboard</a>
+        <a href="#" class="nav-item">Masterclass</a>
+        <a href="admin.html" class="nav-item active">Admin</a>
+        <a href="#" class="nav-item">Settings</a>
+        <button onclick="handleLogout()" class="nav-item logout-item">Sign Out</button>
+    </div>
+
+    <div class="main-content">
+        <h1 class="header-title">Admin Member Search</h1>
+        <p class="header-sub">Search for a member by their invite code.</p>
+
+        <div class="stat-card" style="background: #fff; border: 2px solid var(--apple-blue);">
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="adminSearchInput" placeholder="Invite Code..."
+                       style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
+                <button onclick="searchInviteCode()" class="glow-btn">Search</button>
+            </div>
+        </div>
+
+        <div id="adminSearchResultWrapper" style="display: none; margin-top: 30px;">
+            <div id="adminSearchResult" class="stat-card">
+                <h2 style="margin-top: 0;">Search Result</h2>
+                <p><strong>Full Name:</strong> <span id="resName">---</span></p>
+                <p><strong>Email:</strong> <span id="resEmail">---</span></p>
+                <p><strong>PayPal Email:</strong> <span id="resPaypal">---</span></p>
+                <p><strong>Invited By Code:</strong> <span id="resReferredBy">---</span></p>
+                <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 20px 0;">
+                <p><strong>Tarif:</strong> <span id="resTarif">---</span></p>
+                <p><strong>Pro Since:</strong> <span id="resProSince">---</span></p>
+                <p><strong>Last Provision Sent:</strong> <span id="resLastProvision">---</span></p>
+                <button id="updateProvisionBtn" class="glow-btn" style="background: var(--success-green); width: 100%; margin-top: 20px; padding: 15px;">Mark Provision as Paid</button>
+            </div>
+        </div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAYO0J1GWXIowL0c2mu4x8h6k5R6BVG26U",
+        authDomain: "syndicate-protocol-48f8c.firebaseapp.com",
+        projectId: "syndicate-protocol-48f8c",
+        storageBucket: "syndicate-protocol-48f8c.firebasestorage.app",
+        appId: "1:47535029358:web:9990ca7fad4f0ed72bba7f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const adminEmail = "rayanhfaiedh920@gmail.com";
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            // Not logged in, redirect to login
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (user.email.toLowerCase() !== adminEmail) {
+            // Not the admin, redirect to dashboard
+            alert("Access denied. You are not authorized to view this page.");
+            window.location.href = "dashboard.html";
+            return;
+        }
+
+        // --- Admin is verified, future logic will go here ---
+        console.log("Admin access granted.");
+    });
+
+    import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    const db = getFirestore(app);
+    let currentMemberDocId = null; // Store the found member's document ID
+
+    // --- Admin is verified ---
+    console.log("Admin access granted.");
+
+    // Function to update the last provision date
+    const updateProvisionDate = async () => {
+        if (!currentMemberDocId) {
+            alert("No member selected. Please perform a search first.");
+            return;
+        }
+
+        if (!confirm("Are you sure you want to mark the provision as paid for this member?")) {
+            return;
+        }
+
+        try {
+            const memberDocRef = doc(db, "members", currentMemberDocId);
+            const newDate = new Date();
+            await updateDoc(memberDocRef, {
+                lastProvision: newDate
+            });
+
+            // Update the UI immediately
+            document.getElementById('resLastProvision').innerText = newDate.toLocaleDateString();
+            alert("Provision date updated successfully!");
+
+        } catch (error) {
+            console.error("Error updating provision date:", error);
+            alert("Failed to update provision date. Check console for details.");
+        }
+    };
+
+    // Attach event listener to the button
+    document.getElementById('updateProvisionBtn').addEventListener('click', updateProvisionDate);
+
+    window.searchInviteCode = async () => {
+        const searchInput = document.getElementById('adminSearchInput').value.trim();
+        const resultWrapper = document.getElementById('adminSearchResultWrapper');
+        currentMemberDocId = null; // Reset on each search
+
+        if (!searchInput) {
+            alert("Please enter an Invite Code.");
+            return;
+        }
+
+        try {
+            const q = query(collection(db, "members"), where("myInviteCode", "==", searchInput));
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                alert("No member found with this Invite Code.");
+                resultWrapper.style.display = 'none';
+                return;
+            }
+
+            // Should only be one result, but forEach is safe
+            querySnapshot.forEach((doc) => {
+                currentMemberDocId = doc.id; // Save the document ID for the update function
+                const data = doc.data();
+
+                // --- Populate UI Fields ---
+                document.getElementById('resName').innerText = data.fullName || 'Not Provided';
+                document.getElementById('resEmail').innerText = data.email || 'Not Provided';
+                document.getElementById('resPaypal').innerText = data.paypalEmail || 'Not Provided';
+                document.getElementById('resReferredBy').innerText = data.referredBy || 'N/A';
+
+                let tarif = 'Unknown';
+                if (data.isPro) {
+                    tarif = 'Pro';
+                } else if (data.hasPaid) {
+                    tarif = 'Basic';
+                }
+                document.getElementById('resTarif').innerText = tarif;
+
+                // Handle potential Firestore Timestamp objects for dates
+                const proSinceDate = data.proSince ? (data.proSince.toDate ? data.proSince.toDate().toLocaleDateString() : new Date(data.proSince).toLocaleDateString()) : 'N/A';
+                const lastProvisionDate = data.lastProvision ? (data.lastProvision.toDate ? data.lastProvision.toDate().toLocaleDateString() : new Date(data.lastProvision).toLocaleDateString()) : 'Never';
+
+                document.getElementById('resProSince').innerText = proSinceDate;
+                document.getElementById('resLastProvision').innerText = lastProvisionDate;
+
+                resultWrapper.style.display = 'block'; // Show the result card
+            });
+
+        } catch (error) {
+            console.error("Error searching for member:", error);
+            alert("An error occurred while searching. Check the console for details.");
+            resultWrapper.style.display = 'none';
+        }
+    };
+
+    window.handleLogout = () => signOut(auth).then(() => {
+        window.location.href = "login.html";
+    });
+</script>
+</body>
+</html>
