@@ -147,15 +147,14 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // --- NEU: SICHERHEITS-CHECK ---
-    const urlParams = new URLSearchParams(window.location.search);
-    const hasPaid = urlParams.get('pay');
-
-    // Wenn der Parameter "pay=success" fehlt, sperren wir die Seite
-    if (hasPaid !== 'success') {
-        alert("Access Denied: Please complete the payment first.");
-        window.location.replace("info.html"); 
-    }
+// FIND THIS SECTION IN register.html
+if (data.hasPaid !== true) {
+    // COMMENT THESE OUT FOR TESTING:
+    // alert("Access Denied: Please complete the payment first.");
+    // window.location.href = "index.html"; 
+    
+    console.log("Test Mode: Payment bypass active on registration page.");
+}
     // ------------------------------
 
     // Passwort-Auge Logik
