@@ -206,21 +206,21 @@
             // Generiere einen einfachen Code für den Test (z.B. NESSIM820)
             const myCode = firstName.toUpperCase() + Math.floor(Math.random() * 1000);
             
-            // Daten in Firestore speichern
-            await setDoc(doc(db, "members", user.uid), {
-                fullName: firstName + " " + lastName, 
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                paypalEmail: paypal,
-                myInviteCode: myCode,      
-                referredBy: refCode,       
-                balance: 0,
-                hasPaid: true, // WICHTIG FÜR TEST: Erlaubt Zugriff auf Dashboard
-                paymentStatus: "active", 
-                role: "member",
-                joined: new Date().toISOString()
-            });
+// Data to save in Firestore
+await setDoc(doc(db, "members", user.uid), {
+    fullName: firstName + " " + lastName, 
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    paypalEmail: paypal,
+    myInviteCode: myCode,      
+    referredBy: refCode,       
+    balance: 0,
+    hasPaid: true,                // This covers the initial $5 payment
+    paymentStatus: "learning_phase", 
+    role: "learning",             // Use "learning" as the initial role
+    joined: new Date().toISOString() // Vital for the 5-day timer
+});
 
             console.log("Account created successfully for:", email);
             alert("Registration successful! Welcome to the Syndicate.");
