@@ -147,15 +147,8 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-// FIND THIS SECTION IN register.html
-if (data.hasPaid !== true) {
-    // COMMENT THESE OUT FOR TESTING:
-    // alert("Access Denied: Please complete the payment first.");
-    // window.location.href = "index.html"; 
-    
-    console.log("Test Mode: Payment bypass active on registration page.");
-}
-    // ------------------------------
+    // --- TEST MODUS LOG ---
+    console.log("Test Mode: Payment bypass active. Registration allowed without payment.");
 
     // Passwort-Auge Logik
     const togglePassword = document.querySelector('#togglePassword');
@@ -169,7 +162,8 @@ if (data.hasPaid !== true) {
         });
     }
 
-    // URL Ref-Code Logik (für Einladungen)
+    // URL Ref-Code Logik
+    const urlParams = new URLSearchParams(window.location.search); // Korrigiert: Definition hinzugefügt
     const codeFromUrl = urlParams.get('ref');
     if (codeFromUrl) {
         const refInput = document.getElementById('usedCodeInput');
@@ -199,16 +193,17 @@ if (data.hasPaid !== true) {
                     const userCred = await signInWithEmailAndPassword(auth, email, pass);
                     user = userCred.user;
                 } catch (loginError) {
-                    alert("Email already in use. Please check your password or use another email.");
+                    alert("Email already in use. Please check your password.");
                     return;
                 }
             } else {
-                alert("Error: " + e.message);
+                alert("Auth Error: " + e.message);
                 return;
             }
         }
 
-try {
+        try {
+            // Generiere einen einfachen Code für den Test (z.B. NESSIM820)
             const myCode = firstName.toUpperCase() + Math.floor(Math.random() * 1000);
             
             // Daten in Firestore speichern
@@ -221,17 +216,19 @@ try {
                 myInviteCode: myCode,      
                 referredBy: refCode,       
                 balance: 0,
-                paymentStatus: "learning_phase", 
+                hasPaid: true, // WICHTIG FÜR TEST: Erlaubt Zugriff auf Dashboard
+                paymentStatus: "active", 
                 role: "member",
                 joined: new Date().toISOString()
             });
 
-            // Nur einmal aufrufen:
-            alert("Registration successful!");
+            console.log("Account created successfully for:", email);
+            alert("Registration successful! Welcome to the Syndicate.");
             window.location.href = "dashboard.html";
 
         } catch (dbError) {
-            alert("Database Error: " + dbError.message);
+            console.error("Firestore Error:", dbError);
+            alert("Database Error (Check Firebase Rules!): " + dbError.message);
         }
     };
 </script>
