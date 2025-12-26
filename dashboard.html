@@ -459,6 +459,7 @@
             }
 
             // 3. ZUGRIFFS-LOGIK (Admins überspringen diesen Teil)
+            /* VORÜBERGEHEND FÜR TESTS DEAKTIVIERT
             if (!isAdmin) {
                 let joinDate;
                 if (!data.createdAt) {
@@ -482,6 +483,7 @@
                     return;
                 }
             }
+            */
 
             // 4. UI DATEN BEFÜLLEN
             const finalCode = data.myInviteCode || "---";
