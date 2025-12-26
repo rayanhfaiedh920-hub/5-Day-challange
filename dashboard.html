@@ -466,7 +466,7 @@
                 data.myInviteCode = newGeneratedCode;
             }
 
-            // 3. ZUGRIFFS-LOGIK (Admins überspringen diesen Teil)
+         // 3. ACCESS LOGIC (Modified for Testing)
             if (!isAdmin) {
                 let joinDate;
                 if (!data.createdAt) {
@@ -479,15 +479,14 @@
                 const isExpired = (new Date() - joinDate) > (5 * 24 * 60 * 60 * 1000);
 
                 if (isExpired) {
-                    alert("Your 5-day access has expired.");
-                    window.location.href = "index.html";
-                    return;
+                    console.warn("Test Mode: Access expired, but allowing stay.");
+                    // window.location.href = "index.html"; // DEACTIVATED FOR TESTING
                 }
 
                 if (data.hasPaid !== true) {
-                    alert("Please complete your payment to access the Masterclass.");
-                    window.location.href = "index.html";
-                    return;
+                    console.log("Test Mode: User has not paid, but allowing access to test Dashboard.");
+                    // alert("Please complete your payment to access the Masterclass."); // DEACTIVATED FOR TESTING
+                    // window.location.href = "index.html"; // DEACTIVATED FOR TESTING
                 }
             }
 
